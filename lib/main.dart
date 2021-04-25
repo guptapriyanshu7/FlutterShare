@@ -1,12 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/pages/home.dart';
+import 'package:flutter_share/widgets/progress.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,7 +19,19 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
         accentColor: Colors.pink[200],
       ),
-      home: Home(),
+      home: FutureBuilder(
+        future: initialization,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            print(snapshot.error);
+            return Text('Something went wrong!');
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Home();
+          }
+          return circularIndicator();
+        },
+      ),
     );
   }
 }

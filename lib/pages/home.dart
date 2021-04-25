@@ -1,7 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/pages/activity_feed.dart';
+import 'package:flutter_share/pages/create_account.dart';
+import 'package:flutter_share/pages/profile.dart';
+import 'package:flutter_share/pages/search.dart';
+import 'package:flutter_share/pages/timeline.dart';
+import 'package:flutter_share/pages/upload.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 final googleSignIn = GoogleSignIn();
+final usersRef = FirebaseFirestore.instance.collection('users');
 
 class Home extends StatefulWidget {
   @override
@@ -10,10 +19,13 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var isAuth = false;
+  PageController pageController;
+  var pageIndex = 0;
 
   @override
   void initState() {
     super.initState();
+    pageController = PageController();
     googleSignIn.onCurrentUserChanged.listen((account) {
       handleSignIn(account);
     });
@@ -22,9 +34,30 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void handleSignIn(GoogleSignInAccount account) {
+  @override
+  void dispose() {
+    super.dispose();
+    pageController.dispose();
+  }
+
+  void handleSignIn(GoogleSignInAccount account) async {
     if (account != null) {
       print('User signed in!: $account');
+      final doc = await usersRef.doc(account.id).get();
+      if (!doc.exists) {
+        final String username = await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CreateAccount()),
+        );
+        usersRef.doc(account.id).set({
+          'username': username,
+          'photoUrl': account.photoUrl,
+          'email': account.email,
+          'displayName': account.displayName,
+          'bio': '',
+          'timestamp': DateTime.now(),
+        });
+      }
       setState(() {
         isAuth = true;
       });
@@ -35,14 +68,49 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Widget authorized() {
-    return ElevatedButton(
-      onPressed: logout,
-      child: Text('Logout'),
+  Widget authorizedScreen() {
+    return Scaffold(
+      body: PageView(
+        children: [
+          Timeline(),
+          ActivityFeed(),
+          Upload(),
+          Search(),
+          Profile(logout),
+        ],
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        // physics: NeverScrollableScrollPhysics(),
+      ),
+      bottomNavigationBar: CupertinoTabBar(
+        currentIndex: pageIndex,
+        onTap: onTap,
+        activeColor: Theme.of(context).primaryColor,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.whatshot),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications_active),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.photo_camera,
+              size: 35,
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget unAuthorized() {
+  Widget unAuthorizedScreen() {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -85,16 +153,32 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void onPageChanged(int pageIndex) {
+    setState(() {
+      this.pageIndex = pageIndex;
+    });
+  }
+
+  void onTap(int pageIndex) {
+    pageController.animateToPage(
+      pageIndex,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   void login() {
     googleSignIn.signIn();
   }
 
   void logout() {
+    pageIndex = 0;
     googleSignIn.signOut();
   }
 
   @override
   Widget build(BuildContext context) {
-    return isAuth ? authorized() : unAuthorized();
+    print(pageIndex);
+    return isAuth ? authorizedScreen() : unAuthorizedScreen();
   }
 }
