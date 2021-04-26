@@ -30,6 +30,8 @@ dependencies:
   google_sign_in:
   cloud_firestore:
   firebase_core:
+  cached_network_image:
+  image_picker:
 
 dev_dependencies:
   flutter_test:

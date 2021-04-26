@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/models/user.dart';
 import 'package:flutter_share/pages/activity_feed.dart';
 import 'package:flutter_share/pages/create_account.dart';
 import 'package:flutter_share/pages/profile.dart';
@@ -11,6 +12,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 final googleSignIn = GoogleSignIn();
 final usersRef = FirebaseFirestore.instance.collection('users');
+User currentUser;
 
 class Home extends StatefulWidget {
   @override
@@ -41,10 +43,10 @@ class _HomeState extends State<Home> {
   }
 
   void handleSignIn(GoogleSignInAccount account) async {
-    if (account != null) {
+    if(account != null) {
       print('User signed in!: $account');
-      final doc = await usersRef.doc(account.id).get();
-      if (!doc.exists) {
+      var doc = await usersRef.doc(account.id).get();
+      if(!doc.exists) {
         final String username = await Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => CreateAccount()),
@@ -57,7 +59,11 @@ class _HomeState extends State<Home> {
           'bio': '',
           'timestamp': DateTime.now(),
         });
+        doc = await usersRef.doc(account.id).get();
       }
+      currentUser = User.fromDocument(doc);
+      print(currentUser.id);
+
       setState(() {
         isAuth = true;
       });
