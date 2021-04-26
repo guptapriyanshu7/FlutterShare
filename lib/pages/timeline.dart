@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/widgets/header.dart';
 import 'package:flutter_share/widgets/progress.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-final usersRef = FirebaseFirestore.instance.collection('users');
+import 'package:flutter_share/pages/home.dart';
 
 class Timeline extends StatelessWidget {
   const Timeline({Key key}) : super(key: key);

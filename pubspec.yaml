@@ -32,6 +32,10 @@ dependencies:
   firebase_core:
   cached_network_image:
   image_picker:
+  path_provider:
+  image:
+  uuid:
+  firebase_storage:
 
 dev_dependencies:
   flutter_test:

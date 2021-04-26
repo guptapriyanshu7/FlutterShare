@@ -3,8 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/user.dart';
 import 'package:flutter_share/widgets/progress.dart';
-
-final usersRef = FirebaseFirestore.instance.collection('users');
+import 'package:flutter_share/pages/home.dart';
 
 class Search extends StatefulWidget {
   const Search({Key key}) : super(key: key);

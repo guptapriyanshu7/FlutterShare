@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/user.dart';
 import 'package:flutter_share/pages/activity_feed.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_share/pages/create_account.dart';
 import 'package:flutter_share/pages/profile.dart';
 import 'package:flutter_share/pages/search.dart';
@@ -12,6 +13,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 final googleSignIn = GoogleSignIn();
 final usersRef = FirebaseFirestore.instance.collection('users');
+final postsRef = FirebaseFirestore.instance.collection('posts');
+final storage = FirebaseStorage.instance;
 User currentUser;
 
 class Home extends StatefulWidget {
@@ -43,10 +46,10 @@ class _HomeState extends State<Home> {
   }
 
   void handleSignIn(GoogleSignInAccount account) async {
-    if(account != null) {
+    if (account != null) {
       print('User signed in!: $account');
       var doc = await usersRef.doc(account.id).get();
-      if(!doc.exists) {
+      if (!doc.exists) {
         final String username = await Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => CreateAccount()),
