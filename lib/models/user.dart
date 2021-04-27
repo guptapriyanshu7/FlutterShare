@@ -5,8 +5,8 @@ class User {
   final String username;
   final String email;
   final String photoUrl;
-  final String displayName;
-  final String bio;
+  String displayName;
+  String bio;
 
   User({
     this.id,

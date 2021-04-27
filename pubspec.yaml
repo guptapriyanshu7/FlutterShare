@@ -36,6 +36,8 @@ dependencies:
   image:
   uuid:
   firebase_storage:
+  geolocator:
+  geocoding:
 
 dev_dependencies:
   flutter_test:

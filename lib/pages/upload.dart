@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/widgets/progress.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image/image.dart' as Im;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -111,6 +113,19 @@ class _UploadState extends State<Upload> {
     });
   }
 
+  void getLocation() async {
+    print('getLocation');
+    final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    final placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    final placemark = placemarks[0];
+    print(placemark);
+    String formattedAddress =
+        "${placemark.street}, ${placemark.subLocality}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}";
+    locationController.text = formattedAddress;
+  }
+
   @override
   Widget build(BuildContext context) {
     return file == null
@@ -192,7 +207,7 @@ class _UploadState extends State<Upload> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: getLocation,
                     icon: Icon(Icons.my_location),
                     label: Text('Current Location'),
                   ),
