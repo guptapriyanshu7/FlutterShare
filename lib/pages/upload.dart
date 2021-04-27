@@ -106,6 +106,7 @@ class _UploadState extends State<Upload> {
   void savePostinFirebase(String url) {
     postsRef.doc(currentUser.id).collection('userPosts').doc(postId).set({
       'mediaUrl': url,
+      'ownerid': currentUser.id,
       'caption': captionController.text,
       'location': locationController.text,
       'timestamp': DateTime.now(),

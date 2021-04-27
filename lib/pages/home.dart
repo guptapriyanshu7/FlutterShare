@@ -41,8 +41,8 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
-    super.dispose();
     pageController.dispose();
+    super.dispose();
   }
 
   void handleSignIn(GoogleSignInAccount account) async {

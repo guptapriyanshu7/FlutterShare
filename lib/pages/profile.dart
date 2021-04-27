@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/models/post.dart' as model;
+import 'package:flutter_share/pages/post.dart' as wid;
 import 'package:flutter_share/pages/edit_profile.dart';
 import 'package:flutter_share/widgets/header.dart';
 import 'package:flutter_share/pages/home.dart';
@@ -13,12 +15,35 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  var postsCount = 0;
+  var posts = <wid.Post>[];
   void editProfile() async {
     await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => EditProfile(logout: widget.logout)));
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProfilePosts();
+  }
+
+  getProfilePosts() async {
+    final snap = await postsRef
+        .doc(currentUser.id)
+        .collection('userPosts')
+        .orderBy('timestamp', descending: true)
+        .get();
+    setState(() {
+      postsCount = snap.docs.length;
+      posts = snap.docs.map((doc) {
+        var post = model.Post.fromDocument(doc);
+        return wid.Post(post);
+      }).toList();
+    });
   }
 
   @override
@@ -40,7 +65,10 @@ class _ProfileState extends State<Profile> {
                   Row(
                     // mainAxisSize: MainAxisSize.max,
                     children: [
-                      Column(children: [Text('0'), Text('Posts')]),
+                      Column(children: [
+                        Text(postsCount.toString()),
+                        Text('Posts')
+                      ]),
                       Column(children: [Text('0'), Text('Followers')]),
                       Column(children: [Text('0'), Text('Following')]),
                     ],
@@ -53,6 +81,9 @@ class _ProfileState extends State<Profile> {
           ),
           Text(currentUser.displayName),
           Text(currentUser.username),
+          Column(
+            children: posts,
+          ),
         ],
       ),
     );
