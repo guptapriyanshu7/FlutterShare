@@ -53,50 +53,69 @@ class _EditProfileState extends State<EditProfile> {
       ),
       body: ListView(
         children: [
-          CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(currentUser.photoUrl),
-            radius: 60.0,
-          ),
-          Form(
-              autovalidateMode: AutovalidateMode.always,
-              key: formkey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    // controller: name,
-                    validator: (val) {
-                      if (val.trim().length < 3)
-                        return 'Name too short!';
-                      else if (val.trim().length > 12) return 'Name too big!';
-                      return null;
-                    },
-                    initialValue: currentUser.displayName,
-                    onSaved: (val) => currentUser.displayName = val,
+          Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              CircleAvatar(
+                radius: 50.0,
+                backgroundImage:
+                    CachedNetworkImageProvider(currentUser.photoUrl),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Form(
+                autovalidateMode: AutovalidateMode.always,
+                key: formkey,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Display Name"),
+                      TextFormField(
+                        validator: (val) {
+                          if (val.trim().length < 3)
+                            return 'Name too short!';
+                          else if (val.trim().length > 12) return 'Name too big!';
+                          return null;
+                        },
+                        initialValue: currentUser.displayName,
+                        onSaved: (val) => currentUser.displayName = val,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text("Bio"),
+                      TextFormField(
+                        validator: (val) {
+                          if (val.trim().length > 12) return 'Bio too big!';
+                          return null;
+                        },
+                        initialValue: currentUser.bio,
+                        onSaved: (val) => currentUser.bio = val,
+                      ),
+                    ],
                   ),
-                  TextFormField(
-                    // controller: bio,
-                    validator: (val) {
-                      if (val.trim().length > 12) return 'Bio too big!';
-                      return null;
-                    },
-                    initialValue: currentUser.bio,
-                    onSaved: (val) => currentUser.bio = val,
-                  ),
-                ],
-              )),
-          TextButton(
-            onPressed: update,
-            child: Text('Update'),
-          ),
-          Container(
-            width: 200,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                widget.logout();
-              },
-              child: Text('Logout'),
-            ),
+                ),
+              ),
+              TextButton(
+                onPressed: update,
+                child: Text('Update'),
+              ),
+              Container(
+                width: 200,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    widget.logout();
+                  },
+                  child: Text('Logout'),
+                ),
+              ),
+            ],
           ),
         ],
       ),

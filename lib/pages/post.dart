@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/post.dart' as model;
 import 'package:flutter_share/models/user.dart';
+import 'package:flutter_share/pages/comments.dart';
 import 'package:flutter_share/pages/home.dart';
 import 'package:flutter_share/widgets/cachedImage.dart';
 import 'package:animator/animator.dart';
@@ -117,7 +118,14 @@ class _PostState extends State<Post> {
                     ),
                     IconButton(
                       icon: Icon(Icons.chat),
-                      onPressed: () => print('Comment'),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CommnetsScreen(widget.post.id),
+                          ),
+                        );
+                      },
                       iconSize: 28.0,
                       color: Theme.of(context).accentColor,
                     ),
