@@ -5,6 +5,7 @@ import 'package:flutter_share/pages/post.dart' as wid;
 import 'package:flutter_share/pages/edit_profile.dart';
 import 'package:flutter_share/widgets/header.dart';
 import 'package:flutter_share/pages/home.dart';
+import 'package:flutter_share/widgets/post_tile.dart';
 
 class Profile extends StatefulWidget {
   final void Function() logout;
@@ -17,6 +18,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   var postsCount = 0;
   var posts = <wid.Post>[];
+
   void editProfile() async {
     await Navigator.push(
         context,
@@ -46,44 +48,138 @@ class _ProfileState extends State<Profile> {
     });
   }
 
+  Widget buildGrid() {
+    final gridTiles = <GridTile>[];
+    posts.forEach((post) {
+      gridTiles.add(GridTile(child: PostTile(post.post)));
+    });
+    return GridView.count(
+      crossAxisCount: 3,
+      shrinkWrap: true,
+      mainAxisSpacing: 1.5,
+      crossAxisSpacing: 1.5,
+      // childAspectRatio: 1,
+      children: gridTiles,
+      physics: NeverScrollableScrollPhysics(),
+    );
+  }
+
+  var grid = true;
+  void gridOn() {
+    setState(() {
+      grid = !grid;
+    });
+  }
+
+  Widget changeOrientation() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        IconButton(
+          icon: Icon(Icons.grid_on),
+          onPressed: gridOn,
+          color: grid ? Colors.pink : null,
+        ),
+        IconButton(
+          icon: Icon(Icons.list),
+          onPressed: gridOn,
+          color: !grid ? Colors.pink : null,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: header(context, 'Profile'),
       body: ListView(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundImage:
-                    CachedNetworkImageProvider(currentUser.photoUrl),
-              ),
-              Column(
-                children: [
-                  Row(
-                    // mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Column(children: [
-                        Text(postsCount.toString()),
-                        Text('Posts')
-                      ]),
-                      Column(children: [Text('0'), Text('Followers')]),
-                      Column(children: [Text('0'), Text('Following')]),
-                    ],
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 35,
+                      backgroundImage:
+                          CachedNetworkImageProvider(currentUser.photoUrl),
+                    ),
+                    Expanded(
+                      // flex: 1,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        // mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Row(
+                            // mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(children: [
+                                Text(postsCount.toString()),
+                                Text('Posts')
+                              ]),
+                              Column(children: [Text('0'), Text('Followers')]),
+                              Column(children: [Text('0'), Text('Following')]),
+                            ],
+                          ),
+                          Container(
+                            height: 30,
+                            // padding: EdgeInsets.zero,
+                            child: TextButton(
+                              onPressed: editProfile,
+                              child: Text('Edit Profile'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(top: 12.0),
+                  child: Text(
+                    currentUser.username,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                    ),
                   ),
-                  TextButton(
-                      onPressed: editProfile, child: Text('Edit Profile'))
-                ],
-              ),
-            ],
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(top: 4.0),
+                  child: Text(
+                    currentUser.displayName,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(top: 2.0),
+                  child: Text(
+                    currentUser.bio,
+                  ),
+                ),
+              ],
+            ),
           ),
-          Text(currentUser.displayName),
-          Text(currentUser.username),
-          Column(
-            children: posts,
+          Divider(
+            height: 0,
           ),
+          changeOrientation(),
+          Divider(
+            height: 0,
+          ),
+          grid
+              ? buildGrid()
+              : Column(
+                  children: posts,
+                ),
         ],
       ),
     );

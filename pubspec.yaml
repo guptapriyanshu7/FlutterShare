@@ -38,6 +38,7 @@ dependencies:
   firebase_storage:
   geolocator:
   geocoding:
+  animator:
 
 dev_dependencies:
   flutter_test:
