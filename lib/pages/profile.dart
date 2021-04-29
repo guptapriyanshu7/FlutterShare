@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/post.dart' as model;
-import 'package:flutter_share/pages/post.dart' as wid;
+import 'package:flutter_share/pages/post.dart' as page;
 import 'package:flutter_share/pages/edit_profile.dart';
 import 'package:flutter_share/widgets/header.dart';
 import 'package:flutter_share/pages/home.dart';
@@ -17,7 +17,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   var postsCount = 0;
-  var posts = <wid.Post>[];
+  var posts = <page.Post>[];
 
   void editProfile() async {
     await Navigator.push(
@@ -43,7 +43,7 @@ class _ProfileState extends State<Profile> {
       postsCount = snap.docs.length;
       posts = snap.docs.map((doc) {
         var post = model.Post.fromDocument(doc);
-        return wid.Post(post);
+        return page.Post(post);
       }).toList();
     });
   }

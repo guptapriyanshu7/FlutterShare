@@ -19,9 +19,6 @@ class Post extends StatefulWidget {
 
 class _PostState extends State<Post> {
   int getLikesCount(Map<String, dynamic> likes) {
-    // if(likes == null) {
-    //   return 0;
-    // }
     var count = 0;
     likes.values.forEach((val) {
       if (val == true) count += 1;
@@ -36,6 +33,30 @@ class _PostState extends State<Post> {
         .collection('userPosts')
         .doc(widget.post.id)
         .update({'likes.${currentUser.id}': !isliked});
+    if (!isliked) {
+      feedRef.doc(widget.post.ownerid).collection('userFeed').add({
+        'type': 'like',
+        'timestamp': DateTime.now(),
+        'photoUrl': currentUser.photoUrl,
+        'username': currentUser.username,
+        'userId': currentUser.id,
+        'postId': widget.post.id,
+        "mediaUrl": widget.post.mediaUrl,
+      });
+    } else {
+      feedRef
+          .doc(widget.post.ownerid)
+          .collection('userFeed')
+          .where('userId', isEqualTo: currentUser.id)
+          .where('postId', isEqualTo: widget.post.id)
+          .where('type', isEqualTo: 'like')
+          .get()
+          .then((value) {
+        value.docs.forEach((doc) {
+          doc.reference.delete();
+        });
+      });
+    }
     setState(() {
       isliked = !isliked;
       widget.post.likes[currentUser.id] = isliked;
@@ -123,8 +144,8 @@ class _PostState extends State<Post> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                CommnetsScreen(widget.post.id),
+                            builder: (context) => CommentsScreen(widget.post.id,
+                                widget.post.ownerid, widget.post.mediaUrl),
                           ),
                         );
                       },
@@ -140,27 +161,6 @@ class _PostState extends State<Post> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-                // Container(
-                //   margin: EdgeInsets.only(left: 15),
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       // Container(
-                //       // child:
-                //       Text(
-                //         user.username + ' ',
-                //         style: TextStyle(
-                //           fontWeight: FontWeight.bold,
-                //         ),
-                //       ),
-                //       // ),
-                //       // Expanded(
-                //       // child:
-                //       Text(widget.post.caption),
-                //       // )
-                //     ],
-                //   ),
-                // ),
                 Container(
                   margin: EdgeInsets.only(left: 15, right: 15),
                   child: RichText(

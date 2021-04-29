@@ -5,20 +5,18 @@ import 'package:flutter_share/widgets/header.dart';
 import 'package:flutter_share/widgets/progress.dart';
 import 'package:timeago/timeago.dart';
 
-class CommnetsScreen extends StatefulWidget {
+class CommentsScreen extends StatelessWidget {
   final String postId;
-  CommnetsScreen(this.postId, {Key key}) : super(key: key);
+  final String postOwner;
+  final String photoUrl;
+  CommentsScreen(this.postId, this.postOwner, this.photoUrl, {Key key})
+      : super(key: key);
 
-  @override
-  _CommnetsScreenState createState() => _CommnetsScreenState();
-}
-
-class _CommnetsScreenState extends State<CommnetsScreen> {
   final commentController = TextEditingController();
   Widget showComments() {
     return StreamBuilder(
       stream: commentsRef
-          .doc(widget.postId)
+          .doc(postId)
           .collection('comments')
           .orderBy('timestamp', descending: false)
           .snapshots(),
@@ -39,13 +37,25 @@ class _CommnetsScreenState extends State<CommnetsScreen> {
   }
 
   void addComment() {
-    commentsRef.doc(widget.postId).collection("comments").add({
+    commentsRef.doc(postId).collection("comments").add({
       'comment': commentController.text,
       'timestamp': DateTime.now(),
       'userId': currentUser.id,
       'username': currentUser.username,
       'avatar': currentUser.photoUrl,
     });
+    // if (currentUser.id != postOwner) {
+    feedRef.doc(postOwner).collection('userFeed').add({
+      'type': 'comment',
+      'comment': commentController.text,
+      'timestamp': DateTime.now(),
+      'photoUrl': currentUser.photoUrl,
+      'username': currentUser.username,
+      'userId': currentUser.id,
+      'postId': postId,
+      "mediaUrl": photoUrl,
+    });
+    // }
     commentController.clear();
   }
 
