@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_share/models/user.dart';
+import 'package:flutter_share/models/user.dart' as userModel;
 import 'package:flutter_share/pages/activity_feed.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_share/pages/create_account.dart';
@@ -15,8 +16,9 @@ final googleSignIn = GoogleSignIn();
 final usersRef = FirebaseFirestore.instance.collection('users');
 final postsRef = FirebaseFirestore.instance.collection('posts');
 final commentsRef = FirebaseFirestore.instance.collection('comments');
+final auth = FirebaseAuth.instance;
 final storage = FirebaseStorage.instance;
-User currentUser;
+userModel.User currentUser;
 
 class Home extends StatefulWidget {
   @override
@@ -32,12 +34,31 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     pageController = PageController();
-    googleSignIn.onCurrentUserChanged.listen((account) {
-      handleSignIn(account);
+    auth.userChanges().listen((User user) {
+      if (user == null) {
+        setState(() {
+          isAuth = false;
+        });
+      } else {
+        handleSignIn(user);
+      }
     });
-    googleSignIn.signInSilently().then((account) {
-      handleSignIn(account);
-    });
+    // googleSignIn.onCurrentUserChanged.listen((account) {
+    //   handleSignIn(account);
+    // });
+    // googleSignIn.signInSilently().then((account) {
+    //   handleSignIn(account);
+    // });
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    final googleUser = await googleSignIn.signIn();
+    final googleAuth = await googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    return await auth.signInWithCredential(credential);
   }
 
   @override
@@ -46,36 +67,30 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-  void handleSignIn(GoogleSignInAccount account) async {
-    if (account != null) {
-      print('User signed in!: $account');
-      var doc = await usersRef.doc(account.id).get();
-      if (!doc.exists) {
-        final String username = await Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => CreateAccount()),
-        );
-        usersRef.doc(account.id).set({
-          'username': username,
-          'photoUrl': account.photoUrl,
-          'email': account.email,
-          'displayName': account.displayName,
-          'bio': '',
-          'timestamp': DateTime.now(),
-        });
-        doc = await usersRef.doc(account.id).get();
-      }
-      currentUser = User.fromDocument(doc);
-      print(currentUser.id);
-
-      setState(() {
-        isAuth = true;
+  void handleSignIn(User account) async {
+    print('User signed in!: $account');
+    var doc = await usersRef.doc(account.uid).get();
+    if (!doc.exists) {
+      final String username = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CreateAccount()),
+      );
+      usersRef.doc(account.uid).set({
+        'username': username,
+        'photoUrl': account.photoURL,
+        'email': account.email,
+        'displayName': account.displayName,
+        'bio': '',
+        'timestamp': DateTime.now(),
       });
-    } else {
-      setState(() {
-        isAuth = false;
-      });
+      doc = await usersRef.doc(account.uid).get();
     }
+    currentUser = userModel.User.fromDocument(doc);
+    print(currentUser.id);
+
+    setState(() {
+      isAuth = true;
+    });
   }
 
   Widget authorizedScreen() {
@@ -177,13 +192,14 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void login() {
-    googleSignIn.signIn();
+  void login() async {
+    signInWithGoogle();
   }
 
   void logout() {
     pageIndex = 0;
     googleSignIn.signOut();
+    auth.signOut();
   }
 
   @override

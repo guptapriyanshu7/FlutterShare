@@ -40,6 +40,7 @@ dependencies:
   geocoding:
   animator:
   timeago:
+  firebase_auth:
 
 dev_dependencies:
   flutter_test:

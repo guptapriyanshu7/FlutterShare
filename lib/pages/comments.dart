@@ -60,7 +60,7 @@ class _CommnetsScreenState extends State<CommnetsScreen> {
             ListTile(
               title: TextField(
                 controller: commentController,
-                decoration: InputDecoration(labelText: 'Write  comment...'),
+                decoration: InputDecoration(labelText: 'Write comment...'),
               ),
               trailing: OutlinedButton(
                 style: ButtonStyle(

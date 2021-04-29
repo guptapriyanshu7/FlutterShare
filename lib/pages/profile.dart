@@ -65,9 +65,9 @@ class _ProfileState extends State<Profile> {
   }
 
   var grid = true;
-  void gridOn() {
+  void gridOn(bool set) {
     setState(() {
-      grid = !grid;
+      grid = set;
     });
   }
 
@@ -77,12 +77,12 @@ class _ProfileState extends State<Profile> {
       children: [
         IconButton(
           icon: Icon(Icons.grid_on),
-          onPressed: gridOn,
+          onPressed: () => gridOn(true),
           color: grid ? Colors.pink : null,
         ),
         IconButton(
           icon: Icon(Icons.list),
-          onPressed: gridOn,
+          onPressed: () => gridOn(false),
           color: !grid ? Colors.pink : null,
         ),
       ],
@@ -102,32 +102,36 @@ class _ProfileState extends State<Profile> {
                 Row(
                   children: [
                     CircleAvatar(
-                      radius: 35,
+                      radius: 40,
                       backgroundImage:
                           CachedNetworkImageProvider(currentUser.photoUrl),
                     ),
                     Expanded(
                       // flex: 1,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        // mainAxisAlignment: MainAxisAlignment.end,
+                        // crossAxisAlignment: CrossAxisAlignment.stretch,
+                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Row(
-                            // mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Column(children: [
-                                Text(postsCount.toString()),
-                                Text('Posts')
-                              ]),
-                              Column(children: [Text('0'), Text('Followers')]),
-                              Column(children: [Text('0'), Text('Following')]),
-                            ],
+                          Container(
+                            margin: EdgeInsets.only(top: 10, bottom: 10),
+                            child: Row(
+                              // mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(children: [
+                                  Text(postsCount.toString()),
+                                  Text('Posts')
+                                ]),
+                                Column(
+                                    children: [Text('0'), Text('Followers')]),
+                                Column(
+                                    children: [Text('0'), Text('Following')]),
+                              ],
+                            ),
                           ),
                           Container(
-                            height: 30,
-                            // padding: EdgeInsets.zero,
-                            child: TextButton(
+                            height: 25,
+                            child: OutlinedButton(
                               onPressed: editProfile,
                               child: Text('Edit Profile'),
                             ),

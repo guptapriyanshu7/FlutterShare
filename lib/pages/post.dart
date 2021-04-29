@@ -111,7 +111,8 @@ class _PostState extends State<Post> {
                   children: [
                     IconButton(
                       icon: Icon(
-                          isliked ? Icons.favorite : Icons.favorite_border),
+                        isliked ? Icons.favorite : Icons.favorite_border,
+                      ),
                       onPressed: likesController,
                       iconSize: 28.0,
                       color: Theme.of(context).accentColor,
@@ -122,7 +123,8 @@ class _PostState extends State<Post> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CommnetsScreen(widget.post.id),
+                            builder: (context) =>
+                                CommnetsScreen(widget.post.id),
                           ),
                         );
                       },
@@ -138,22 +140,46 @@ class _PostState extends State<Post> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-                Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 15),
-                      child: Text(
-                        user.username + ' ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                // Container(
+                //   margin: EdgeInsets.only(left: 15),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       // Container(
+                //       // child:
+                //       Text(
+                //         user.username + ' ',
+                //         style: TextStyle(
+                //           fontWeight: FontWeight.bold,
+                //         ),
+                //       ),
+                //       // ),
+                //       // Expanded(
+                //       // child:
+                //       Text(widget.post.caption),
+                //       // )
+                //     ],
+                //   ),
+                // ),
+                Container(
+                  margin: EdgeInsets.only(left: 15, right: 15),
+                  child: RichText(
+                    text: TextSpan(
+                      style: DefaultTextStyle.of(context).style,
+                      children: [
+                        TextSpan(
+                          text: '${user.username} ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
+                        TextSpan(text: widget.post.caption),
+                      ],
                     ),
-                    Expanded(child: Text(widget.post.caption))
-                  ],
+                  ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 )
               ],
             )
