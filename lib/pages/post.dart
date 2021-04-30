@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/post.dart' as model;
 import 'package:flutter_share/models/user.dart';
 import 'package:flutter_share/pages/comments.dart';
 import 'package:flutter_share/pages/home.dart';
+import 'package:flutter_share/pages/profile.dart';
 import 'package:flutter_share/widgets/cachedImage.dart';
 import 'package:animator/animator.dart';
 
@@ -25,7 +27,7 @@ class _PostState extends State<Post> {
     });
     return count;
   }
-
+  
   bool isliked;
   void likesController() {
     postsRef
@@ -82,7 +84,14 @@ class _PostState extends State<Post> {
               leading: CircleAvatar(
                 backgroundImage: CachedNetworkImageProvider(user.photoUrl),
               ),
-              title: Text(user.username),
+              title: GestureDetector(
+                  onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Profile(user.id),
+                        ),
+                      ),
+                  child: Text(user.username)),
               subtitle: Text(widget.post.location),
               trailing: IconButton(
                 onPressed: () => print('deleting post'),
@@ -169,6 +178,13 @@ class _PostState extends State<Post> {
                       children: [
                         TextSpan(
                           text: '${user.username} ',
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Profile(user.id),
+                                  ),
+                                ),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),

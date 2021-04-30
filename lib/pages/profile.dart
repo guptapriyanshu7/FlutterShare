@@ -1,29 +1,28 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/post.dart' as model;
-import 'package:flutter_share/pages/post.dart' as page;
+import 'package:flutter_share/models/user.dart';
+import 'package:flutter_share/pages/post.dart' as wid;
 import 'package:flutter_share/pages/edit_profile.dart';
 import 'package:flutter_share/widgets/header.dart';
 import 'package:flutter_share/pages/home.dart';
 import 'package:flutter_share/widgets/post_tile.dart';
 
 class Profile extends StatefulWidget {
-  final void Function() logout;
-  const Profile(this.logout, {Key key}) : super(key: key);
-
+  final String userId;
+  const Profile(this.userId, {Key key}) : super(key: key);
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
   var postsCount = 0;
-  var posts = <page.Post>[];
+  var posts = <wid.Post>[];
 
   void editProfile() async {
     await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => EditProfile(logout: widget.logout)));
+        context, MaterialPageRoute(builder: (context) => EditProfile()));
     setState(() {});
   }
 
@@ -35,7 +34,7 @@ class _ProfileState extends State<Profile> {
 
   getProfilePosts() async {
     final snap = await postsRef
-        .doc(currentUser.id)
+        .doc(widget.userId)
         .collection('userPosts')
         .orderBy('timestamp', descending: true)
         .get();
@@ -43,15 +42,15 @@ class _ProfileState extends State<Profile> {
       postsCount = snap.docs.length;
       posts = snap.docs.map((doc) {
         var post = model.Post.fromDocument(doc);
-        return page.Post(post);
+        return wid.Post(post);
       }).toList();
     });
   }
 
-  Widget buildGrid() {
+  Widget buildGrid(BuildContext context) {
     final gridTiles = <GridTile>[];
     posts.forEach((post) {
-      gridTiles.add(GridTile(child: PostTile(post.post)));
+      gridTiles.add(GridTile(child: postTile(context, post.post)));
     });
     return GridView.count(
       crossAxisCount: 3,
@@ -93,99 +92,110 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: header(context, 'Profile'),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
+      body: FutureBuilder<DocumentSnapshot>(
+          future: usersRef.doc(widget.userId).get(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return Text('');
+            final user = User.fromDocument(snapshot.data);
+            return ListView(
               children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage:
-                          CachedNetworkImageProvider(currentUser.photoUrl),
-                    ),
-                    Expanded(
-                      // flex: 1,
-                      child: Column(
-                        // crossAxisAlignment: CrossAxisAlignment.stretch,
-                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    children: [
+                      Row(
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(top: 10, bottom: 10),
-                            child: Row(
-                              // mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Column(children: [
-                                  Text(postsCount.toString()),
-                                  Text('Posts')
-                                ]),
-                                Column(
-                                    children: [Text('0'), Text('Followers')]),
-                                Column(
-                                    children: [Text('0'), Text('Following')]),
-                              ],
-                            ),
+                          CircleAvatar(
+                            radius: 40,
+                            backgroundImage:
+                                CachedNetworkImageProvider(user.photoUrl),
                           ),
-                          Container(
-                            height: 25,
-                            child: OutlinedButton(
-                              onPressed: editProfile,
-                              child: Text('Edit Profile'),
+                          Expanded(
+                            // flex: 1,
+                            child: Column(
+                              // crossAxisAlignment: CrossAxisAlignment.stretch,
+                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(top: 10, bottom: 10),
+                                  child: Row(
+                                    // mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Column(children: [
+                                        Text(postsCount.toString()),
+                                        Text('Posts')
+                                      ]),
+                                      Column(children: [
+                                        Text('0'),
+                                        Text('Followers')
+                                      ]),
+                                      Column(children: [
+                                        Text('0'),
+                                        Text('Following')
+                                      ]),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  height: 25,
+                                  child: OutlinedButton(
+                                    onPressed: editProfile,
+                                    child: Text('Edit Profile'),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 12.0),
-                  child: Text(
-                    currentUser.username,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.only(top: 12.0),
+                        child: Text(
+                          user.username,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.only(top: 4.0),
+                        child: Text(
+                          user.displayName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.only(top: 2.0),
+                        child: Text(
+                          user.bio,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 4.0),
-                  child: Text(
-                    currentUser.displayName,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                Divider(
+                  height: 0,
                 ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 2.0),
-                  child: Text(
-                    currentUser.bio,
-                  ),
+                changeOrientation(),
+                Divider(
+                  height: 0,
                 ),
+                grid
+                    ? buildGrid(context)
+                    : Column(
+                        children: posts,
+                      ),
               ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          changeOrientation(),
-          Divider(
-            height: 0,
-          ),
-          grid
-              ? buildGrid()
-              : Column(
-                  children: posts,
-                ),
-        ],
-      ),
+            );
+          }),
     );
   }
 }

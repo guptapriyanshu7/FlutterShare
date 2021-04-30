@@ -53,7 +53,7 @@ class CommentsScreen extends StatelessWidget {
       'username': currentUser.username,
       'userId': currentUser.id,
       'postId': postId,
-      "mediaUrl": photoUrl,
+      'mediaUrl': photoUrl,
     });
     // }
     commentController.clear();
@@ -62,26 +62,27 @@ class CommentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: header(context, 'Comments'),
-        body: Column(
-          children: [
-            Expanded(child: showComments()),
-            Divider(),
-            ListTile(
-              title: TextField(
-                controller: commentController,
-                decoration: InputDecoration(labelText: 'Write comment...'),
+      appBar: header(context, 'Comments'),
+      body: Column(
+        children: [
+          Expanded(child: showComments()),
+          Divider(),
+          ListTile(
+            title: TextField(
+              controller: commentController,
+              decoration: InputDecoration(labelText: 'Write comment...'),
+            ),
+            trailing: OutlinedButton(
+              style: ButtonStyle(
+                side: MaterialStateProperty.all<BorderSide>(
+                    BorderSide(color: Colors.red)),
               ),
-              trailing: OutlinedButton(
-                style: ButtonStyle(
-                  side: MaterialStateProperty.all<BorderSide>(
-                      BorderSide(color: Colors.red)),
-                ),
-                onPressed: addComment,
-                child: Text('POST'),
-              ),
-            )
-          ],
-        ));
+              onPressed: addComment,
+              child: Text('POST'),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

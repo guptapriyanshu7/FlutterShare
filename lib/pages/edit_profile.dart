@@ -4,17 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/pages/home.dart';
 
-class EditProfile extends StatefulWidget {
-  final void Function() logout;
-  const EditProfile({this.logout, Key key}) : super(key: key);
-  @override
-  _EditProfileState createState() => _EditProfileState();
-}
-
-class _EditProfileState extends State<EditProfile> {
+class EditProfile extends StatelessWidget {
   final formkey = GlobalKey<FormState>();
 
-  void update() async {
+  void update(BuildContext context) async {
     final form = formkey.currentState;
     if (form.validate()) {
       form.save();
@@ -79,7 +72,8 @@ class _EditProfileState extends State<EditProfile> {
                         validator: (val) {
                           if (val.trim().length < 3)
                             return 'Name too short!';
-                          else if (val.trim().length > 12) return 'Name too big!';
+                          else if (val.trim().length > 50)
+                            return 'Name too big!';
                           return null;
                         },
                         initialValue: currentUser.displayName,
@@ -102,7 +96,7 @@ class _EditProfileState extends State<EditProfile> {
                 ),
               ),
               TextButton(
-                onPressed: update,
+                onPressed: () => update(context),
                 child: Text('Update'),
               ),
               Container(
@@ -110,7 +104,9 @@ class _EditProfileState extends State<EditProfile> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    widget.logout();
+                    pageIndex = 0;
+                    googleSignIn.signOut();
+                    auth.signOut();
                   },
                   child: Text('Logout'),
                 ),

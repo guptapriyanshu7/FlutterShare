@@ -20,6 +20,7 @@ final feedRef = FirebaseFirestore.instance.collection('feed');
 final auth = FirebaseAuth.instance;
 final storage = FirebaseStorage.instance;
 userModel.User currentUser;
+var pageIndex = 0;
 
 class Home extends StatefulWidget {
   @override
@@ -29,7 +30,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var isAuth = false;
   PageController pageController;
-  var pageIndex = 0;
 
   @override
   void initState() {
@@ -102,7 +102,7 @@ class _HomeState extends State<Home> {
           ActivityFeed(),
           Upload(),
           Search(),
-          Profile(logout),
+          Profile(currentUser.id),
         ],
         controller: pageController,
         onPageChanged: onPageChanged,
@@ -179,9 +179,9 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void onPageChanged(int pageIndex) {
+  void onPageChanged(int pI) {
     setState(() {
-      this.pageIndex = pageIndex;
+      pageIndex = pI;
     });
   }
 
@@ -195,12 +195,6 @@ class _HomeState extends State<Home> {
 
   void login() async {
     signInWithGoogle();
-  }
-
-  void logout() {
-    pageIndex = 0;
-    googleSignIn.signOut();
-    auth.signOut();
   }
 
   @override
