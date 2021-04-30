@@ -28,24 +28,35 @@ class ActivityFeed extends StatelessWidget {
               children: snapshot.data.docs.map<GestureDetector>((doc) {
                 return GestureDetector(
                   onTap: () async {
-                    final post = await postsRef
-                        .doc(currentUser.id)
-                        .collection('userPosts')
-                        .doc(doc['postId'])
-                        .get();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return Scaffold(
-                            appBar: header(context, 'FlutterShare'),
-                            body: SingleChildScrollView(
-                              child: Post(model.Post.fromDocument(post)),
-                            ),
-                          );
-                        },
-                      ),
-                    );
+                    if (doc['type'] == 'follow') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return Profile(doc['userId']);
+                          },
+                        ),
+                      );
+                    } else {
+                      final post = await postsRef
+                          .doc(currentUser.id)
+                          .collection('userPosts')
+                          .doc(doc['postId'])
+                          .get();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return Scaffold(
+                              appBar: header(context, 'FlutterShare'),
+                              body: SingleChildScrollView(
+                                child: Post(model.Post.fromDocument(post)),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
                   },
                   child: ListTile(
                     leading: GestureDetector(
@@ -85,7 +96,9 @@ class ActivityFeed extends StatelessWidget {
                           child: Text(
                             doc['type'] == 'comment'
                                 ? ' replied: ${doc['comment']}'
-                                : ' liked your post.',
+                                : doc['type'] == 'like'
+                                    ? ' liked your post.'
+                                    : ' started following you.',
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -94,10 +107,12 @@ class ActivityFeed extends StatelessWidget {
                     subtitle: Text(
                       format(doc['timestamp'].toDate()),
                     ),
-                    trailing: CircleAvatar(
-                      backgroundImage:
-                          CachedNetworkImageProvider(doc['mediaUrl']),
-                    ),
+                    trailing: doc['type'] == 'follow'
+                        ? null
+                        : CircleAvatar(
+                            backgroundImage:
+                                CachedNetworkImageProvider(doc['mediaUrl']),
+                          ),
                   ),
                 );
               }).toList(),

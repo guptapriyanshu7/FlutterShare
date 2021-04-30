@@ -19,6 +19,10 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   var postsCount = 0;
   var posts = <wid.Post>[];
+  var grid = true;
+  var isFollowing = false;
+  var followers = 0;
+  var following = 0;
 
   void editProfile() async {
     await Navigator.push(
@@ -30,6 +34,36 @@ class _ProfileState extends State<Profile> {
   void initState() {
     super.initState();
     getProfilePosts();
+    getFollowersCount();
+    getFollowingCount();
+    checkIfFollowing();
+  }
+
+  void getFollowingCount() async {
+    final doc =
+        await followingRef.doc(widget.userId).collection('following').get();
+    setState(() {
+      following = doc.size;
+    });
+  }
+
+  void getFollowersCount() async {
+    final doc =
+        await followersRef.doc(widget.userId).collection('followers').get();
+    setState(() {
+      followers = doc.size;
+    });
+  }
+
+  void checkIfFollowing() async {
+    final doc = await followingRef
+        .doc(currentUser.id)
+        .collection('following')
+        .doc(widget.userId)
+        .get();
+    setState(() {
+      isFollowing = doc.exists;
+    });
   }
 
   getProfilePosts() async {
@@ -63,7 +97,6 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  var grid = true;
   void gridOn(bool set) {
     setState(() {
       grid = set;
@@ -85,6 +118,70 @@ class _ProfileState extends State<Profile> {
           color: !grid ? Colors.pink : null,
         ),
       ],
+    );
+  }
+
+  void changeFollowStatus() {
+    setState(() {
+      isFollowing = !isFollowing;
+      followers += isFollowing ? 1 : -1;
+    });
+    if (isFollowing) {
+      followingRef
+          .doc(currentUser.id)
+          .collection('following')
+          .doc(widget.userId)
+          .set({});
+      followersRef
+          .doc(widget.userId)
+          .collection('followers')
+          .doc(currentUser.id)
+          .set({});
+      feedRef.doc(widget.userId).collection('userFeed').add({
+        'type': 'follow',
+        'timestamp': DateTime.now(),
+        'photoUrl': currentUser.photoUrl,
+        'username': currentUser.username,
+        'userId': currentUser.id,
+      });
+    } else {
+      followingRef
+          .doc(currentUser.id)
+          .collection('following')
+          .doc(widget.userId)
+          .delete();
+      followersRef
+          .doc(widget.userId)
+          .collection('followers')
+          .doc(currentUser.id)
+          .delete();
+      feedRef
+          .doc(widget.userId)
+          .collection('userFeed')
+          .where('userId', isEqualTo: currentUser.id)
+          .where('type', isEqualTo: 'follow')
+          .get()
+          .then((value) {
+        value.docs.forEach((doc) {
+          doc.reference.delete();
+        });
+      });
+    }
+  }
+
+  Widget buildButtons() {
+    return Container(
+      height: 25,
+      width: 200,
+      child: currentUser.id == widget.userId
+          ? OutlinedButton(
+              onPressed: editProfile,
+              child: Text('Edit Profile'),
+            )
+          : OutlinedButton(
+              onPressed: changeFollowStatus,
+              child: isFollowing ? Text('Unfollow') : Text('Follow'),
+            ),
     );
   }
 
@@ -128,23 +225,17 @@ class _ProfileState extends State<Profile> {
                                         Text('Posts')
                                       ]),
                                       Column(children: [
-                                        Text('0'),
+                                        Text(followers.toString()),
                                         Text('Followers')
                                       ]),
                                       Column(children: [
-                                        Text('0'),
+                                        Text(following.toString()),
                                         Text('Following')
                                       ]),
                                     ],
                                   ),
                                 ),
-                                Container(
-                                  height: 25,
-                                  child: OutlinedButton(
-                                    onPressed: editProfile,
-                                    child: Text('Edit Profile'),
-                                  ),
-                                ),
+                                buildButtons(),
                               ],
                             ),
                           ),
