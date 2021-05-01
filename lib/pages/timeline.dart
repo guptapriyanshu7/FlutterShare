@@ -34,20 +34,20 @@ class Timeline extends StatelessWidget {
     // getUsers();
     return Scaffold(
       appBar: header(context, 'FlutterShare'),
-      body: StreamBuilder(
-        stream: usersRef.snapshots(),
-        builder: (ctx, snapshot) {
-          if (!snapshot.hasData) {
-            return circularIndicator();
-          }
-          final List<Text> children = snapshot.data.docs
-              .map<Text>((doc) => Text(doc['username']))
-              .toList();
-          return Container(
-            child: ListView(children: children),
-          );
-        },
-      ),
+      // body: StreamBuilder(
+      //   stream: usersRef.snapshots(),
+      //   builder: (ctx, snapshot) {
+      //     if (!snapshot.hasData) {
+      //       return circularIndicator();
+      //     }
+      //     final List<Text> children = snapshot.data.docs
+      //         .map<Text>((doc) => Text(doc['username']))
+      //         .toList();
+      //     return Container(
+      //       child: ListView(children: children),
+      //     );
+      //   },
+      // ),
     );
   }
 }

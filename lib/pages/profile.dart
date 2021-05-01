@@ -16,7 +16,9 @@ class Profile extends StatefulWidget {
   _ProfileState createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin {
+  get wantKeepAlive => true;
+
   var postsCount = 0;
   var posts = <wid.Post>[];
   var grid = true;
@@ -187,6 +189,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: header(context, 'Profile'),
       body: FutureBuilder<DocumentSnapshot>(

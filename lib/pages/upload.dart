@@ -17,7 +17,7 @@ class Upload extends StatefulWidget {
   _UploadState createState() => _UploadState();
 }
 
-class _UploadState extends State<Upload> {
+class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin {
   File file;
   var isUploading = false;
   var postId = Uuid().v4();
@@ -127,8 +127,11 @@ class _UploadState extends State<Upload> {
     locationController.text = formattedAddress;
   }
 
+  get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return file == null
         ? Container(
             color: Theme.of(context).accentColor,

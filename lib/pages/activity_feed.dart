@@ -8,11 +8,20 @@ import 'package:flutter_share/widgets/header.dart';
 import 'package:flutter_share/widgets/progress.dart';
 import 'package:timeago/timeago.dart';
 
-class ActivityFeed extends StatelessWidget {
-  const ActivityFeed({Key key}) : super(key: key);
+class ActivityFeed extends StatefulWidget {
+  // const ActivityFeed({Key key}) : super(key: key);
+  @override
+  _ActivityFeedState createState() => _ActivityFeedState();
+}
+
+class _ActivityFeedState extends State<ActivityFeed>
+    with AutomaticKeepAliveClientMixin {
+  get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       appBar: header(context, 'Notifications'),
       body: FutureBuilder(
