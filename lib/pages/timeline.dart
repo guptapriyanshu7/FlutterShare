@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/widgets/header.dart';
-import 'package:flutter_share/widgets/progress.dart';
-import 'package:flutter_share/pages/home.dart';
 
 class Timeline extends StatelessWidget {
   const Timeline({Key key}) : super(key: key);
