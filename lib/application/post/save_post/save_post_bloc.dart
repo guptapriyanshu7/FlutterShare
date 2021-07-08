@@ -52,6 +52,14 @@ class SavePostBloc extends Bloc<SavePostEvent, SavePostState> {
           // failureOption: none(),
         );
       },
+      locationChanged: (e) async* {
+        yield state.copyWith(
+          post: state.post.copyWith(
+            location: e.value,
+          ),
+          // failureOption: none(),
+        );
+      },
     );
   }
 }

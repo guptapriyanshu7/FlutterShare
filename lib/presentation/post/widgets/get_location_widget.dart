@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_share/application/post/save_post/save_post_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class GetLocationWidget extends StatelessWidget {
-  final locationController = TextEditingController();
+  final _locationController = TextEditingController();
 
   GetLocationWidget({Key? key}) : super(key: key);
 
-  Future<void> getLocation() async {
+  Future<String> getLocation() async {
     print('getLocation');
     final position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
@@ -20,7 +22,7 @@ class GetLocationWidget extends StatelessWidget {
     print(placemark);
     final String formattedAddress =
         "${placemark.street}, ${placemark.subLocality}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}";
-    locationController.text = formattedAddress;
+    return formattedAddress;
   }
 
   @override
@@ -33,8 +35,14 @@ class GetLocationWidget extends StatelessWidget {
             color: Theme.of(context).primaryColor,
             size: 35,
           ),
-          title: TextField(
-            controller: locationController,
+          title: TextFormField(
+            controller: _locationController,
+            // onChanged: (value) {
+            //   _locationController.text = value;
+            //   context.read<SavePostBloc>().add(
+            //         SavePostEvent.locationChanged(value),
+            //       );
+            // },
             decoration: const InputDecoration(
               hintText: 'Location...',
               border: InputBorder.none,
@@ -50,7 +58,13 @@ class GetLocationWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
-            onPressed: getLocation,
+            onPressed: () async {
+              final value = await getLocation();
+              _locationController.text = value;
+              context.read<SavePostBloc>().add(
+                    SavePostEvent.locationChanged(value),
+                  );
+            },
             icon: const Icon(Icons.my_location),
             label: const Text('Current Location'),
           ),

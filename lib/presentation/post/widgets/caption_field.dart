@@ -19,10 +19,12 @@ class CaptionField extends StatelessWidget {
         ),
       ),
       title: TextFormField(
-        // controller: captionController,
         onChanged: (value) => context.read<SavePostBloc>().add(
               SavePostEvent.captionChanged(value),
             ),
+        maxLength: CAPTION_MAX_LENGTH,
+        maxLines: 8,
+        minLines: 3,
         validator: (_) {
           if (_ == null || !validateStringNotEmpty(_)) {
             return 'Caption is empty.';
@@ -33,6 +35,7 @@ class CaptionField extends StatelessWidget {
         },
         decoration: const InputDecoration(
           hintText: 'Enter a Caption...',
+          counterText: '',
           border: InputBorder.none,
         ),
       ),

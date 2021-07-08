@@ -29,6 +29,12 @@ class _$SavePostEventTearOff {
       value,
     );
   }
+
+  _LocationChanged locationChanged(String value) {
+    return _LocationChanged(
+      value,
+    );
+  }
 }
 
 /// @nodoc
@@ -41,6 +47,7 @@ mixin _$SavePostEvent {
     required TResult Function() save,
     required TResult Function() autoValidate,
     required TResult Function(String value) captionChanged,
+    required TResult Function(String value) locationChanged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -48,6 +55,7 @@ mixin _$SavePostEvent {
     TResult Function()? save,
     TResult Function()? autoValidate,
     TResult Function(String value)? captionChanged,
+    TResult Function(String value)? locationChanged,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -56,6 +64,7 @@ mixin _$SavePostEvent {
     required TResult Function(_Save value) save,
     required TResult Function(_AutoValidate value) autoValidate,
     required TResult Function(_CaptionChanged value) captionChanged,
+    required TResult Function(_LocationChanged value) locationChanged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -63,6 +72,7 @@ mixin _$SavePostEvent {
     TResult Function(_Save value)? save,
     TResult Function(_AutoValidate value)? autoValidate,
     TResult Function(_CaptionChanged value)? captionChanged,
+    TResult Function(_LocationChanged value)? locationChanged,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -125,6 +135,7 @@ class _$_Save implements _Save {
     required TResult Function() save,
     required TResult Function() autoValidate,
     required TResult Function(String value) captionChanged,
+    required TResult Function(String value) locationChanged,
   }) {
     return save();
   }
@@ -135,6 +146,7 @@ class _$_Save implements _Save {
     TResult Function()? save,
     TResult Function()? autoValidate,
     TResult Function(String value)? captionChanged,
+    TResult Function(String value)? locationChanged,
     required TResult orElse(),
   }) {
     if (save != null) {
@@ -149,6 +161,7 @@ class _$_Save implements _Save {
     required TResult Function(_Save value) save,
     required TResult Function(_AutoValidate value) autoValidate,
     required TResult Function(_CaptionChanged value) captionChanged,
+    required TResult Function(_LocationChanged value) locationChanged,
   }) {
     return save(this);
   }
@@ -159,6 +172,7 @@ class _$_Save implements _Save {
     TResult Function(_Save value)? save,
     TResult Function(_AutoValidate value)? autoValidate,
     TResult Function(_CaptionChanged value)? captionChanged,
+    TResult Function(_LocationChanged value)? locationChanged,
     required TResult orElse(),
   }) {
     if (save != null) {
@@ -215,6 +229,7 @@ class _$_AutoValidate implements _AutoValidate {
     required TResult Function() save,
     required TResult Function() autoValidate,
     required TResult Function(String value) captionChanged,
+    required TResult Function(String value) locationChanged,
   }) {
     return autoValidate();
   }
@@ -225,6 +240,7 @@ class _$_AutoValidate implements _AutoValidate {
     TResult Function()? save,
     TResult Function()? autoValidate,
     TResult Function(String value)? captionChanged,
+    TResult Function(String value)? locationChanged,
     required TResult orElse(),
   }) {
     if (autoValidate != null) {
@@ -239,6 +255,7 @@ class _$_AutoValidate implements _AutoValidate {
     required TResult Function(_Save value) save,
     required TResult Function(_AutoValidate value) autoValidate,
     required TResult Function(_CaptionChanged value) captionChanged,
+    required TResult Function(_LocationChanged value) locationChanged,
   }) {
     return autoValidate(this);
   }
@@ -249,6 +266,7 @@ class _$_AutoValidate implements _AutoValidate {
     TResult Function(_Save value)? save,
     TResult Function(_AutoValidate value)? autoValidate,
     TResult Function(_CaptionChanged value)? captionChanged,
+    TResult Function(_LocationChanged value)? locationChanged,
     required TResult orElse(),
   }) {
     if (autoValidate != null) {
@@ -330,6 +348,7 @@ class _$_CaptionChanged implements _CaptionChanged {
     required TResult Function() save,
     required TResult Function() autoValidate,
     required TResult Function(String value) captionChanged,
+    required TResult Function(String value) locationChanged,
   }) {
     return captionChanged(value);
   }
@@ -340,6 +359,7 @@ class _$_CaptionChanged implements _CaptionChanged {
     TResult Function()? save,
     TResult Function()? autoValidate,
     TResult Function(String value)? captionChanged,
+    TResult Function(String value)? locationChanged,
     required TResult orElse(),
   }) {
     if (captionChanged != null) {
@@ -354,6 +374,7 @@ class _$_CaptionChanged implements _CaptionChanged {
     required TResult Function(_Save value) save,
     required TResult Function(_AutoValidate value) autoValidate,
     required TResult Function(_CaptionChanged value) captionChanged,
+    required TResult Function(_LocationChanged value) locationChanged,
   }) {
     return captionChanged(this);
   }
@@ -364,6 +385,7 @@ class _$_CaptionChanged implements _CaptionChanged {
     TResult Function(_Save value)? save,
     TResult Function(_AutoValidate value)? autoValidate,
     TResult Function(_CaptionChanged value)? captionChanged,
+    TResult Function(_LocationChanged value)? locationChanged,
     required TResult orElse(),
   }) {
     if (captionChanged != null) {
@@ -379,6 +401,130 @@ abstract class _CaptionChanged implements SavePostEvent {
   String get value => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$CaptionChangedCopyWith<_CaptionChanged> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$LocationChangedCopyWith<$Res> {
+  factory _$LocationChangedCopyWith(
+          _LocationChanged value, $Res Function(_LocationChanged) then) =
+      __$LocationChangedCopyWithImpl<$Res>;
+  $Res call({String value});
+}
+
+/// @nodoc
+class __$LocationChangedCopyWithImpl<$Res>
+    extends _$SavePostEventCopyWithImpl<$Res>
+    implements _$LocationChangedCopyWith<$Res> {
+  __$LocationChangedCopyWithImpl(
+      _LocationChanged _value, $Res Function(_LocationChanged) _then)
+      : super(_value, (v) => _then(v as _LocationChanged));
+
+  @override
+  _LocationChanged get _value => super._value as _LocationChanged;
+
+  @override
+  $Res call({
+    Object? value = freezed,
+  }) {
+    return _then(_LocationChanged(
+      value == freezed
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_LocationChanged implements _LocationChanged {
+  const _$_LocationChanged(this.value);
+
+  @override
+  final String value;
+
+  @override
+  String toString() {
+    return 'SavePostEvent.locationChanged(value: $value)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _LocationChanged &&
+            (identical(other.value, value) ||
+                const DeepCollectionEquality().equals(other.value, value)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(value);
+
+  @JsonKey(ignore: true)
+  @override
+  _$LocationChangedCopyWith<_LocationChanged> get copyWith =>
+      __$LocationChangedCopyWithImpl<_LocationChanged>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() save,
+    required TResult Function() autoValidate,
+    required TResult Function(String value) captionChanged,
+    required TResult Function(String value) locationChanged,
+  }) {
+    return locationChanged(value);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? save,
+    TResult Function()? autoValidate,
+    TResult Function(String value)? captionChanged,
+    TResult Function(String value)? locationChanged,
+    required TResult orElse(),
+  }) {
+    if (locationChanged != null) {
+      return locationChanged(value);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Save value) save,
+    required TResult Function(_AutoValidate value) autoValidate,
+    required TResult Function(_CaptionChanged value) captionChanged,
+    required TResult Function(_LocationChanged value) locationChanged,
+  }) {
+    return locationChanged(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Save value)? save,
+    TResult Function(_AutoValidate value)? autoValidate,
+    TResult Function(_CaptionChanged value)? captionChanged,
+    TResult Function(_LocationChanged value)? locationChanged,
+    required TResult orElse(),
+  }) {
+    if (locationChanged != null) {
+      return locationChanged(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _LocationChanged implements SavePostEvent {
+  const factory _LocationChanged(String value) = _$_LocationChanged;
+
+  String get value => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$LocationChangedCopyWith<_LocationChanged> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
