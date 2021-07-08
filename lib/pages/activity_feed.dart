@@ -2,8 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/pages/home.dart';
-import 'package:flutter_share/pages/post.dart';
-// import 'package:flutter_share/models/post.dart' as model;
 import 'package:flutter_share/pages/profile.dart';
 import 'package:flutter_share/widgets/header.dart';
 import 'package:flutter_share/widgets/progress.dart';
@@ -49,11 +47,11 @@ class _ActivityFeedState extends State<ActivityFeed>
                         ),
                       );
                     } else {
-                      final post = await postsRef
-                          .doc(currentUser!.id)
-                          .collection('userPosts')
-                          .doc(doc['postId'] as String)
-                          .get();
+                      // final post = await postsRef
+                      //     .doc(currentUser!.id)
+                      //     .collection('userPosts')
+                      //     .doc(doc['postId'] as String)
+                      //     .get();
                       Navigator.push(
                         context,
                         MaterialPageRoute(

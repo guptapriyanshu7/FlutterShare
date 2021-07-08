@@ -2,8 +2,6 @@ import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/injection.dart';
-import 'package:flutter_share/pages/home.dart';
-import 'package:flutter_share/presentation/post/posts_page.dart';
 import 'package:flutter_share/presentation/post/save_post_page.dart';
 import 'package:flutter_share/widgets/progress.dart';
 import 'package:injectable/injectable.dart';

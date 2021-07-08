@@ -1,14 +1,10 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/domain/posts/post.dart' as model;
-import 'package:flutter_share/models/user.dart';
 import 'package:flutter_share/pages/comments.dart';
 import 'package:flutter_share/pages/home.dart';
-import 'package:flutter_share/pages/profile.dart';
+
 import 'package:flutter_share/widgets/cached_image.dart';
 import 'package:animator/animator.dart';
 
