@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/pages/home.dart';
 import 'package:flutter_share/pages/post.dart';
-import 'package:flutter_share/models/post.dart' as model;
+// import 'package:flutter_share/models/post.dart' as model;
 import 'package:flutter_share/pages/profile.dart';
 import 'package:flutter_share/widgets/header.dart';
 import 'package:flutter_share/widgets/progress.dart';
@@ -16,25 +17,26 @@ class ActivityFeed extends StatefulWidget {
 
 class _ActivityFeedState extends State<ActivityFeed>
     with AutomaticKeepAliveClientMixin {
-  get wantKeepAlive => true;
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     return Scaffold(
       appBar: header(context, 'Notifications'),
       body: FutureBuilder(
-          future: feedRef
-              .doc(currentUser.id)
-              .collection('userFeed')
-              .orderBy('timestamp', descending: true)
-              .limit(50)
-              .get(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return circularIndicator();
-            return ListView(
-              children: snapshot.data.docs.map<GestureDetector>((doc) {
+        future: feedRef
+            .doc(currentUser!.id)
+            .collection('userFeed')
+            .orderBy('timestamp', descending: true)
+            .limit(50)
+            .get(),
+        builder: (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+          if (!snapshot.hasData) return circularIndicator();
+          return ListView(
+            children: snapshot.data?.docs.map<GestureDetector>(
+              (doc) {
                 return GestureDetector(
                   onTap: () async {
                     if (doc['type'] == 'follow') {
@@ -42,15 +44,15 @@ class _ActivityFeedState extends State<ActivityFeed>
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return Profile(doc['userId']);
+                            return Profile(doc['userId'] as String);
                           },
                         ),
                       );
                     } else {
                       final post = await postsRef
-                          .doc(currentUser.id)
+                          .doc(currentUser!.id)
                           .collection('userPosts')
-                          .doc(doc['postId'])
+                          .doc(doc['postId'] as String)
                           .get();
                       Navigator.push(
                         context,
@@ -59,7 +61,7 @@ class _ActivityFeedState extends State<ActivityFeed>
                             return Scaffold(
                               appBar: header(context, 'FlutterShare'),
                               body: SingleChildScrollView(
-                                child: Post(model.Post.fromDocument(post)),
+                                // child: Post(model.Post.(post)),
                               ),
                             );
                           },
@@ -74,14 +76,15 @@ class _ActivityFeedState extends State<ActivityFeed>
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return Profile(doc['userId']);
+                              return Profile(doc['userId'] as String);
                             },
                           ),
                         );
                       },
                       child: CircleAvatar(
-                          backgroundImage:
-                              CachedNetworkImageProvider(doc['photoUrl'])),
+                        backgroundImage: CachedNetworkImageProvider(
+                            doc['photoUrl'] as String),
+                      ),
                     ),
                     title: Row(
                       children: [
@@ -91,14 +94,14 @@ class _ActivityFeedState extends State<ActivityFeed>
                               context,
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return Profile(doc['userId']);
+                                  return Profile(doc['userId'] as String);
                                 },
                               ),
                             );
                           },
                           child: Text(
-                            doc['username'],
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            doc['username'] as String,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                         Flexible(
@@ -114,19 +117,21 @@ class _ActivityFeedState extends State<ActivityFeed>
                       ],
                     ),
                     subtitle: Text(
-                      format(doc['timestamp'].toDate()),
+                      format(doc['timestamp'].toDate() as DateTime),
                     ),
                     trailing: doc['type'] == 'follow'
                         ? null
                         : CircleAvatar(
-                            backgroundImage:
-                                CachedNetworkImageProvider(doc['mediaUrl']),
+                            backgroundImage: CachedNetworkImageProvider(
+                                doc['mediaUrl'] as String),
                           ),
                   ),
                 );
-              }).toList(),
-            );
-          }),
+              },
+            ).toList() as List<GestureDetector>,
+          );
+        },
+      ),
     );
   }
 }

@@ -1,10 +1,12 @@
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_share/models/user.dart' as userModel;
+import 'package:flutter_share/models/user.dart' as user_model;
 import 'package:flutter_share/pages/activity_feed.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_share/pages/camera.dart';
 import 'package:flutter_share/pages/create_account.dart';
 import 'package:flutter_share/pages/profile.dart';
 import 'package:flutter_share/pages/search.dart';
@@ -18,26 +20,28 @@ final postsRef = FirebaseFirestore.instance.collection('posts');
 final commentsRef = FirebaseFirestore.instance.collection('comments');
 final feedRef = FirebaseFirestore.instance.collection('feed');
 final followingRef = FirebaseFirestore.instance.collection('following');
-final followersRef = FirebaseFirestore.instance.collection('followers');
+final followersRef = FirebaseFirestore.instance.collection('followers');  
 final auth = FirebaseAuth.instance;
 final storage = FirebaseStorage.instance;
-userModel.User currentUser;
-var pageIndex = 0;
+user_model.User? currentUser;
+int pageIndex = 0;
 
 class Home extends StatefulWidget {
+  final CameraDescription? camera;
+  const Home({Key? key, this.camera}) : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  var isAuth = false;
-  PageController pageController;
+  bool isAuth = false;
+  PageController? pageController;
 
   @override
   void initState() {
     super.initState();
     pageController = PageController();
-    auth.userChanges().listen((User user) {
+    auth.userChanges().listen((User? user) {
       if (user == null) {
         setState(() {
           isAuth = false;
@@ -56,25 +60,25 @@ class _HomeState extends State<Home> {
 
   Future<UserCredential> signInWithGoogle() async {
     final googleUser = await googleSignIn.signIn();
-    final googleAuth = await googleUser.authentication;
+    final googleAuth = await googleUser?.authentication;
     final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
     );
-    return await auth.signInWithCredential(credential);
+    return auth.signInWithCredential(credential);
   }
 
   @override
   void dispose() {
-    pageController.dispose();
+    pageController?.dispose();
     super.dispose();
   }
 
-  void handleSignIn(User account) async {
+  Future<void> handleSignIn(User account) async {
     print('User signed in!: $account');
     var doc = await usersRef.doc(account.uid).get();
     if (!doc.exists) {
-      final String username = await Navigator.push(
+      final String? username = await Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => CreateAccount()),
       );
@@ -88,8 +92,8 @@ class _HomeState extends State<Home> {
       });
       doc = await usersRef.doc(account.uid).get();
     }
-    currentUser = userModel.User.fromDocument(doc);
-    print(currentUser.id);
+    currentUser = user_model.User.fromDocument(doc);
+    print(currentUser?.id);
 
     setState(() {
       isAuth = true;
@@ -99,22 +103,23 @@ class _HomeState extends State<Home> {
   Widget authorizedScreen() {
     return Scaffold(
       body: PageView(
-        children: [
-          Timeline(),
-          ActivityFeed(),
-          Upload(),
-          Search(),
-          Profile(currentUser.id),
-        ],
         controller: pageController,
         onPageChanged: onPageChanged,
+        children: [
+          const Timeline(),
+          ActivityFeed(),
+          const Upload(),
+          Camera(camera: widget.camera),
+          const Search(),
+          Profile(currentUser!.id),
+        ],
         // physics: NeverScrollableScrollPhysics(),
       ),
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: pageIndex,
         onTap: onTap,
         activeColor: Theme.of(context).primaryColor,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.whatshot),
           ),
@@ -126,6 +131,9 @@ class _HomeState extends State<Home> {
               Icons.photo_camera,
               size: 35,
             ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.camera),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
@@ -155,7 +163,7 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'FlutterShare',
               style: TextStyle(
                 color: Colors.white,
@@ -167,7 +175,7 @@ class _HomeState extends State<Home> {
               child: Container(
                 width: 260,
                 height: 50,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/google_auth.png'),
                     fit: BoxFit.cover,
@@ -188,14 +196,14 @@ class _HomeState extends State<Home> {
   }
 
   void onTap(int pageIndex) {
-    pageController.animateToPage(
+    pageController?.animateToPage(
       pageIndex,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }
 
-  void login() async {
+  void login() {
     signInWithGoogle();
   }
 

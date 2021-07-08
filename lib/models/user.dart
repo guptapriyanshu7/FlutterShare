@@ -9,22 +9,22 @@ class User {
   String bio;
 
   User({
-    this.id,
-    this.username,
-    this.email,
-    this.photoUrl,
-    this.displayName,
-    this.bio,
+    required this.id,
+    required this.username,
+    required this.email,
+    required this.photoUrl,
+    required this.displayName,
+    required this.bio,
   });
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
       id: doc.id,
-      email: doc['email'],
-      username: doc['username'],
-      photoUrl: doc['photoUrl'],
-      displayName: doc['displayName'],
-      bio: doc['bio'],
+      email: doc['email'] as String,
+      username: doc['username'] as String,
+      photoUrl: doc['photoUrl'] as String,
+      displayName: doc['displayName'] as String,
+      bio: doc['bio'] as String,
     );
   }
 }

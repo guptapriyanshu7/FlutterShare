@@ -7,14 +7,14 @@ import 'package:flutter_share/widgets/progress.dart';
 import 'package:flutter_share/pages/home.dart';
 
 class Search extends StatefulWidget {
-  const Search({Key key}) : super(key: key);
+  const Search({Key? key}) : super(key: key);
 
   @override
   _SearchState createState() => _SearchState();
 }
 
 class _SearchState extends State<Search> {
-  Future<QuerySnapshot> searchResultsFuture;
+  Future<QuerySnapshot>? searchResultsFuture;
   final searchController = TextEditingController();
   void clearForm() {
     searchController.clear();
@@ -31,9 +31,9 @@ class _SearchState extends State<Search> {
           decoration: InputDecoration(
             hintText: 'Search Users',
             filled: true,
-            prefixIcon: Icon(Icons.account_box),
+            prefixIcon: const Icon(Icons.account_box),
             suffixIcon: IconButton(
-              icon: Icon(Icons.clear),
+              icon: const Icon(Icons.clear),
               onPressed: clearForm,
             ),
           ),
@@ -51,7 +51,7 @@ class _SearchState extends State<Search> {
           ? Center(
               child: ListView(
                 shrinkWrap: true,
-                children: [
+                children: const [
                   Text(
                     'Find Users',
                     textAlign: TextAlign.center,
@@ -67,13 +67,14 @@ class _SearchState extends State<Search> {
             )
           : FutureBuilder(
               future: searchResultsFuture,
-              builder: (context, snapshot) {
+              builder: (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
                 if (!snapshot.hasData) {
                   return circularIndicator();
                 }
-                List<UserResult> searchResults = [];
-                snapshot.data.docs.forEach((doc) {
-                  final user = User.fromDocument(doc);
+                final List<UserResult> searchResults = [];
+                snapshot.data!.docs.forEach((doc) {
+                  final user =
+                      User.fromDocument(doc as DocumentSnapshot<Object>);
                   final searchResult = UserResult(user);
                   searchResults.add(searchResult);
                 });
@@ -88,7 +89,7 @@ class _SearchState extends State<Search> {
 
 class UserResult extends StatelessWidget {
   final User user;
-  UserResult(this.user);
+  const UserResult(this.user);
   @override
   Widget build(BuildContext context) {
     return Container(

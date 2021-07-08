@@ -5,22 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/pages/home.dart';
 
 class EditProfile extends StatelessWidget {
-  final formkey = GlobalKey<FormState>();
+  late final formkey = GlobalKey<FormState>();
 
-  void update(BuildContext context) async {
+  Future<void> update(BuildContext context) async {
     final form = formkey.currentState;
-    if (form.validate()) {
+    if (form!.validate()) {
       form.save();
-      await usersRef.doc(currentUser.id).update({
-        'bio': currentUser.bio,
-        'displayName': currentUser.displayName,
+      await usersRef.doc(currentUser!.id).update({
+        'bio': currentUser!.bio,
+        'displayName': currentUser!.displayName,
       });
-      final snackbar = SnackBar(
+      const snackbar = SnackBar(
         content: Text('Profile Updated!'),
         duration: Duration(milliseconds: 500),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
-      Timer(Duration(seconds: 1), () {
+      Timer(const Duration(seconds: 1), () {
         Navigator.pop(context);
       });
     }
@@ -32,13 +32,13 @@ class EditProfile extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,
-        title: Text('Edit Profile'),
+        title: const Text('Edit Profile'),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.done),
+              icon: const Icon(Icons.done),
               color: Colors.green,
             ),
           )
@@ -48,15 +48,15 @@ class EditProfile extends StatelessWidget {
         children: [
           Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               CircleAvatar(
                 radius: 50.0,
                 backgroundImage:
-                    CachedNetworkImageProvider(currentUser.photoUrl),
+                    CachedNetworkImageProvider(currentUser!.photoUrl),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Form(
@@ -67,29 +67,30 @@ class EditProfile extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Display Name"),
+                      const Text("Display Name"),
                       TextFormField(
                         validator: (val) {
-                          if (val.trim().length < 3)
+                          if (val!.trim().length < 3) {
                             return 'Name too short!';
-                          else if (val.trim().length > 50)
+                          } else if (val.trim().length > 50) {
                             return 'Name too big!';
+                          }
                           return null;
                         },
-                        initialValue: currentUser.displayName,
-                        onSaved: (val) => currentUser.displayName = val,
+                        initialValue: currentUser!.displayName,
+                        onSaved: (val) => currentUser!.displayName = val!,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      Text("Bio"),
+                      const Text("Bio"),
                       TextFormField(
                         validator: (val) {
-                          if (val.trim().length > 12) return 'Bio too big!';
+                          if (val!.trim().length > 12) return 'Bio too big!';
                           return null;
                         },
-                        initialValue: currentUser.bio,
-                        onSaved: (val) => currentUser.bio = val,
+                        initialValue: currentUser!.bio,
+                        onSaved: (val) => currentUser!.bio = val!,
                       ),
                     ],
                   ),
@@ -97,9 +98,9 @@ class EditProfile extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () => update(context),
-                child: Text('Update'),
+                child: const Text('Update'),
               ),
-              Container(
+              SizedBox(
                 width: 200,
                 child: ElevatedButton(
                   onPressed: () {
@@ -108,7 +109,7 @@ class EditProfile extends StatelessWidget {
                     googleSignIn.signOut();
                     auth.signOut();
                   },
-                  child: Text('Logout'),
+                  child: const Text('Logout'),
                 ),
               ),
             ],

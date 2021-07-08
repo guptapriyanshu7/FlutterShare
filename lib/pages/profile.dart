@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_share/models/post.dart' as model;
+import 'package:flutter_share/domain/posts/post.dart' as model;
 import 'package:flutter_share/models/user.dart';
 import 'package:flutter_share/pages/post.dart' as wid;
 import 'package:flutter_share/pages/edit_profile.dart';
@@ -11,20 +11,20 @@ import 'package:flutter_share/widgets/post_tile.dart';
 
 class Profile extends StatefulWidget {
   final String userId;
-  const Profile(this.userId, {Key key}) : super(key: key);
+  const Profile(this.userId, {Key? key}) : super(key: key);
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  var postsCount = 0;
-  var posts = <wid.Post>[];
-  var grid = true;
-  var isFollowing = false;
-  var followers = 0;
-  var following = 0;
+  int postsCount = 0;
+  List<wid.Post> posts = [];
+  bool grid = true;
+  bool isFollowing = false;
+  int followers = 0;
+  int following = 0;
 
-  void editProfile() async {
+  Future<void> editProfile() async {
     await Navigator.push(
         context, MaterialPageRoute(builder: (context) => EditProfile()));
     setState(() {});
@@ -39,7 +39,7 @@ class _ProfileState extends State<Profile> {
     checkIfFollowing();
   }
 
-  void getFollowingCount() async {
+  Future<void> getFollowingCount() async {
     final doc =
         await followingRef.doc(widget.userId).collection('following').get();
     setState(() {
@@ -47,7 +47,7 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  void getFollowersCount() async {
+  Future<void> getFollowersCount() async {
     final doc =
         await followersRef.doc(widget.userId).collection('followers').get();
     setState(() {
@@ -55,9 +55,9 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  void checkIfFollowing() async {
+  Future<void> checkIfFollowing() async {
     final doc = await followingRef
-        .doc(currentUser.id)
+        .doc(currentUser!.id)
         .collection('following')
         .doc(widget.userId)
         .get();
@@ -66,7 +66,7 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  getProfilePosts() async {
+  Future<void> getProfilePosts() async {
     final snap = await postsRef
         .doc(widget.userId)
         .collection('userPosts')
@@ -75,29 +75,36 @@ class _ProfileState extends State<Profile> {
     setState(() {
       postsCount = snap.docs.length;
       posts = snap.docs.map((doc) {
-        var post = model.Post.fromDocument(doc);
-        return wid.Post(post);
+        // final post = model.Post.fromJson(doc);
+        return wid.Post(
+          model.Post.fromJson(
+            doc.data(),
+          ),
+        );
       }).toList();
     });
   }
 
   Widget buildGrid(BuildContext context) {
     final gridTiles = <GridTile>[];
-    posts.forEach((post) {
+    // posts.forEach((post) {
+    //   gridTiles.add(GridTile(child: postTile(context, post.post)));
+    // });
+    for (final post in posts) {
       gridTiles.add(GridTile(child: postTile(context, post.post)));
-    });
+    }
     return GridView.count(
       crossAxisCount: 3,
       shrinkWrap: true,
       mainAxisSpacing: 1.5,
       crossAxisSpacing: 1.5,
+      physics: const NeverScrollableScrollPhysics(),
       // childAspectRatio: 1,
       children: gridTiles,
-      physics: NeverScrollableScrollPhysics(),
     );
   }
 
-  void gridOn(bool set) {
+  void gridOn({required bool set}) {
     setState(() {
       grid = set;
     });
@@ -108,13 +115,13 @@ class _ProfileState extends State<Profile> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         IconButton(
-          icon: Icon(Icons.grid_on),
-          onPressed: () => gridOn(true),
+          icon: const Icon(Icons.grid_on),
+          onPressed: () => gridOn(set: true),
           color: grid ? Colors.pink : null,
         ),
         IconButton(
-          icon: Icon(Icons.list),
-          onPressed: () => gridOn(false),
+          icon: const Icon(Icons.list),
+          onPressed: () => gridOn(set: false),
           color: !grid ? Colors.pink : null,
         ),
       ],
@@ -128,59 +135,63 @@ class _ProfileState extends State<Profile> {
     });
     if (isFollowing) {
       followingRef
-          .doc(currentUser.id)
+          .doc(currentUser!.id)
           .collection('following')
           .doc(widget.userId)
           .set({});
       followersRef
           .doc(widget.userId)
           .collection('followers')
-          .doc(currentUser.id)
+          .doc(currentUser!.id)
           .set({});
       feedRef.doc(widget.userId).collection('userFeed').add({
         'type': 'follow',
         'timestamp': DateTime.now(),
-        'photoUrl': currentUser.photoUrl,
-        'username': currentUser.username,
-        'userId': currentUser.id,
+        'photoUrl': currentUser!.photoUrl,
+        'username': currentUser!.username,
+        'userId': currentUser!.id,
       });
     } else {
       followingRef
-          .doc(currentUser.id)
+          .doc(currentUser!.id)
           .collection('following')
           .doc(widget.userId)
           .delete();
       followersRef
           .doc(widget.userId)
           .collection('followers')
-          .doc(currentUser.id)
+          .doc(currentUser!.id)
           .delete();
       feedRef
           .doc(widget.userId)
           .collection('userFeed')
-          .where('userId', isEqualTo: currentUser.id)
+          .where('userId', isEqualTo: currentUser!.id)
           .where('type', isEqualTo: 'follow')
           .get()
           .then((value) {
-        value.docs.forEach((doc) {
+        // value.docs.forEach((doc) {
+        //   doc.reference.delete();
+        // });
+        for (final doc in value.docs) {
           doc.reference.delete();
-        });
+        }
       });
     }
   }
 
   Widget buildButtons() {
-    return Container(
+    return SizedBox(
       height: 25,
       width: 200,
-      child: currentUser.id == widget.userId
+      child: currentUser!.id == widget.userId
           ? OutlinedButton(
               onPressed: editProfile,
-              child: Text('Edit Profile'),
+              child: const Text('Edit Profile'),
             )
           : OutlinedButton(
               onPressed: changeFollowStatus,
-              child: isFollowing ? Text('Unfollow') : Text('Follow'),
+              child:
+                  isFollowing ? const Text('Unfollow') : const Text('Follow'),
             ),
     );
   }
@@ -192,8 +203,8 @@ class _ProfileState extends State<Profile> {
       body: FutureBuilder<DocumentSnapshot>(
           future: usersRef.doc(widget.userId).get(),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) return Text('');
-            final user = User.fromDocument(snapshot.data);
+            if (!snapshot.hasData) return const Text('');
+            final user = User.fromDocument(snapshot.data!);
             return ListView(
               children: [
                 Padding(
@@ -214,7 +225,8 @@ class _ProfileState extends State<Profile> {
                               // mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Container(
-                                  margin: EdgeInsets.only(top: 10, bottom: 10),
+                                  margin: const EdgeInsets.only(
+                                      top: 10, bottom: 10),
                                   child: Row(
                                     // mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
@@ -222,15 +234,15 @@ class _ProfileState extends State<Profile> {
                                     children: [
                                       Column(children: [
                                         Text(postsCount.toString()),
-                                        Text('Posts')
+                                        const Text('Posts')
                                       ]),
                                       Column(children: [
                                         Text(followers.toString()),
-                                        Text('Followers')
+                                        const Text('Followers')
                                       ]),
                                       Column(children: [
                                         Text(following.toString()),
-                                        Text('Following')
+                                        const Text('Following')
                                       ]),
                                     ],
                                   ),
@@ -243,10 +255,10 @@ class _ProfileState extends State<Profile> {
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.only(top: 12.0),
+                        padding: const EdgeInsets.only(top: 12.0),
                         child: Text(
                           user.username,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0,
                           ),
@@ -254,17 +266,17 @@ class _ProfileState extends State<Profile> {
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.only(top: 4.0),
+                        padding: const EdgeInsets.only(top: 4.0),
                         child: Text(
                           user.displayName,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.only(top: 2.0),
+                        padding: const EdgeInsets.only(top: 2.0),
                         child: Text(
                           user.bio,
                         ),
@@ -272,18 +284,19 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                 ),
-                Divider(
+                const Divider(
                   height: 0,
                 ),
                 changeOrientation(),
-                Divider(
+                const Divider(
                   height: 0,
                 ),
-                grid
-                    ? buildGrid(context)
-                    : Column(
-                        children: posts,
-                      ),
+                if (grid)
+                  buildGrid(context)
+                else
+                  Column(
+                    children: posts,
+                  ),
               ],
             );
           }),

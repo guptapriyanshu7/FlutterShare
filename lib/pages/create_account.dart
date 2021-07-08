@@ -9,19 +9,19 @@ class CreateAccount extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
-  String username;
+  String username = '';
   final formkey = GlobalKey<FormState>();
 
   void submit() {
     final form = formkey.currentState;
-    if (form.validate()) {
+    if (form!.validate()) {
       form.save();
       final snackbar = SnackBar(
         content: Text('Welcome $username'),
-        duration: Duration(milliseconds: 1500),
+        duration: const Duration(milliseconds: 1500),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
-      Timer(Duration(seconds: 2), () {
+      Timer(const Duration(seconds: 2), () {
         Navigator.pop(context, username);
       });
     }
@@ -33,28 +33,29 @@ class _CreateAccountState extends State<CreateAccount> {
       appBar: header(context, 'Create Username'),
       body: Column(
         children: [
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
           Form(
             autovalidateMode: AutovalidateMode.always,
             key: formkey,
             child: TextFormField(
               validator: (val) {
-                if (val.trim().length < 3)
+                if (val!.trim().length < 3) {
                   return 'Username too short!';
-                else if (val.trim().length > 12)
+                } else if (val.trim().length > 12) {
                   return 'Username too big!';
-                else
+                } else {
                   return null;
+                }
               },
-              onSaved: (val) => username = val.trim(),
-              decoration: InputDecoration(
+              onSaved: (val) => username = val!.trim(),
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
             ),
           ),
           ElevatedButton(
             onPressed: submit,
-            child: Text('Submit'),
+            child: const Text('Submit'),
           )
         ],
       ),

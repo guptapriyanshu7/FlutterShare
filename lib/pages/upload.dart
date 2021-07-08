@@ -5,22 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/widgets/progress.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:image/image.dart' as Im;
+import 'package:image/image.dart' as im;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_share/pages/home.dart';
 
 class Upload extends StatefulWidget {
-  const Upload({Key key}) : super(key: key);
+  const Upload({Key? key}) : super(key: key);
   @override
   _UploadState createState() => _UploadState();
 }
 
 class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin {
-  File file;
-  var isUploading = false;
-  var postId = Uuid().v4();
+  File? file;
+  bool isUploading = false;
+  String postId = const Uuid().v4();
   final captionController = TextEditingController();
   final locationController = TextEditingController();
 
@@ -28,33 +28,33 @@ class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin {
     showDialog(
       context: context,
       builder: (context) => SimpleDialog(
-        title: Text('Create Post'),
+        title: const Text('Create Post'),
         children: [
           SimpleDialogOption(
-            child: Text('Choose from gallery'),
             onPressed: () async {
               Navigator.pop(context);
-              var file =
+              final pickedFile =
                   await ImagePicker().getImage(source: ImageSource.gallery);
               setState(() {
-                this.file = File(file.path);
+                this.file = pickedFile != null ? File(pickedFile.path) : null;
               });
             },
+            child: const Text('Choose from gallery'),
           ),
           SimpleDialogOption(
-            child: Text('Click a photo'),
             onPressed: () async {
               Navigator.pop(context);
-              var file =
+              final pickedFile =
                   await ImagePicker().getImage(source: ImageSource.camera);
               setState(() {
-                this.file = File(file.path);
+                this.file = pickedFile != null ? File(pickedFile.path) : null;
               });
             },
+            child: const Text('Click a photo'),
           ),
           SimpleDialogOption(
-            child: Text('Cancel'),
             onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
           ),
         ],
       ),
@@ -67,7 +67,7 @@ class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin {
     });
   }
 
-  void uploadPost() async {
+  Future<void> uploadPost() async {
     print('Uploading');
     setState(() {
       isUploading = true;
@@ -79,7 +79,7 @@ class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin {
     setState(() {
       isUploading = false;
       file = null;
-      postId = Uuid().v4();
+      postId = const Uuid().v4();
     });
   }
 
@@ -87,26 +87,27 @@ class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin {
     final dir = await getTemporaryDirectory();
     final path = dir.path;
     // final path = file.parent.path;
-    Im.Image image = Im.decodeImage(file.readAsBytesSync());
-    final compressedImage = File('$path/img_$postId.jpg')
-      ..writeAsBytesSync(
-        Im.encodeJpg(image, quality: 85),
-      );
+    final im.Image? image = im.decodeImage(file!.readAsBytesSync());
+    final compressedImage =
+        image != null ? File('$path/img_$postId.jpg') : null;
+    compressedImage?.writeAsBytesSync(
+      im.encodeJpg(image!, quality: 85),
+    );
     setState(() {
       file = compressedImage;
     });
   }
 
   Future<void> uploadtoFirebase() async {
-    final snap = await storage.ref('post_$postId.jpg').putFile(file);
+    final snap = await storage.ref('post_$postId.jpg').putFile(file!);
     final url = await snap.ref.getDownloadURL();
     savePostinFirebase(url);
   }
 
   void savePostinFirebase(String url) {
-    postsRef.doc(currentUser.id).collection('userPosts').doc(postId).set({
+    postsRef.doc(currentUser!.id).collection('userPosts').doc(postId).set({
       'mediaUrl': url,
-      'ownerid': currentUser.id,
+      'ownerid': currentUser!.id,
       'caption': captionController.text,
       'location': locationController.text,
       'timestamp': DateTime.now(),
@@ -114,7 +115,7 @@ class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin {
     });
   }
 
-  void getLocation() async {
+  Future<void> getLocation() async {
     print('getLocation');
     final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -122,12 +123,13 @@ class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     final placemark = placemarks[0];
     print(placemark);
-    String formattedAddress =
+    final String formattedAddress =
         "${placemark.street}, ${placemark.subLocality}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}";
     locationController.text = formattedAddress;
   }
 
-  get wantKeepAlive => true;
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -138,21 +140,21 @@ class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin {
             child: Center(
               child: ElevatedButton(
                 onPressed: () => selectImage(),
-                child: Text('Upload Image'),
+                child: const Text('Upload Image'),
               ),
             ),
           )
         : Scaffold(
             appBar: AppBar(
               leading: IconButton(
-                icon: Icon(Icons.arrow_back),
+                icon: const Icon(Icons.arrow_back),
                 onPressed: clearImage,
               ),
-              title: Text('Caption Post'),
+              title: const Text('Caption Post'),
               actions: [
                 TextButton(
                   onPressed: isUploading ? null : uploadPost,
-                  child: Text(
+                  child: const Text(
                     'Post',
                     style: TextStyle(
                       color: Colors.white,
@@ -164,30 +166,30 @@ class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin {
             ),
             body: ListView(
               children: [
-                isUploading ? linearIndicator() : Text(''),
-                Container(
+                if (isUploading) linearIndicator() else const Text(''),
+                SizedBox(
                   height: 220,
                   // width: MediaQuery.of(context).size.width * 0.8,
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
-                    child: Image.file(file),
+                    child: Image.file(file!),
                   ),
                 ),
                 ListTile(
                   leading: CircleAvatar(
                     backgroundImage: CachedNetworkImageProvider(
-                      currentUser.photoUrl,
+                      currentUser!.photoUrl,
                     ),
                   ),
                   title: TextField(
                     controller: captionController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Enter a Caption...',
                       border: InputBorder.none,
                     ),
                   ),
                 ),
-                Divider(),
+                const Divider(),
                 ListTile(
                   leading: Icon(
                     Icons.pin_drop,
@@ -196,7 +198,7 @@ class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin {
                   ),
                   title: TextField(
                     controller: locationController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Location...',
                       border: InputBorder.none,
                     ),
@@ -212,8 +214,8 @@ class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin {
                       ),
                     ),
                     onPressed: getLocation,
-                    icon: Icon(Icons.my_location),
-                    label: Text('Current Location'),
+                    icon: const Icon(Icons.my_location),
+                    label: const Text('Current Location'),
                   ),
                 )
               ],

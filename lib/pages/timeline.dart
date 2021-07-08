@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/widgets/header.dart';
+// import 'package:flutter_share/widgets/progress.dart';
+
+// import 'home.dart';
 
 class Timeline extends StatelessWidget {
-  const Timeline({Key key}) : super(key: key);
+  const Timeline({Key? key}) : super(key: key);
 
   // void getUsers() async {
   //   final snapshot = await usersRef
@@ -20,7 +23,7 @@ class Timeline extends StatelessWidget {
   // }
 
   // void getUserById() async {
-  //   final String id = 'wC74lTFNybUOYLVvyyvS';
+  //   const String id = 'wC74lTFNybUOYLVvyyvS';
   //   final doc = await usersRef.doc(id).get();
   //   print(doc.data());
   //   print(doc.id);
@@ -39,11 +42,9 @@ class Timeline extends StatelessWidget {
       //       return circularIndicator();
       //     }
       //     final List<Text> children = snapshot.data.docs
-      //         .map<Text>((doc) => Text(doc['username']))
-      //         .toList();
-      //     return Container(
-      //       child: ListView(children: children),
-      //     );
+      //         .map<Text>((doc) => Text(doc['username'] as String))
+      //         .toList() as List<Text>;
+      //     return ListView(children: children);
       //   },
       // ),
     );

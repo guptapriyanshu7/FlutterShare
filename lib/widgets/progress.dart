@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 Widget circularIndicator() {
   return Container(
     alignment: Alignment.center,
-    child: CircularProgressIndicator(
+    child: const CircularProgressIndicator(
       valueColor: AlwaysStoppedAnimation(Colors.pink),
     ),
   );
@@ -12,8 +12,8 @@ Widget circularIndicator() {
 
 Widget linearIndicator() {
   return Container(
-    padding: EdgeInsets.only(bottom: 10),
-    child: LinearProgressIndicator(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: const LinearProgressIndicator(
       valueColor: AlwaysStoppedAnimation(Colors.pink),
     ),
   );
