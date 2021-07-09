@@ -7,10 +7,10 @@
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 
-import '../../domain/notes/note.dart' as _i7;
 import '../auth/sign_in_page.dart' as _i4;
-import '../notes/note_form/note_form_page.dart' as _i6;
-import '../notes/notes_overveiw/notes_overview_page.dart' as _i5;
+import '../home_page.dart' as _i5;
+import '../post/posts_page.dart' as _i7;
+import '../post/save_post_page.dart' as _i6;
 import '../splash/splash_page.dart' as _i3;
 
 class Router extends _i1.RootStackRouter {
@@ -29,27 +29,31 @@ class Router extends _i1.RootStackRouter {
         builder: (_) {
           return const _i4.SignInPage();
         }),
-    NotesOverviewRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
+    HomeRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return const _i5.NotesOverviewPage();
+          return _i5.HomePage();
         }),
-    NoteFormRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
+    SavePostRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
-        builder: (data) {
-          final args = data.argsAs<NoteFormRouteArgs>(
-              orElse: () => const NoteFormRouteArgs());
-          return _i6.NoteFormPage(editNote: args.editNote, key: args.key);
-        },
-        fullscreenDialog: true)
+        builder: (_) {
+          return const _i6.SavePostPage();
+        }),
+    PostsRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i7.PostsPage();
+        })
   };
 
   @override
   List<_i1.RouteConfig> get routes => [
         _i1.RouteConfig(SplashRoute.name, path: '/'),
         _i1.RouteConfig(SignInRoute.name, path: '/sign-in-page'),
-        _i1.RouteConfig(NotesOverviewRoute.name, path: '/notes-overview-page'),
-        _i1.RouteConfig(NoteFormRoute.name, path: '/note-form-page')
+        _i1.RouteConfig(HomeRoute.name, path: '/home-page', children: [
+          _i1.RouteConfig(SavePostRoute.name, path: 'save-post-page'),
+          _i1.RouteConfig(PostsRoute.name, path: 'posts-page')
+        ])
       ];
 }
 
@@ -65,25 +69,21 @@ class SignInRoute extends _i1.PageRouteInfo {
   static const String name = 'SignInRoute';
 }
 
-class NotesOverviewRoute extends _i1.PageRouteInfo {
-  const NotesOverviewRoute() : super(name, path: '/notes-overview-page');
+class HomeRoute extends _i1.PageRouteInfo {
+  const HomeRoute({List<_i1.PageRouteInfo>? children})
+      : super(name, path: '/home-page', initialChildren: children);
 
-  static const String name = 'NotesOverviewRoute';
+  static const String name = 'HomeRoute';
 }
 
-class NoteFormRoute extends _i1.PageRouteInfo<NoteFormRouteArgs> {
-  NoteFormRoute({_i7.Note? editNote, _i2.Key? key})
-      : super(name,
-            path: '/note-form-page',
-            args: NoteFormRouteArgs(editNote: editNote, key: key));
+class SavePostRoute extends _i1.PageRouteInfo {
+  const SavePostRoute() : super(name, path: 'save-post-page');
 
-  static const String name = 'NoteFormRoute';
+  static const String name = 'SavePostRoute';
 }
 
-class NoteFormRouteArgs {
-  const NoteFormRouteArgs({this.editNote, this.key});
+class PostsRoute extends _i1.PageRouteInfo {
+  const PostsRoute() : super(name, path: 'posts-page');
 
-  final _i7.Note? editNote;
-
-  final _i2.Key? key;
+  static const String name = 'PostsRoute';
 }

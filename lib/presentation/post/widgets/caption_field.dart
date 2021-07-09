@@ -23,7 +23,7 @@ class CaptionField extends StatelessWidget {
               SavePostEvent.captionChanged(value),
             ),
         maxLength: CAPTION_MAX_LENGTH,
-        maxLines: 8,
+        maxLines: null,
         minLines: 3,
         validator: (_) {
           if (_ == null || !validateStringNotEmpty(_)) {

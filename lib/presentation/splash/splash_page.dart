@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes_app/application/auth/auth_bloc.dart';
-import 'package:notes_app/presentation/routes/router.gr.dart';
+import 'package:flutter_share/application/auth/auth_bloc.dart';
+import 'package:flutter_share/presentation/routes/router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 
 class SplashPage extends StatelessWidget {
@@ -14,12 +14,12 @@ class SplashPage extends StatelessWidget {
         state.map(
           initial: (_) {},
           unauthenticated: (_) => context.replaceRoute(SignInRoute()),
-          authenticated: (_) => context.replaceRoute(NotesOverviewRoute()),
+          authenticated: (_) => context.replaceRoute(HomeRoute()),
         );
       },
       child: Scaffold(
         body: Center(
-          child: CircularProgressIndicator(),
+          child: FlutterLogo(),
         ),
       ),
     );

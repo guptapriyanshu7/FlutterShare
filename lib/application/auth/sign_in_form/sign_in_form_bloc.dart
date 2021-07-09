@@ -5,7 +5,6 @@ import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter_share/domain/auth/i_auth_facade.dart';
-import 'package:flutter_share/domain/auth/value_objects.dart';
 import 'package:flutter_share/domain/auth/auth_failure.dart';
 
 part 'sign_in_form_event.dart';
@@ -25,13 +24,13 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
     yield* event.map(
       emailChanged: (e) async* {
         yield state.copyWith(
-          emailAddress: EmailAddress(e.emailStr),
+          emailAddress: e.emailStr,
           authFailureOrSuccessOption: none(),
         );
       },
       passwordChanged: (e) async* {
         yield state.copyWith(
-          password: Password(e.passwordStr),
+          password: e.passwordStr,
           authFailureOrSuccessOption: none(),
         );
       },
@@ -61,15 +60,15 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
 
   Stream<SignInFormState> _chooseRegisterOrSignIn(
     Future<Either<AuthFailure, Unit>> Function({
-      required EmailAddress emailAddress,
-      required Password password,
+      required String emailAddress,
+      required String password,
     })
         forwardedCall,
   ) async* {
     Either<AuthFailure, Unit>? failureOrSuccess;
     // final isEmailValid = state.emailAddress.isValid();
     // final isPasswordValid = state.password.isValid();
-    if (true) {
+    // if (true) {
       yield state.copyWith(
         isSubmitting: true,
         authFailureOrSuccessOption: none(),
@@ -78,7 +77,7 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
         emailAddress: state.emailAddress,
         password: state.password,
       );
-    }
+    // }
     yield state.copyWith(
       showErrorMessages: true,
       isSubmitting: false,

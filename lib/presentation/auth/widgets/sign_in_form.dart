@@ -28,7 +28,7 @@ class SignInForm extends StatelessWidget {
               ).show(context);
             },
             (_) {
-              context.replaceRoute(NotesOverviewRoute());
+              context.replaceRoute(SavePostRoute());
               context
                   .read<AuthBloc>()
                   .add(const AuthEvent.authCheckRequested());
@@ -70,14 +70,14 @@ class SignInForm extends StatelessWidget {
                   ),
                   onChanged: (value) =>
                       signInFormBloc.add(SignInFormEvent.emailChanged(value)),
-                  validator: (_) =>
-                      signInFormBloc.state.emailAddress.value.fold(
-                    (l) => l.maybeMap(
-                      invalidEmail: (_) => 'Invalid Email',
-                      orElse: () => null,
-                    ),
-                    (r) => null,
-                  ),
+                  // validator: (_) =>
+                  //     signInFormBloc.state.emailAddress.value.fold(
+                  //   (l) => l.maybeMap(
+                  //     invalidEmail: (_) => 'Invalid Email',
+                  //     orElse: () => null,
+                  //   ),
+                  //   (r) => null,
+                  // ),
                 ),
                 SizedBox(height: 12),
                 TextFormField(
@@ -90,13 +90,13 @@ class SignInForm extends StatelessWidget {
                   onChanged: (value) => signInFormBloc.add(
                     SignInFormEvent.passwordChanged(value),
                   ),
-                  validator: (_) => signInFormBloc.state.password.value.fold(
-                    (l) => l.maybeMap(
-                      shortPassword: (_) => 'Short Password',
-                      orElse: () => null,
-                    ),
-                    (r) => null,
-                  ),
+                  // validator: (_) => signInFormBloc.state.password.value.fold(
+                  //   (l) => l.maybeMap(
+                  //     shortPassword: (_) => 'Short Password',
+                  //     orElse: () => null,
+                  //   ),
+                  //   (r) => null,
+                  // ),
                 ),
                 SizedBox(height: 12),
                 Row(

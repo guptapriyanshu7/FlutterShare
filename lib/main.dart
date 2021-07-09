@@ -1,44 +1,39 @@
-import 'package:camera/camera.dart';
+// import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Router;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_share/application/auth/auth_bloc.dart';
 import 'package:flutter_share/injection.dart';
-import 'package:flutter_share/presentation/post/save_post_page.dart';
-import 'package:flutter_share/widgets/progress.dart';
 import 'package:injectable/injectable.dart';
+import 'package:flutter_share/presentation/routes/router.gr.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final cameras = await availableCameras();
-  final firstCamera = cameras.first;
+  await Firebase.initializeApp();
+  // final cameras = await availableCameras();
+  // final firstCamera = cameras.first;
   configureInjection(Environment.prod);
-  runApp(MyApp(camera: firstCamera));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final CameraDescription camera;
-  final initialization = Firebase.initializeApp();
-  MyApp({Key? key, required this.camera}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
+  // final CameraDescription camera;
+  // final _router = Router();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'FlutterShare',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-        accentColor: Colors.pink[200],
-      ),
-      home: FutureBuilder(
-        future: initialization,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            print(snapshot.error);
-            return const Text('Something went wrong!');
-          }
-          if (snapshot.connectionState == ConnectionState.done) {
-            return SavePostPage();
-          }
-          return circularIndicator();
-        },
+    return BlocProvider(
+      create: (context) =>
+          getIt<AuthBloc>()..add(AuthEvent.authCheckRequested()),
+      child: MaterialApp.router(
+        routeInformationParser: getIt<Router>().defaultRouteParser(),
+        routerDelegate: getIt<Router>().delegate(),
+        title: 'FlutterShare',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.red,
+          accentColor: Colors.pink[200],
+        ),
       ),
     );
   }

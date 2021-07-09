@@ -4,7 +4,6 @@ import 'package:injectable/injectable.dart';
 import 'package:flutter_share/domain/auth/auth_failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_share/domain/auth/i_auth_facade.dart';
-import 'package:flutter_share/domain/auth/value_objects.dart';
 import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/infrastructure/auth/firebase_user_mapper.dart';
 
@@ -19,15 +18,15 @@ class FirebaseAuthFacade implements IAuthFacade {
   );
   @override
   Future<Either<AuthFailure, Unit>> registerWithEmailAndPassword({
-    required EmailAddress emailAddress,
-    required Password password,
+    required String emailAddress,
+    required String password,
   }) async {
-    final emailAddressStr = emailAddress.getOrCrash();
-    final passwordStr = password.getOrCrash();
+    // final emailAddressStr = emailAddress.getOrCrash();
+    // final passwordStr = password.getOrCrash();
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
-        email: emailAddressStr,
-        password: passwordStr,
+        email: emailAddress,
+        password: password,
       );
       return right(unit);
     } on FirebaseAuthException catch (e) {
@@ -41,15 +40,15 @@ class FirebaseAuthFacade implements IAuthFacade {
 
   @override
   Future<Either<AuthFailure, Unit>> signInWithEmailAndPassword({
-    required EmailAddress emailAddress,
-    required Password password,
+    required String emailAddress,
+    required String password,
   }) async {
-    final emailAddressStr = emailAddress.getOrCrash();
-    final passwordStr = password.getOrCrash();
+    // final emailAddressStr = emailAddress.getOrCrash();
+    // final passwordStr = password.getOrCrash();
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
-        email: emailAddressStr,
-        password: passwordStr,
+        email: emailAddress,
+        password: password,
       );
       return right(unit);
     } on FirebaseAuthException catch (e) {

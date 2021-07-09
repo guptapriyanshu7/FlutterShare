@@ -702,8 +702,8 @@ class _$SignInFormStateTearOff {
   const _$SignInFormStateTearOff();
 
   _SignInFormState call(
-      {required EmailAddress emailAddress,
-      required Password password,
+      {required String emailAddress,
+      required String password,
       required bool showErrorMessages,
       required bool isSubmitting,
       required Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption}) {
@@ -722,8 +722,8 @@ const $SignInFormState = _$SignInFormStateTearOff();
 
 /// @nodoc
 mixin _$SignInFormState {
-  EmailAddress get emailAddress => throw _privateConstructorUsedError;
-  Password get password => throw _privateConstructorUsedError;
+  String get emailAddress => throw _privateConstructorUsedError;
+  String get password => throw _privateConstructorUsedError;
   bool get showErrorMessages => throw _privateConstructorUsedError;
   bool get isSubmitting => throw _privateConstructorUsedError;
   Option<Either<AuthFailure, Unit>> get authFailureOrSuccessOption =>
@@ -740,8 +740,8 @@ abstract class $SignInFormStateCopyWith<$Res> {
           SignInFormState value, $Res Function(SignInFormState) then) =
       _$SignInFormStateCopyWithImpl<$Res>;
   $Res call(
-      {EmailAddress emailAddress,
-      Password password,
+      {String emailAddress,
+      String password,
       bool showErrorMessages,
       bool isSubmitting,
       Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption});
@@ -768,11 +768,11 @@ class _$SignInFormStateCopyWithImpl<$Res>
       emailAddress: emailAddress == freezed
           ? _value.emailAddress
           : emailAddress // ignore: cast_nullable_to_non_nullable
-              as EmailAddress,
+              as String,
       password: password == freezed
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
-              as Password,
+              as String,
       showErrorMessages: showErrorMessages == freezed
           ? _value.showErrorMessages
           : showErrorMessages // ignore: cast_nullable_to_non_nullable
@@ -797,8 +797,8 @@ abstract class _$SignInFormStateCopyWith<$Res>
       __$SignInFormStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {EmailAddress emailAddress,
-      Password password,
+      {String emailAddress,
+      String password,
       bool showErrorMessages,
       bool isSubmitting,
       Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption});
@@ -827,11 +827,11 @@ class __$SignInFormStateCopyWithImpl<$Res>
       emailAddress: emailAddress == freezed
           ? _value.emailAddress
           : emailAddress // ignore: cast_nullable_to_non_nullable
-              as EmailAddress,
+              as String,
       password: password == freezed
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
-              as Password,
+              as String,
       showErrorMessages: showErrorMessages == freezed
           ? _value.showErrorMessages
           : showErrorMessages // ignore: cast_nullable_to_non_nullable
@@ -859,9 +859,9 @@ class _$_SignInFormState implements _SignInFormState {
       required this.authFailureOrSuccessOption});
 
   @override
-  final EmailAddress emailAddress;
+  final String emailAddress;
   @override
-  final Password password;
+  final String password;
   @override
   final bool showErrorMessages;
   @override
@@ -914,17 +914,17 @@ class _$_SignInFormState implements _SignInFormState {
 
 abstract class _SignInFormState implements SignInFormState {
   const factory _SignInFormState(
-      {required EmailAddress emailAddress,
-      required Password password,
+      {required String emailAddress,
+      required String password,
       required bool showErrorMessages,
       required bool isSubmitting,
       required Option<Either<AuthFailure, Unit>>
           authFailureOrSuccessOption}) = _$_SignInFormState;
 
   @override
-  EmailAddress get emailAddress => throw _privateConstructorUsedError;
+  String get emailAddress => throw _privateConstructorUsedError;
   @override
-  Password get password => throw _privateConstructorUsedError;
+  String get password => throw _privateConstructorUsedError;
   @override
   bool get showErrorMessages => throw _privateConstructorUsedError;
   @override

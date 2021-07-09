@@ -246,8 +246,8 @@ abstract class SignedOut implements AuthEvent {
 class _$AuthStateTearOff {
   const _$AuthStateTearOff();
 
-  Initial initial() {
-    return const Initial();
+  _Initial initial() {
+    return const _Initial();
   }
 
   Unauthenticated unauthenticated() {
@@ -281,14 +281,14 @@ mixin _$AuthState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Initial value) initial,
+    required TResult Function(_Initial value) initial,
     required TResult Function(Unauthenticated value) unauthenticated,
     required TResult Function(Authenticated value) authenticated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Initial value)? initial,
+    TResult Function(_Initial value)? initial,
     TResult Function(Unauthenticated value)? unauthenticated,
     TResult Function(Authenticated value)? authenticated,
     required TResult orElse(),
@@ -312,25 +312,25 @@ class _$AuthStateCopyWithImpl<$Res> implements $AuthStateCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class $InitialCopyWith<$Res> {
-  factory $InitialCopyWith(Initial value, $Res Function(Initial) then) =
-      _$InitialCopyWithImpl<$Res>;
+abstract class _$InitialCopyWith<$Res> {
+  factory _$InitialCopyWith(_Initial value, $Res Function(_Initial) then) =
+      __$InitialCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$InitialCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>
-    implements $InitialCopyWith<$Res> {
-  _$InitialCopyWithImpl(Initial _value, $Res Function(Initial) _then)
-      : super(_value, (v) => _then(v as Initial));
+class __$InitialCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>
+    implements _$InitialCopyWith<$Res> {
+  __$InitialCopyWithImpl(_Initial _value, $Res Function(_Initial) _then)
+      : super(_value, (v) => _then(v as _Initial));
 
   @override
-  Initial get _value => super._value as Initial;
+  _Initial get _value => super._value as _Initial;
 }
 
 /// @nodoc
 
-class _$Initial implements Initial {
-  const _$Initial();
+class _$_Initial implements _Initial {
+  const _$_Initial();
 
   @override
   String toString() {
@@ -339,7 +339,7 @@ class _$Initial implements Initial {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is Initial);
+    return identical(this, other) || (other is _Initial);
   }
 
   @override
@@ -372,7 +372,7 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Initial value) initial,
+    required TResult Function(_Initial value) initial,
     required TResult Function(Unauthenticated value) unauthenticated,
     required TResult Function(Authenticated value) authenticated,
   }) {
@@ -382,7 +382,7 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Initial value)? initial,
+    TResult Function(_Initial value)? initial,
     TResult Function(Unauthenticated value)? unauthenticated,
     TResult Function(Authenticated value)? authenticated,
     required TResult orElse(),
@@ -394,8 +394,8 @@ class _$Initial implements Initial {
   }
 }
 
-abstract class Initial implements AuthState {
-  const factory Initial() = _$Initial;
+abstract class _Initial implements AuthState {
+  const factory _Initial() = _$_Initial;
 }
 
 /// @nodoc
@@ -461,7 +461,7 @@ class _$Unauthenticated implements Unauthenticated {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Initial value) initial,
+    required TResult Function(_Initial value) initial,
     required TResult Function(Unauthenticated value) unauthenticated,
     required TResult Function(Authenticated value) authenticated,
   }) {
@@ -471,7 +471,7 @@ class _$Unauthenticated implements Unauthenticated {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Initial value)? initial,
+    TResult Function(_Initial value)? initial,
     TResult Function(Unauthenticated value)? unauthenticated,
     TResult Function(Authenticated value)? authenticated,
     required TResult orElse(),
@@ -550,7 +550,7 @@ class _$Authenticated implements Authenticated {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Initial value) initial,
+    required TResult Function(_Initial value) initial,
     required TResult Function(Unauthenticated value) unauthenticated,
     required TResult Function(Authenticated value) authenticated,
   }) {
@@ -560,7 +560,7 @@ class _$Authenticated implements Authenticated {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Initial value)? initial,
+    TResult Function(_Initial value)? initial,
     TResult Function(Unauthenticated value)? unauthenticated,
     TResult Function(Authenticated value)? authenticated,
     required TResult orElse(),
