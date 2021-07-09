@@ -1,32 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_share/application/post/save_post/save_post_bloc.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter_share/helper/helper_functions.dart';
 
-class GetLocationWidget extends StatelessWidget {
-  final _locationController = TextEditingController();
+class GetLocationWidget extends HookWidget {
+  const GetLocationWidget({Key? key}) : super(key: key);
 
-  GetLocationWidget({Key? key}) : super(key: key);
-
-  Future<String> getLocation() async {
-    print('getLocation');
-    final position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-    final placemarks = await placemarkFromCoordinates(
-      position.latitude,
-      position.longitude,
-    );
-    final placemark = placemarks[0];
-    print(placemark);
-    final String formattedAddress =
-        "${placemark.street}, ${placemark.subLocality}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}";
-    return formattedAddress;
+  void _addLocationChangedEvent(BuildContext context, String value) {
+    context.read<SavePostBloc>().add(
+          SavePostEvent.locationChanged(value),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
+    final _locationController = useTextEditingController();
     return Column(
       children: [
         ListTile(
@@ -37,12 +26,7 @@ class GetLocationWidget extends StatelessWidget {
           ),
           title: TextFormField(
             controller: _locationController,
-            // onChanged: (value) {
-            //   _locationController.text = value;
-            //   context.read<SavePostBloc>().add(
-            //         SavePostEvent.locationChanged(value),
-            //       );
-            // },
+            onChanged: (value) => _addLocationChangedEvent(context, value),
             decoration: const InputDecoration(
               hintText: 'Location...',
               border: InputBorder.none,
@@ -61,9 +45,7 @@ class GetLocationWidget extends StatelessWidget {
             onPressed: () async {
               final value = await getLocation();
               _locationController.text = value;
-              context.read<SavePostBloc>().add(
-                    SavePostEvent.locationChanged(value),
-                  );
+              _addLocationChangedEvent(context, value);
             },
             icon: const Icon(Icons.my_location),
             label: const Text('Current Location'),

@@ -1,4 +1,4 @@
-const CAPTION_MAX_LENGTH = 3;
+const CAPTION_MAX_LENGTH = 500;
 const PASSWORD_MAX_LENGTH = 3;
 
 bool validateStringNotEmpty(String input) {
