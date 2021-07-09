@@ -11,6 +11,7 @@ import '../auth/sign_in_page.dart' as _i4;
 import '../home_page.dart' as _i5;
 import '../post/posts_page.dart' as _i7;
 import '../post/save_post_page.dart' as _i6;
+import '../profile/profile_page.dart' as _i8;
 import '../splash/splash_page.dart' as _i3;
 
 class Router extends _i1.RootStackRouter {
@@ -43,6 +44,13 @@ class Router extends _i1.RootStackRouter {
         routeData: routeData,
         builder: (_) {
           return const _i7.PostsPage();
+        }),
+    ProfileRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
+        routeData: routeData,
+        builder: (data) {
+          final args = data.argsAs<ProfileRouteArgs>(
+              orElse: () => const ProfileRouteArgs());
+          return _i8.ProfilePage(key: args.key);
         })
   };
 
@@ -52,7 +60,8 @@ class Router extends _i1.RootStackRouter {
         _i1.RouteConfig(SignInRoute.name, path: '/sign-in-page'),
         _i1.RouteConfig(HomeRoute.name, path: '/home-page', children: [
           _i1.RouteConfig(SavePostRoute.name, path: 'save-post-page'),
-          _i1.RouteConfig(PostsRoute.name, path: 'posts-page')
+          _i1.RouteConfig(PostsRoute.name, path: 'posts-page'),
+          _i1.RouteConfig(ProfileRoute.name, path: 'profile-page')
         ])
       ];
 }
@@ -86,4 +95,17 @@ class PostsRoute extends _i1.PageRouteInfo {
   const PostsRoute() : super(name, path: 'posts-page');
 
   static const String name = 'PostsRoute';
+}
+
+class ProfileRoute extends _i1.PageRouteInfo<ProfileRouteArgs> {
+  ProfileRoute({_i2.Key? key})
+      : super(name, path: 'profile-page', args: ProfileRouteArgs(key: key));
+
+  static const String name = 'ProfileRoute';
+}
+
+class ProfileRouteArgs {
+  const ProfileRouteArgs({this.key});
+
+  final _i2.Key? key;
 }

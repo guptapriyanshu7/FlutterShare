@@ -7,9 +7,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
-      routes: const [
+      routes: [
         SavePostRoute(),
-        PostsRoute(),
+        ProfileRoute(),
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(

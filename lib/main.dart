@@ -1,4 +1,5 @@
 // import 'package:camera/camera.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,15 +26,28 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           getIt<AuthBloc>()..add(AuthEvent.authCheckRequested()),
-      child: MaterialApp.router(
-        routeInformationParser: getIt<Router>().defaultRouteParser(),
-        routerDelegate: getIt<Router>().delegate(),
-        title: 'FlutterShare',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.red,
-          accentColor: Colors.pink[200],
-        ),
+      child: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          return MaterialApp.router(
+            routeInformationParser: getIt<Router>().defaultRouteParser(),
+            routerDelegate: AutoRouterDelegate.declarative(
+              getIt<Router>(),
+              routes: (_) => [
+                state.map(
+                  initial: (_) => SplashRoute(),
+                  unauthenticated: (_) => SignInRoute(),
+                  authenticated: (_) => HomeRoute(),
+                )
+              ],
+            ),
+            title: 'FlutterShare',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primarySwatch: Colors.red,
+              accentColor: Colors.pink[200],
+            ),
+          );
+        },
       ),
     );
   }
