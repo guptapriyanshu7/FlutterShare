@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
+import 'package:flutter_share/injection.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter_share/domain/auth/auth_failure.dart';
@@ -24,10 +26,11 @@ class FirebaseAuthFacade implements IAuthFacade {
     // final emailAddressStr = emailAddress.getOrCrash();
     // final passwordStr = password.getOrCrash();
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      final credential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
+      _saveUserDocToDatabase(credential);
       return right(unit);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -72,11 +75,27 @@ class FirebaseAuthFacade implements IAuthFacade {
         accessToken: googleAuthentication.accessToken,
         idToken: googleAuthentication.idToken,
       );
-      await _firebaseAuth.signInWithCredential(authCredential);
+      final credential =
+          await _firebaseAuth.signInWithCredential(authCredential);
+      final doc = await getIt<FirebaseFirestore>()
+          .collection('users')
+          .doc(credential.user!.uid)
+          .get();
+      if (!doc.exists) _saveUserDocToDatabase(credential);
       return right(unit);
     } catch (_) {
       return left(const AuthFailure.serverError());
     }
+  }
+
+  Future<void> _saveUserDocToDatabase(UserCredential credential) async {
+    final firebaseUser = credential.user;
+    final userDomain = firebaseUser?.toDomain();
+    final userJson = userDomain?.toJson();
+    await getIt<FirebaseFirestore>()
+        .collection('users')
+        .doc(userDomain!.id)
+        .set(userJson!);
   }
 
   @override

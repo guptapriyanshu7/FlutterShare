@@ -254,8 +254,10 @@ class _$AuthStateTearOff {
     return const Unauthenticated();
   }
 
-  Authenticated authenticated() {
-    return const Authenticated();
+  Authenticated authenticated(User currentUser) {
+    return Authenticated(
+      currentUser,
+    );
   }
 }
 
@@ -268,14 +270,14 @@ mixin _$AuthState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() unauthenticated,
-    required TResult Function() authenticated,
+    required TResult Function(User currentUser) authenticated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? unauthenticated,
-    TResult Function()? authenticated,
+    TResult Function(User currentUser)? authenticated,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -350,7 +352,7 @@ class _$_Initial implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() unauthenticated,
-    required TResult Function() authenticated,
+    required TResult Function(User currentUser) authenticated,
   }) {
     return initial();
   }
@@ -360,7 +362,7 @@ class _$_Initial implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? unauthenticated,
-    TResult Function()? authenticated,
+    TResult Function(User currentUser)? authenticated,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -439,7 +441,7 @@ class _$Unauthenticated implements Unauthenticated {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() unauthenticated,
-    required TResult Function() authenticated,
+    required TResult Function(User currentUser) authenticated,
   }) {
     return unauthenticated();
   }
@@ -449,7 +451,7 @@ class _$Unauthenticated implements Unauthenticated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? unauthenticated,
-    TResult Function()? authenticated,
+    TResult Function(User currentUser)? authenticated,
     required TResult orElse(),
   }) {
     if (unauthenticated != null) {
@@ -492,6 +494,9 @@ abstract class $AuthenticatedCopyWith<$Res> {
   factory $AuthenticatedCopyWith(
           Authenticated value, $Res Function(Authenticated) then) =
       _$AuthenticatedCopyWithImpl<$Res>;
+  $Res call({User currentUser});
+
+  $UserCopyWith<$Res> get currentUser;
 }
 
 /// @nodoc
@@ -503,34 +508,66 @@ class _$AuthenticatedCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>
 
   @override
   Authenticated get _value => super._value as Authenticated;
+
+  @override
+  $Res call({
+    Object? currentUser = freezed,
+  }) {
+    return _then(Authenticated(
+      currentUser == freezed
+          ? _value.currentUser
+          : currentUser // ignore: cast_nullable_to_non_nullable
+              as User,
+    ));
+  }
+
+  @override
+  $UserCopyWith<$Res> get currentUser {
+    return $UserCopyWith<$Res>(_value.currentUser, (value) {
+      return _then(_value.copyWith(currentUser: value));
+    });
+  }
 }
 
 /// @nodoc
 
 class _$Authenticated implements Authenticated {
-  const _$Authenticated();
+  const _$Authenticated(this.currentUser);
+
+  @override
+  final User currentUser;
 
   @override
   String toString() {
-    return 'AuthState.authenticated()';
+    return 'AuthState.authenticated(currentUser: $currentUser)';
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is Authenticated);
+    return identical(this, other) ||
+        (other is Authenticated &&
+            (identical(other.currentUser, currentUser) ||
+                const DeepCollectionEquality()
+                    .equals(other.currentUser, currentUser)));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(currentUser);
+
+  @JsonKey(ignore: true)
+  @override
+  $AuthenticatedCopyWith<Authenticated> get copyWith =>
+      _$AuthenticatedCopyWithImpl<Authenticated>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() unauthenticated,
-    required TResult Function() authenticated,
+    required TResult Function(User currentUser) authenticated,
   }) {
-    return authenticated();
+    return authenticated(currentUser);
   }
 
   @override
@@ -538,11 +575,11 @@ class _$Authenticated implements Authenticated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? unauthenticated,
-    TResult Function()? authenticated,
+    TResult Function(User currentUser)? authenticated,
     required TResult orElse(),
   }) {
     if (authenticated != null) {
-      return authenticated();
+      return authenticated(currentUser);
     }
     return orElse();
   }
@@ -573,5 +610,10 @@ class _$Authenticated implements Authenticated {
 }
 
 abstract class Authenticated implements AuthState {
-  const factory Authenticated() = _$Authenticated;
+  const factory Authenticated(User currentUser) = _$Authenticated;
+
+  User get currentUser => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $AuthenticatedCopyWith<Authenticated> get copyWith =>
+      throw _privateConstructorUsedError;
 }
