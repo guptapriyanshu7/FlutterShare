@@ -5,7 +5,9 @@ import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/domain/user_actions.dart/i_user_actions_repository.dart';
 import 'package:flutter_share/domain/user_actions.dart/profile.dart';
 import 'package:flutter_share/domain/user_actions.dart/user_actions_failure.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: IUserActionsRepository)
 class UserActionsRepositoryImpl implements IUserActionsRepository {
   final FirebaseFirestore _firestore;
 
@@ -17,6 +19,7 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
     try {
       final userDoc = await _firestore.collection('users').doc(userId).get();
       final userJson = userDoc.data();
+      print(userJson);
       final userDomain = User.fromJson(userJson!);
       final followingQuery = await _firestore
           .collection('following')

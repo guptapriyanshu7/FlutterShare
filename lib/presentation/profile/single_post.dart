@@ -1,22 +1,29 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_share/domain/posts/post.dart' as model;
+import 'package:flutter_share/domain/auth/user.dart';
+import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/pages/comments.dart';
 import 'package:flutter_share/pages/home.dart';
+import 'package:flutter_share/presentation/profile/profile_page.dart';
 
-import 'package:flutter_share/widgets/cached_image.dart';
+// import 'package:flutter_share/widgets/cached_image.dart';
 import 'package:animator/animator.dart';
+import 'package:flutter_share/presentation/routes/router.gr.dart';
 
-class Post extends StatefulWidget {
-  final model.Post post;
-  const Post(this.post, {Key? key}) : super(key: key);
+class SinglePost extends StatefulWidget {
+  final Post post;
+  final User user;
+  const SinglePost(this.post, this.user, {Key? key}) : super(key: key);
 
   @override
-  _PostState createState() => _PostState();
+  _SinglePostState createState() => _SinglePostState();
 }
 
-class _PostState extends State<Post> {
+class _SinglePostState extends State<SinglePost> {
   int getLikesCount(Map<String, dynamic> likes) {
     var count = 0;
     // likes.values.forEach((val) {
@@ -77,17 +84,17 @@ class _PostState extends State<Post> {
       children: [
         ListTile(
           leading: CircleAvatar(
-              // backgroundImage: CachedNetworkImageProvider(user.photoUrl),
-              ),
+            backgroundImage: CachedNetworkImageProvider(widget.user.photoUrl),
+          ),
           title: GestureDetector(
-              // onTap: () => Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => Profile(user.id),
-              //       ),
-              //     ),
-              // child: Text(user.username),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfilePage(widget.user.id),
               ),
+            ),
+            child: Text(widget.user.username),
+          ),
           subtitle: Text(widget.post.location),
           trailing: IconButton(
             onPressed: () => print('deleting post'),
@@ -173,19 +180,16 @@ class _PostState extends State<Post> {
                 text: TextSpan(
                   style: DefaultTextStyle.of(context).style,
                   children: [
-                    // TextSpan(
-                    //   text: '${user.username} ',
-                    //   recognizer: TapGestureRecognizer()
-                    //     // ..onTap = () => Navigator.push(
-                    //     //       context,
-                    //     //       MaterialPageRoute(
-                    //     //         builder: (context) => Profile(user.id),
-                    //     //       ),
-                    //     //     ),
-                    //   style: const TextStyle(
-                    //     fontWeight: FontWeight.bold,
-                    //   ),
-                    // ),
+                    TextSpan(
+                      text: '${widget.user.username} ',
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => context.pushRoute(
+                              ProfileRoute(id: widget.user.id),
+                            ),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     TextSpan(text: widget.post.caption),
                   ],
                 ),

@@ -5,28 +5,8 @@ import 'package:flutter_share/application/user_actions/user_actions_bloc.dart';
 import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/injection.dart';
-import 'package:flutter_share/presentation/post/posts_page.dart';
-
-Widget postTile(BuildContext context, Post post) {
-  return GestureDetector(
-    onTap: () async {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return Scaffold(
-              appBar: AppBar(title: Text('FlutterShare')),
-              body: SingleChildScrollView(
-                  // child: Post(post),
-                  ),
-            );
-          },
-        ),
-      );
-    },
-    child: cachedImage(post.mediaUrl),
-  );
-}
+import 'package:flutter_share/presentation/profile/single_post.dart';
+// import 'package:flutter_share/presentation/post/posts_page.dart';
 
 Widget cachedImage(String mediaUrl) {
   print(mediaUrl);
@@ -41,25 +21,39 @@ Widget cachedImage(String mediaUrl) {
   );
 }
 
-
-class ProfilePage extends StatefulWidget {
-  ProfilePage({Key? key}) : super(key: key);
-
-  @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
+class ProfilePage extends StatelessWidget {
+  ProfilePage(String id, {Key? key}) : super(key: key);
   late final User user;
   late final List<Post> posts;
   late final int following;
   late final int followers;
-  bool grid = true;
+  final grid = true;
 
   void gridOn({required bool set}) {
-    setState(() {
-      grid = set;
-    });
+    // setState(() {
+    // grid = set;
+    // });
+  }
+
+  Widget postTile(BuildContext context, Post post) {
+    return GestureDetector(
+      onTap: () async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return Scaffold(
+                appBar: AppBar(title: Text('FlutterShare')),
+                body: SingleChildScrollView(
+                  child: SinglePost(post, user),
+                ),
+              );
+            },
+          ),
+        );
+      },
+      child: cachedImage(post.mediaUrl),
+    );
   }
 
   Widget changeOrientation() {
@@ -144,12 +138,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     ]),
                     Column(children: [
                       Text(followers.toString()),
-                      Text('20'),
                       const Text('Followers')
                     ]),
                     Column(children: [
                       Text(following.toString()),
-                      Text('12'),
                       const Text('Following')
                     ]),
                   ],
@@ -230,7 +222,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   const Divider(height: 0),
                   changeOrientation(),
                   const Divider(height: 0),
-                  if (grid) _buildGrid(context) else PostsPage(),
+                  // _buildGrid(context),
+                  Column(
+                    children: posts.map((e) => SinglePost(e, user)).toList(),
+                  )
+                  // if (grid) _buildGrid(context) else PostsPage(),
                 ],
               );
             },

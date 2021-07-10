@@ -48,9 +48,8 @@ class Router extends _i1.RootStackRouter {
     ProfileRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (data) {
-          final args = data.argsAs<ProfileRouteArgs>(
-              orElse: () => const ProfileRouteArgs());
-          return _i8.ProfilePage(key: args.key);
+          final args = data.argsAs<ProfileRouteArgs>();
+          return _i8.ProfilePage(args.id, key: args.key);
         })
   };
 
@@ -98,14 +97,17 @@ class PostsRoute extends _i1.PageRouteInfo {
 }
 
 class ProfileRoute extends _i1.PageRouteInfo<ProfileRouteArgs> {
-  ProfileRoute({_i2.Key? key})
-      : super(name, path: 'profile-page', args: ProfileRouteArgs(key: key));
+  ProfileRoute({required String id, _i2.Key? key})
+      : super(name,
+            path: 'profile-page', args: ProfileRouteArgs(id: id, key: key));
 
   static const String name = 'ProfileRoute';
 }
 
 class ProfileRouteArgs {
-  const ProfileRouteArgs({this.key});
+  const ProfileRouteArgs({required this.id, this.key});
+
+  final String id;
 
   final _i2.Key? key;
 }

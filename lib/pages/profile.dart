@@ -3,7 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/domain/posts/post.dart' as model;
 import 'package:flutter_share/models/user.dart';
-import 'package:flutter_share/pages/post.dart' as wid;
+import 'package:flutter_share/domain/auth/user.dart' as domainUser;
+import 'package:flutter_share/presentation/profile/single_post.dart' as wid;
 import 'package:flutter_share/pages/edit_profile.dart';
 import 'package:flutter_share/widgets/header.dart';
 import 'package:flutter_share/pages/home.dart';
@@ -18,7 +19,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   int postsCount = 0;
-  List<wid.Post> posts = [];
+  List<wid.SinglePost> posts = [];
   bool grid = true;
   bool isFollowing = false;
   int followers = 0;
@@ -76,10 +77,17 @@ class _ProfileState extends State<Profile> {
       postsCount = snap.docs.length;
       posts = snap.docs.map((doc) {
         // final post = model.Post.fromJson(doc);
-        return wid.Post(
+        return wid.SinglePost(
           model.Post.fromJson(
             doc.data(),
           ),
+          domainUser.User(
+              id: 'id',
+              username: 'username',
+              email: 'email',
+              photoUrl: 'photoUrl',
+              displayName: 'displayName',
+              bio: 'bio'),
         );
       }).toList();
     });

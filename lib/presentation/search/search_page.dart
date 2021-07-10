@@ -2,9 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/user.dart';
-import 'package:flutter_share/pages/profile.dart';
+import 'package:flutter_share/presentation/profile/profile_page.dart';
 import 'package:flutter_share/widgets/progress.dart';
-import 'package:flutter_share/pages/home.dart';
 
 class SearchPage extends StatelessWidget {
   Future<QuerySnapshot>? searchResultsFuture;
@@ -31,9 +30,9 @@ class SearchPage extends StatelessWidget {
             ),
           ),
           onFieldSubmitted: (val) {
-            final users = usersRef
-                .where("displayName", isGreaterThanOrEqualTo: val)
-                .get();
+            // final users = usersRef
+            //     .where("displayName", isGreaterThanOrEqualTo: val)
+            //     .get();
             // setState(() {
             //   searchResultsFuture = users;
             // });
@@ -97,7 +96,7 @@ class UserResult extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) {
                 print(user.displayName);
-                return Profile(user.id);
+                return ProfilePage(user.id);
               },
             ),
           );

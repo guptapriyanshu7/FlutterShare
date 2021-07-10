@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
     return AutoTabsScaffold(
       routes: [
         SavePostRoute(),
-        ProfileRoute(),
+        ProfileRoute(id: 'dsfasffa'),
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(

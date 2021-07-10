@@ -5,6 +5,7 @@ import 'package:flutter_share/presentation/post/posts_page.dart';
 import 'package:flutter_share/presentation/post/save_post_page.dart';
 import 'package:flutter_share/presentation/profile/profile_page.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
+import 'package:flutter_share/presentation/search/search_page.dart';
 import 'package:flutter_share/presentation/splash/splash_page.dart';
 import 'package:injectable/injectable.dart';
 
@@ -19,6 +20,7 @@ import 'package:injectable/injectable.dart';
         AutoRoute(page: SavePostPage),
         AutoRoute(page: PostsPage),
         AutoRoute(page: ProfilePage),
+        AutoRoute(page: SearchPage),
       ],
     ),
   ],
