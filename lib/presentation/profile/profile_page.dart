@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_share/application/user_actions/user_actions_bloc.dart';
 import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/posts/post.dart';
@@ -21,13 +22,13 @@ Widget cachedImage(String mediaUrl) {
   );
 }
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends HookWidget {
   ProfilePage(String id, {Key? key}) : super(key: key);
-  late final User user;
-  late final List<Post> posts;
-  late final int following;
-  late final int followers;
-  final grid = true;
+  late User user;
+  late List<Post> posts;
+  late int following;
+  late int followers;
+  // final grid = true;
 
   void gridOn({required bool set}) {
     // setState(() {
@@ -56,19 +57,19 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget changeOrientation() {
+  Widget changeOrientation(ValueNotifier<bool> grid) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         IconButton(
           icon: const Icon(Icons.grid_on),
-          onPressed: () => gridOn(set: true),
-          color: grid ? Colors.pink : null,
+          onPressed: () => grid.value = true,
+          color: grid.value ? Colors.pink : null,
         ),
         IconButton(
           icon: const Icon(Icons.list),
-          onPressed: () => gridOn(set: false),
-          color: !grid ? Colors.pink : null,
+          onPressed: () => grid.value = false,
+          color: !grid.value ? Colors.pink : null,
         ),
       ],
     );
@@ -192,6 +193,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final grid = useState(true);
     return BlocProvider(
       create: (context) => getIt<UserActionsBloc>()
         ..add(UserActionsEvent.fetchProfile('5QNxqcDLc5hrjox6Hf0VAbADLqy2')),
@@ -220,12 +222,15 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   const Divider(height: 0),
-                  changeOrientation(),
+                  changeOrientation(grid),
                   const Divider(height: 0),
                   // _buildGrid(context),
-                  Column(
-                    children: posts.map((e) => SinglePost(e, user)).toList(),
-                  )
+                  if (grid.value)
+                    _buildGrid(context)
+                  else
+                    Column(
+                      children: posts.map((e) => SinglePost(e, user)).toList(),
+                    )
                   // if (grid) _buildGrid(context) else PostsPage(),
                 ],
               );
