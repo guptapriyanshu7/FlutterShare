@@ -9,7 +9,8 @@ class HomePage extends StatelessWidget {
     return AutoTabsScaffold(
       routes: [
         SavePostRoute(),
-        ProfileRoute(id: 'dsfasffa'),
+        SearchRoute(),
+        ProfileRoute(id: '5QNxqcDLc5hrjox6Hf0VAbADLqy2'),
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
@@ -19,6 +20,10 @@ class HomePage extends StatelessWidget {
             BottomNavigationBarItem(
               icon: Icon(Icons.add_a_photo_outlined),
               label: 'New Post',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: 'Search',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.account_box),

@@ -8,10 +8,11 @@ import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 
 import '../auth/sign_in_page.dart' as _i4;
-import '../home_page.dart' as _i5;
-import '../post/posts_page.dart' as _i7;
-import '../post/save_post_page.dart' as _i6;
-import '../profile/profile_page.dart' as _i8;
+import '../home_page.dart' as _i6;
+import '../post/posts_page.dart' as _i8;
+import '../post/save_post_page.dart' as _i7;
+import '../profile/profile_page.dart' as _i5;
+import '../search/search_page.dart' as _i9;
 import '../splash/splash_page.dart' as _i3;
 
 class Router extends _i1.RootStackRouter {
@@ -30,26 +31,34 @@ class Router extends _i1.RootStackRouter {
         builder: (_) {
           return const _i4.SignInPage();
         }),
+    ProfileRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
+        routeData: routeData,
+        builder: (data) {
+          final pathParams = data.pathParams;
+          final args = data.argsAs<ProfileRouteArgs>(
+              orElse: () =>
+                  ProfileRouteArgs(id: pathParams.getString('profileId')));
+          return _i5.ProfilePage(args.id, key: args.key);
+        }),
     HomeRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return _i5.HomePage();
+          return _i6.HomePage();
         }),
     SavePostRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return const _i6.SavePostPage();
+          return const _i7.SavePostPage();
         }),
     PostsRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return const _i7.PostsPage();
+          return const _i8.PostsPage();
         }),
-    ProfileRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
+    SearchRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
-        builder: (data) {
-          final args = data.argsAs<ProfileRouteArgs>();
-          return _i8.ProfilePage(args.id, key: args.key);
+        builder: (_) {
+          return _i9.SearchPage();
         })
   };
 
@@ -57,10 +66,12 @@ class Router extends _i1.RootStackRouter {
   List<_i1.RouteConfig> get routes => [
         _i1.RouteConfig(SplashRoute.name, path: '/'),
         _i1.RouteConfig(SignInRoute.name, path: '/sign-in-page'),
+        _i1.RouteConfig(ProfileRoute.name, path: 'profile-page/:profileId'),
         _i1.RouteConfig(HomeRoute.name, path: '/home-page', children: [
           _i1.RouteConfig(SavePostRoute.name, path: 'save-post-page'),
           _i1.RouteConfig(PostsRoute.name, path: 'posts-page'),
-          _i1.RouteConfig(ProfileRoute.name, path: 'profile-page')
+          _i1.RouteConfig(ProfileRoute.name, path: 'profile-page/:profileId'),
+          _i1.RouteConfig(SearchRoute.name, path: 'search-page')
         ])
       ];
 }
@@ -75,6 +86,24 @@ class SignInRoute extends _i1.PageRouteInfo {
   const SignInRoute() : super(name, path: '/sign-in-page');
 
   static const String name = 'SignInRoute';
+}
+
+class ProfileRoute extends _i1.PageRouteInfo<ProfileRouteArgs> {
+  ProfileRoute({required String id, _i2.Key? key})
+      : super(name,
+            path: 'profile-page/:profileId',
+            args: ProfileRouteArgs(id: id, key: key),
+            rawPathParams: {'profileId': id});
+
+  static const String name = 'ProfileRoute';
+}
+
+class ProfileRouteArgs {
+  const ProfileRouteArgs({required this.id, this.key});
+
+  final String id;
+
+  final _i2.Key? key;
 }
 
 class HomeRoute extends _i1.PageRouteInfo {
@@ -96,18 +125,8 @@ class PostsRoute extends _i1.PageRouteInfo {
   static const String name = 'PostsRoute';
 }
 
-class ProfileRoute extends _i1.PageRouteInfo<ProfileRouteArgs> {
-  ProfileRoute({required String id, _i2.Key? key})
-      : super(name,
-            path: 'profile-page', args: ProfileRouteArgs(id: id, key: key));
+class SearchRoute extends _i1.PageRouteInfo {
+  const SearchRoute() : super(name, path: 'search-page');
 
-  static const String name = 'ProfileRoute';
-}
-
-class ProfileRouteArgs {
-  const ProfileRouteArgs({required this.id, this.key});
-
-  final String id;
-
-  final _i2.Key? key;
+  static const String name = 'SearchRoute';
 }

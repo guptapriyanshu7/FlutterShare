@@ -1,13 +1,23 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/user.dart';
 import 'package:flutter_share/presentation/profile/profile_page.dart';
+import 'package:flutter_share/presentation/routes/router.gr.dart';
 import 'package:flutter_share/widgets/progress.dart';
+import 'package:flutter_share/injection.dart';
 
-class SearchPage extends StatelessWidget {
+class SearchPage extends StatefulWidget {
+  @override
+  _SearchPageState createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
   Future<QuerySnapshot>? searchResultsFuture;
+
   final searchController = TextEditingController();
+
   void clearForm() {
     searchController.clear();
   }
@@ -30,12 +40,13 @@ class SearchPage extends StatelessWidget {
             ),
           ),
           onFieldSubmitted: (val) {
-            // final users = usersRef
-            //     .where("displayName", isGreaterThanOrEqualTo: val)
-            //     .get();
-            // setState(() {
-            //   searchResultsFuture = users;
-            // });
+            final users = getIt<FirebaseFirestore>()
+                .collection('users')
+                .where("displayName", isGreaterThanOrEqualTo: val)
+                .get();
+            setState(() {
+              searchResultsFuture = users;
+            });
           },
         ),
       ),
@@ -90,16 +101,17 @@ class UserResult extends StatelessWidget {
     return Container(
       color: Theme.of(context).primaryColor.withOpacity(0.7),
       child: GestureDetector(
-        onTap: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                print(user.displayName);
-                return ProfilePage(user.id);
-              },
-            ),
-          );
+        onTap: () {
+          context.pushRoute(ProfileRoute(id: user.id));
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) {
+          //       print(user.displayName);
+          //       return ProfilePage(user.id);
+          //     },
+          //   ),
+          // );
         },
         child: ListTile(
           leading: CircleAvatar(

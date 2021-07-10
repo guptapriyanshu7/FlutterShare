@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +24,8 @@ Widget cachedImage(String mediaUrl) {
 }
 
 class ProfilePage extends HookWidget {
-  ProfilePage(String id, {Key? key}) : super(key: key);
+  ProfilePage(@PathParam('profileId') this.id, {Key? key}) : super(key: key);
+  final String id;
   late User user;
   late List<Post> posts;
   late int following;
@@ -195,46 +197,49 @@ class ProfilePage extends HookWidget {
   Widget build(BuildContext context) {
     final grid = useState(true);
     return BlocProvider(
-      create: (context) => getIt<UserActionsBloc>()
-        ..add(UserActionsEvent.fetchProfile('5QNxqcDLc5hrjox6Hf0VAbADLqy2')),
+      create: (context) =>
+          getIt<UserActionsBloc>()..add(UserActionsEvent.fetchProfile(id)),
       child: BlocBuilder<UserActionsBloc, UserActionsState>(
         builder: (context, state) {
-          return state.maybeMap(
-            orElse: () => CircularProgressIndicator(),
-            error: (_) => Text(''),
-            loaded: (state) {
-              final profile = state.profile;
+          return Scaffold(
+            body: state.maybeMap(
+              orElse: () => CircularProgressIndicator(),
+              error: (_) => Text(''),
+              loaded: (state) {
+                final profile = state.profile;
 
-              user = profile.user;
-              posts = profile.posts;
-              following = profile.following;
-              followers = profile.followers;
+                user = profile.user;
+                posts = profile.posts;
+                following = profile.following;
+                followers = profile.followers;
 
-              return ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      children: [
-                        _buildHeader(),
-                        _buildInfo(),
-                      ],
+                return ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        children: [
+                          _buildHeader(),
+                          _buildInfo(),
+                        ],
+                      ),
                     ),
-                  ),
-                  const Divider(height: 0),
-                  changeOrientation(grid),
-                  const Divider(height: 0),
-                  // _buildGrid(context),
-                  if (grid.value)
-                    _buildGrid(context)
-                  else
-                    Column(
-                      children: posts.map((e) => SinglePost(e, user)).toList(),
-                    )
-                  // if (grid) _buildGrid(context) else PostsPage(),
-                ],
-              );
-            },
+                    const Divider(height: 0),
+                    changeOrientation(grid),
+                    const Divider(height: 0),
+                    // _buildGrid(context),
+                    if (grid.value)
+                      _buildGrid(context)
+                    else
+                      Column(
+                        children:
+                            posts.map((e) => SinglePost(e, user)).toList(),
+                      )
+                    // if (grid) _buildGrid(context) else PostsPage(),
+                  ],
+                );
+              },
+            ),
           );
         },
       ),

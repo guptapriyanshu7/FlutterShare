@@ -87,12 +87,7 @@ class _SinglePostState extends State<SinglePost> {
             backgroundImage: CachedNetworkImageProvider(widget.user.photoUrl),
           ),
           title: GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProfilePage(widget.user.id),
-              ),
-            ),
+            onTap: () => context.pushRoute(ProfileRoute(id: widget.user.id)),
             child: Text(widget.user.username),
           ),
           subtitle: Text(widget.post.location),

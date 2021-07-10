@@ -9,17 +9,20 @@ import 'package:flutter_share/presentation/search/search_page.dart';
 import 'package:flutter_share/presentation/splash/splash_page.dart';
 import 'package:injectable/injectable.dart';
 
+const PROFILE_ROUTE_PATH = 'profile-page/:profileId';
+
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: [
     AutoRoute(page: SplashPage, initial: true),
     AutoRoute(page: SignInPage),
+    AutoRoute(page: ProfilePage, path: PROFILE_ROUTE_PATH),
     AutoRoute(
       page: HomePage,
       children: [
         AutoRoute(page: SavePostPage),
         AutoRoute(page: PostsPage),
-        AutoRoute(page: ProfilePage),
+        AutoRoute(page: ProfilePage, path: PROFILE_ROUTE_PATH),
         AutoRoute(page: SearchPage),
       ],
     ),
