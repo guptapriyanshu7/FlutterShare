@@ -1,4 +1,5 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +8,8 @@ import 'package:flutter_share/application/user_actions/user_actions_bloc.dart';
 import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/injection.dart';
-import 'package:flutter_share/presentation/profile/single_post.dart';
+import 'package:flutter_share/presentation/profile/widgets/single_post.dart';
+import 'package:flutter_share/presentation/routes/router.gr.dart';
 // import 'package:flutter_share/presentation/post/posts_page.dart';
 
 Widget cachedImage(String mediaUrl) {
@@ -40,21 +42,11 @@ class ProfilePage extends HookWidget {
 
   Widget postTile(BuildContext context, Post post) {
     return GestureDetector(
-      onTap: () async {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return Scaffold(
-                appBar: AppBar(title: Text('FlutterShare')),
-                body: SingleChildScrollView(
-                  child: SinglePost(post, user),
-                ),
-              );
-            },
-          ),
-        );
-      },
+      onTap: () => context.pushRoute(SinglePostRoute(
+        id: post.id,
+        post: post,
+        user: user,
+      )),
       child: cachedImage(post.mediaUrl),
     );
   }

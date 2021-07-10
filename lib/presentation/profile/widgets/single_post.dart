@@ -4,8 +4,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/domain/auth/i_auth_facade.dart';
 import 'package:flutter_share/domain/auth/user.dart';
+import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/domain/posts/post.dart';
+import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/pages/comments.dart';
 import 'package:flutter_share/pages/home.dart';
 import 'package:flutter_share/presentation/profile/profile_page.dart';
@@ -36,19 +39,21 @@ class _SinglePostState extends State<SinglePost> {
   }
 
   bool isliked = false;
-  void likesController() {
+  void likesController() async {
+    final userOption = await getIt<IAuthFacade>().getSignedInUser();
+    final currentUser = userOption.getOrElse(() => throw NotAuthenticatedError());
     postsRef
         .doc(widget.post.ownerid)
         .collection('userPosts')
         .doc(widget.post.id)
-        .update({'likes.${currentUser!.id}': !isliked});
+        .update({'likes.${currentUser.id}': !isliked});
     if (!isliked) {
       feedRef.doc(widget.post.ownerid).collection('userFeed').add({
         'type': 'like',
         'timestamp': DateTime.now(),
-        'photoUrl': currentUser!.photoUrl,
-        'username': currentUser!.username,
-        'userId': currentUser!.id,
+        'photoUrl': currentUser.photoUrl,
+        'username': currentUser.username,
+        'userId': currentUser.id,
         'postId': widget.post.id,
         "mediaUrl": widget.post.mediaUrl,
       });
@@ -56,7 +61,7 @@ class _SinglePostState extends State<SinglePost> {
       feedRef
           .doc(widget.post.ownerid)
           .collection('userFeed')
-          .where('userId', isEqualTo: currentUser!.id)
+          .where('userId', isEqualTo: currentUser.id)
           .where('postId', isEqualTo: widget.post.id)
           .where('type', isEqualTo: 'like')
           .get()
@@ -71,7 +76,7 @@ class _SinglePostState extends State<SinglePost> {
     }
     setState(() {
       isliked = !isliked;
-      widget.post.likes[currentUser!.id] = isliked;
+      widget.post.likes[currentUser.id] = isliked;
     });
   }
 

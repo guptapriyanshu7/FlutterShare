@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/domain/posts/post.dart' as model;
 import 'package:flutter_share/models/user.dart';
 import 'package:flutter_share/domain/auth/user.dart' as domainUser;
-import 'package:flutter_share/presentation/profile/single_post.dart' as wid;
+import 'package:flutter_share/presentation/profile/widgets/single_post.dart' as wid;
 import 'package:flutter_share/pages/edit_profile.dart';
 import 'package:flutter_share/widgets/header.dart';
 import 'package:flutter_share/pages/home.dart';

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'post.freezed.dart';
 part 'post.g.dart';
@@ -6,7 +7,7 @@ part 'post.g.dart';
 @freezed
 class Post with _$Post {
   const factory Post({
-  @JsonKey(ignore: true) String? id,
+    required String? id,
     required String ownerid,
     required String mediaUrl,
     required String caption,
@@ -15,7 +16,7 @@ class Post with _$Post {
   }) = _Post;
 
   factory Post.empty() => Post(
-        id: 'fgdfgdfdgf',
+        id: const Uuid().v4(),
         ownerid: '',
         mediaUrl: '',
         caption: '',
@@ -23,6 +24,6 @@ class Post with _$Post {
         likes: {},
       );
 
-  factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json).copyWith(id: 'sdfsdfs');
+  factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
   // Map<String, dynamic> toJson() => _$PostToJson(this);
 }
