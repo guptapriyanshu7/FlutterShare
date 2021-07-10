@@ -15,9 +15,7 @@ class PostRepositoryImpl implements IPostRepository {
   @override
   Future<Either<PostFailure, Unit>> create(Post post) async {
     try {
-      final userDoc = await getIt<FirebaseFirestore>()
-          .collection('posts')
-          .doc('fsdfsfdfsfs');
+      final userDoc = await _firestore.collection('posts').doc('fsdfsfdfsfs');
       // final postDto = postDto.fromDomain(post);
       await userDoc.collection('userPosts').doc(post.id).set(post.toJson());
       return right(unit);

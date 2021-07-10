@@ -1,9 +1,46 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_share/application/user_actions/user_actions_bloc.dart';
+import 'package:flutter_share/domain/auth/user.dart';
+import 'package:flutter_share/domain/posts/post.dart';
+import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/post/posts_page.dart';
 
-const photoUrl =
-    'https://firebasestorage.googleapis.com/v0/b/flutter-share-d228b.appspot.com/o/post_173f6a52-fe2e-4ca0-af33-fe81a5abc1ad.jpg?alt=media&token=90df9b6d-288a-4471-9967-4940b7c827ae';
+Widget postTile(BuildContext context, Post post) {
+  return GestureDetector(
+    onTap: () async {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return Scaffold(
+              appBar: AppBar(title: Text('FlutterShare')),
+              body: SingleChildScrollView(
+                  // child: Post(post),
+                  ),
+            );
+          },
+        ),
+      );
+    },
+    child: cachedImage(post.mediaUrl),
+  );
+}
+
+Widget cachedImage(String mediaUrl) {
+  print(mediaUrl);
+  return CachedNetworkImage(
+    imageUrl: mediaUrl,
+    fit: BoxFit.cover,
+    placeholder: (context, url) => const Padding(
+      padding: EdgeInsets.all(30),
+      child: CircularProgressIndicator(),
+    ),
+    errorWidget: (context, url, error) => const Icon(Icons.error),
+  );
+}
+
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
@@ -13,6 +50,10 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late final User user;
+  late final List<Post> posts;
+  late final int following;
+  late final int followers;
   bool grid = true;
 
   void gridOn({required bool set}) {
@@ -41,12 +82,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildGrid(BuildContext context) {
     final gridTiles = <GridTile>[];
-    // posts.forEach((post) {
-    //   gridTiles.add(GridTile(child: postTile(context, post.post)));
-    // });
-    // for (final post in posts) {
-    //   gridTiles.add(GridTile(child: postTile(context, post.post)));
-    // }
+    for (final post in posts) {
+      gridTiles.add(GridTile(child: postTile(context, post)));
+    }
     return GridView.count(
       crossAxisCount: 3,
       shrinkWrap: true,
@@ -86,7 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
       children: [
         CircleAvatar(
           radius: 40,
-          backgroundImage: CachedNetworkImageProvider(photoUrl),
+          backgroundImage: CachedNetworkImageProvider(user.photoUrl),
         ),
         Expanded(
           // flex: 1,
@@ -101,17 +139,16 @@ class _ProfilePageState extends State<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Column(children: [
-                      // Text(postsCount.toString()),
-                      Text('1'),
+                      Text(posts.length.toString()),
                       const Text('Posts')
                     ]),
                     Column(children: [
-                      // Text(followers.toString()),
+                      Text(followers.toString()),
                       Text('20'),
                       const Text('Followers')
                     ]),
                     Column(children: [
-                      // Text(following.toString()),
+                      Text(following.toString()),
                       Text('12'),
                       const Text('Following')
                     ]),
@@ -133,8 +170,7 @@ class _ProfilePageState extends State<ProfilePage> {
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.only(top: 12.0),
           child: Text(
-            // user.username,
-            'guptapriyanshu7',
+            user.username,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16.0,
@@ -145,8 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.only(top: 4.0),
           child: Text(
-            // user.displayName,
-            'Priyanshu Gupta',
+            user.displayName,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -165,22 +200,43 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            children: [
-              _buildHeader(),
-              _buildInfo(),
-            ],
-          ),
-        ),
-        const Divider(height: 0),
-        changeOrientation(),
-        const Divider(height: 0),
-        if (grid) _buildGrid(context) else PostsPage(),
-      ],
+    return BlocProvider(
+      create: (context) => getIt<UserActionsBloc>()
+        ..add(UserActionsEvent.fetchProfile('5QNxqcDLc5hrjox6Hf0VAbADLqy2')),
+      child: BlocBuilder<UserActionsBloc, UserActionsState>(
+        builder: (context, state) {
+          return state.maybeMap(
+            orElse: () => CircularProgressIndicator(),
+            error: (_) => Text(''),
+            loaded: (state) {
+              final profile = state.profile;
+
+              user = profile.user;
+              posts = profile.posts;
+              following = profile.following;
+              followers = profile.followers;
+
+              return ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      children: [
+                        _buildHeader(),
+                        _buildInfo(),
+                      ],
+                    ),
+                  ),
+                  const Divider(height: 0),
+                  changeOrientation(),
+                  const Divider(height: 0),
+                  if (grid) _buildGrid(context) else PostsPage(),
+                ],
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
