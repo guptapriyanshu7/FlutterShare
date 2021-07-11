@@ -9,6 +9,7 @@ class HomePage extends StatelessWidget {
     return AutoTabsScaffold(
       routes: [
         SavePostRoute(),
+        ActivityFeedRoute(),
         SearchRoute(),
         ProfileRoute(id: '5QNxqcDLc5hrjox6Hf0VAbADLqy2'),
       ],
@@ -20,14 +21,22 @@ class HomePage extends StatelessWidget {
             BottomNavigationBarItem(
               icon: Icon(Icons.add_a_photo_outlined),
               label: 'New Post',
+              backgroundColor: Colors.red,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications),
+              label: 'Notifications',
+              backgroundColor: Colors.red,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.search),
               label: 'Search',
+              backgroundColor: Colors.red,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.account_box),
               label: 'Account',
+              backgroundColor: Colors.red,
             ),
           ],
         );

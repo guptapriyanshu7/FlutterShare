@@ -9,7 +9,6 @@ import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/injection.dart';
-import 'package:flutter_share/pages/comments.dart';
 import 'package:flutter_share/pages/home.dart';
 import 'package:flutter_share/presentation/profile/profile_page.dart';
 
@@ -27,21 +26,36 @@ class SinglePost extends StatefulWidget {
 }
 
 class _SinglePostState extends State<SinglePost> {
+  late final User currentUser;
+  bool showHeart = false;
+  bool isliked = false;
+
+  Future<void> getUser() async {
+    final userOption = await getIt<IAuthFacade>().getSignedInUser();
+    currentUser = userOption.getOrElse(() => throw NotAuthenticatedError());
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUser().then((value) {
+      isliked = widget.post.likes[currentUser.id] as bool;
+    });
+  }
+
   int getLikesCount(Map<String, dynamic> likes) {
     var count = 0;
-    // likes.values.forEach((val) {
-    //   if (val == true) count += 1;
-    // });
     for (final val in likes.values) {
       if (val == true) count += 1;
     }
     return count;
   }
 
-  bool isliked = false;
   void likesController() async {
     final userOption = await getIt<IAuthFacade>().getSignedInUser();
-    final currentUser = userOption.getOrElse(() => throw NotAuthenticatedError());
+    final currentUser =
+        userOption.getOrElse(() => throw NotAuthenticatedError());
     postsRef
         .doc(widget.post.ownerid)
         .collection('userPosts')
@@ -80,11 +94,8 @@ class _SinglePostState extends State<SinglePost> {
     });
   }
 
-  bool showHeart = false;
-
   @override
   Widget build(BuildContext context) {
-    // isliked = widget.post.likes[currentUser!.id] as bool;
     return Column(
       children: [
         ListTile(
@@ -154,13 +165,11 @@ class _SinglePostState extends State<SinglePost> {
                 IconButton(
                   icon: const Icon(Icons.chat),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CommentsScreen(widget.post.id!,
-                            widget.post.ownerid, widget.post.mediaUrl),
-                      ),
-                    );
+                    context.pushRoute(CommentsRoute(
+                      postId: widget.post.id,
+                      postOwner: widget.post.ownerid,
+                      photoUrl: widget.post.mediaUrl,
+                    ));
                   },
                   iconSize: 28.0,
                   color: Theme.of(context).accentColor,

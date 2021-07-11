@@ -7,7 +7,7 @@ part 'post.g.dart';
 @freezed
 class Post with _$Post {
   const factory Post({
-    required String? id,
+    required String id,
     required String ownerid,
     required String mediaUrl,
     required String caption,

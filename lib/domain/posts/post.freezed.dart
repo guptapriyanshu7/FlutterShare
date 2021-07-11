@@ -21,7 +21,7 @@ class _$PostTearOff {
   const _$PostTearOff();
 
   _Post call(
-      {@JsonKey(ignore: true) String? id,
+      {required String id,
       required String ownerid,
       required String mediaUrl,
       required String caption,
@@ -47,8 +47,7 @@ const $Post = _$PostTearOff();
 
 /// @nodoc
 mixin _$Post {
-  @JsonKey(ignore: true)
-  String? get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   String get ownerid => throw _privateConstructorUsedError;
   String get mediaUrl => throw _privateConstructorUsedError;
   String get caption => throw _privateConstructorUsedError;
@@ -65,7 +64,7 @@ abstract class $PostCopyWith<$Res> {
   factory $PostCopyWith(Post value, $Res Function(Post) then) =
       _$PostCopyWithImpl<$Res>;
   $Res call(
-      {@JsonKey(ignore: true) String? id,
+      {String id,
       String ownerid,
       String mediaUrl,
       String caption,
@@ -94,7 +93,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       ownerid: ownerid == freezed
           ? _value.ownerid
           : ownerid // ignore: cast_nullable_to_non_nullable
@@ -125,7 +124,7 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       __$PostCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@JsonKey(ignore: true) String? id,
+      {String id,
       String ownerid,
       String mediaUrl,
       String caption,
@@ -155,7 +154,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       ownerid: ownerid == freezed
           ? _value.ownerid
           : ownerid // ignore: cast_nullable_to_non_nullable
@@ -184,7 +183,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Post implements _Post {
   const _$_Post(
-      {@JsonKey(ignore: true) this.id,
+      {required this.id,
       required this.ownerid,
       required this.mediaUrl,
       required this.caption,
@@ -195,8 +194,7 @@ class _$_Post implements _Post {
       _$_$_PostFromJson(json);
 
   @override
-  @JsonKey(ignore: true)
-  final String? id;
+  final String id;
   @override
   final String ownerid;
   @override
@@ -258,7 +256,7 @@ class _$_Post implements _Post {
 
 abstract class _Post implements Post {
   const factory _Post(
-      {@JsonKey(ignore: true) String? id,
+      {required String id,
       required String ownerid,
       required String mediaUrl,
       required String caption,
@@ -268,8 +266,7 @@ abstract class _Post implements Post {
   factory _Post.fromJson(Map<String, dynamic> json) = _$_Post.fromJson;
 
   @override
-  @JsonKey(ignore: true)
-  String? get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   @override
   String get ownerid => throw _privateConstructorUsedError;
   @override
