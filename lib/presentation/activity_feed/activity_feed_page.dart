@@ -1,14 +1,14 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/domain/auth/i_auth_facade.dart';
 import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/core/errors.dart';
+import 'package:flutter_share/domain/posts/post.dart';
+// import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/injection.dart';
-import 'package:flutter_share/pages/home.dart';
-import 'package:flutter_share/pages/profile.dart';
-import 'package:flutter_share/widgets/header.dart';
-import 'package:flutter_share/widgets/progress.dart';
+import 'package:flutter_share/presentation/routes/router.gr.dart';
 import 'package:timeago/timeago.dart';
 // import 'package:dartz/dartz.dart' hide State;
 
@@ -40,80 +40,62 @@ class _ActivityFeedPageState extends State<ActivityFeedPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      appBar: header(context, 'Notifications'),
+      appBar: AppBar(title: Text('Notifications')),
       body: FutureBuilder(
-        future: feedRef
+        future: getIt<FirebaseFirestore>()
+            .collection('feed')
             .doc(currentUser.id)
             .collection('userFeed')
             .orderBy('timestamp', descending: true)
             .limit(50)
             .get(),
         builder: (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
-          if (!snapshot.hasData) return circularIndicator();
+          if (!snapshot.hasData) return CircularProgressIndicator();
           return ListView(
             children: snapshot.data?.docs.map<GestureDetector>(
               (doc) {
                 return GestureDetector(
                   onTap: () async {
                     if (doc['type'] == 'follow') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return Profile(doc['userId'] as String);
-                          },
-                        ),
-                      );
+                      context
+                          .pushRoute(ProfileRoute(id: doc['userId'] as String));
                     } else {
-                      // final post = await postsRef
-                      //     .doc(currentUser!.id)
-                      //     .collection('userPosts')
-                      //     .doc(doc['postId'] as String)
-                      //     .get();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return Scaffold(
-                              appBar: header(context, 'FlutterShare'),
-                              body: SingleChildScrollView(
-                                  // child: Post(model.Post.(post)),
-                                  ),
-                            );
-                          },
-                        ),
-                      );
+                      final postDoc = await getIt<FirebaseFirestore>()
+                          .collection('posts')
+                          .doc(currentUser.id)
+                          .collection('userPosts')
+                          .doc(doc['postId'] as String)
+                          .get();
+                      final postJson = postDoc.data();
+                      final post = Post.fromJson(postJson!);
+                      final userDoc = await getIt<FirebaseFirestore>()
+                          .collection('users')
+                          .doc(post.ownerid)
+                          .get();
+                      final userJson = userDoc.data();
+                      final user = User.fromJson(userJson!);
+                      context.pushRoute(
+                          SinglePostRoute(id: post.id, post: post, user: user));
                     }
                   },
                   child: ListTile(
                     leading: GestureDetector(
                       onTap: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return Profile(doc['userId'] as String);
-                            },
-                          ),
-                        );
+                        context.pushRoute(
+                            ProfileRoute(id: doc['userId'] as String));
                       },
                       child: CircleAvatar(
                         backgroundImage: CachedNetworkImageProvider(
-                            doc['photoUrl'] as String),
+                          doc['photoUrl'] as String,
+                        ),
                       ),
                     ),
                     title: Row(
                       children: [
                         GestureDetector(
                           onTap: () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return Profile(doc['userId'] as String);
-                                },
-                              ),
-                            );
+                            context.pushRoute(
+                                ProfileRoute(id: doc['userId'] as String));
                           },
                           child: Text(
                             doc['username'] as String,

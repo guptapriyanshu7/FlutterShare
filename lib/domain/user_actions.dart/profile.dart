@@ -11,5 +11,6 @@ class Profile with _$Profile {
     required List<Post> posts,
     required int followers,
     required int following,
+    required bool isFollowing,
   }) = _Profile;
 }

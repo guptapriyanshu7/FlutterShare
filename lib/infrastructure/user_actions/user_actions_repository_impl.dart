@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_share/domain/auth/i_auth_facade.dart';
 import 'package:flutter_share/domain/auth/user.dart';
+import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/domain/user_actions.dart/i_user_actions_repository.dart';
 import 'package:flutter_share/domain/user_actions.dart/profile.dart';
 import 'package:flutter_share/domain/user_actions.dart/user_actions_failure.dart';
+import 'package:flutter_share/injection.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: IUserActionsRepository)
@@ -43,11 +46,21 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
         final postJson = postsQueryDoc.data();
         return Post.fromJson(postJson);
       }).toList();
+      final userOption = await getIt<IAuthFacade>().getSignedInUser();
+      final currentUser =
+          userOption.getOrElse(() => throw NotAuthenticatedError());
+      final followingDoc = await _firestore
+          .collection('following')
+          .doc(currentUser.id)
+          .collection('userFollowing')
+          .doc(userId)
+          .get();
       final profile = Profile(
         user: userDomain,
         following: followingCount,
         followers: followerCount,
         posts: postsDomainList,
+        isFollowing: followingDoc.exists,
       );
       return right(profile);
     } on FirebaseException catch (e) {

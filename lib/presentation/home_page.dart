@@ -1,44 +1,55 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_share/application/auth/auth_bloc.dart';
+import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return AutoTabsScaffold(
-      routes: [
-        SavePostRoute(),
-        ActivityFeedRoute(),
-        SearchRoute(),
-        ProfileRoute(id: '5QNxqcDLc5hrjox6Hf0VAbADLqy2'),
-      ],
-      bottomNavigationBuilder: (_, tabsRouter) {
-        return BottomNavigationBar(
-          currentIndex: tabsRouter.activeIndex,
-          onTap: tabsRouter.setActiveIndex,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add_a_photo_outlined),
-              label: 'New Post',
-              backgroundColor: Colors.red,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: 'Notifications',
-              backgroundColor: Colors.red,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Search',
-              backgroundColor: Colors.red,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_box),
-              label: 'Account',
-              backgroundColor: Colors.red,
-            ),
-          ],
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        return state.map(
+          initial: (_) => CircularProgressIndicator(),
+          unauthenticated: (_) => throw NotAuthenticatedError(),
+          authenticated: (_) => AutoTabsScaffold(
+            routes: [
+              SavePostRoute(),
+              ActivityFeedRoute(),
+              SearchRoute(),
+              ProfileRoute(id: _.currentUser.id),
+            ],
+            bottomNavigationBuilder: (_, tabsRouter) {
+              return BottomNavigationBar(
+                currentIndex: tabsRouter.activeIndex,
+                onTap: tabsRouter.setActiveIndex,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.add_a_photo_outlined),
+                    label: 'New Post',
+                    backgroundColor: Colors.red,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.notifications),
+                    label: 'Notifications',
+                    backgroundColor: Colors.red,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.search),
+                    label: 'Search',
+                    backgroundColor: Colors.red,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.account_box),
+                    label: 'Account',
+                    backgroundColor: Colors.red,
+                  ),
+                ],
+              );
+            },
+          ),
         );
       },
     );

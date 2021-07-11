@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_share/domain/auth/i_auth_facade.dart';
+import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/domain/posts/i_post_repository.dart';
 import 'package:flutter_share/domain/posts/post_failure.dart';
 import 'package:flutter_share/domain/posts/post.dart';
@@ -15,7 +17,10 @@ class PostRepositoryImpl implements IPostRepository {
   @override
   Future<Either<PostFailure, Unit>> create(Post post) async {
     try {
-      final userDoc = await _firestore.collection('posts').doc('fsdfsfdfsfs');
+      final userOption = await getIt<IAuthFacade>().getSignedInUser();
+      final currentUser =
+          userOption.getOrElse(() => throw NotAuthenticatedError());
+      final userDoc = await _firestore.collection('posts').doc(currentUser.id);
       // final postDto = postDto.fromDomain(post);
       await userDoc.collection('userPosts').doc(post.id).set(post.toJson());
       return right(unit);
@@ -30,8 +35,11 @@ class PostRepositoryImpl implements IPostRepository {
 
   @override
   Future<Either<PostFailure, Unit>> delete(Post post) async {
+    final userOption = await getIt<IAuthFacade>().getSignedInUser();
+    final currentUser =
+        userOption.getOrElse(() => throw NotAuthenticatedError());
     try {
-      final userDoc = await _firestore.collection('users').doc('fsdfsfdfsfs');
+      final userDoc = await _firestore.collection('users').doc(currentUser.id);
       final noteId = post.id;
       await userDoc.collection('userPosts').doc(noteId).delete();
       return right(unit);
@@ -48,9 +56,10 @@ class PostRepositoryImpl implements IPostRepository {
 
   @override
   Stream<Either<PostFailure, List<Post>>> read() async* {
-    final userDoc = await _firestore
-        .collection('posts')
-        .doc('5QNxqcDLc5hrjox6Hf0VAbADLqy2');
+    final userOption = await getIt<IAuthFacade>().getSignedInUser();
+    final currentUser =
+        userOption.getOrElse(() => throw NotAuthenticatedError());
+    final userDoc = await _firestore.collection('posts').doc(currentUser.id);
     print(userDoc);
     yield* userDoc
         .collection('userPosts')
