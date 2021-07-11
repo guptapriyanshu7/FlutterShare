@@ -28,10 +28,10 @@ class SignInForm extends StatelessWidget {
               ).show(context);
             },
             (_) {
-              context.replaceRoute(SavePostRoute());
               context
                   .read<AuthBloc>()
                   .add(const AuthEvent.authCheckRequested());
+              context.replaceRoute(HomeRoute());
             },
           ),
         );

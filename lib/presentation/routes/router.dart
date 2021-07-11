@@ -26,14 +26,13 @@ const SINGLE_POST_ROUTE_PATH = 'single-post-page/:postId';
     AutoRoute(
       page: HomePage,
       children: [
-        AutoRoute(page: SavePostPage, initial: true),
+        AutoRoute(page: SavePostPage),
         AutoRoute(page: PostsPage),
         AutoRoute(page: ActivityFeedPage),
         AutoRoute(page: ProfilePage, path: PROFILE_ROUTE_PATH),
         AutoRoute(page: SearchPage),
       ],
     ),
-    // RedirectRoute(path: '/', redirectTo: HomeRoute.name)
   ],
 )
 class $Router {}

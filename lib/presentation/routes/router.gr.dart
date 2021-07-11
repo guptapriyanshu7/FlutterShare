@@ -94,7 +94,7 @@ class Router extends _i1.RootStackRouter {
         _i1.RouteConfig(ProfileRoute.name, path: 'profile-page/:profileId'),
         _i1.RouteConfig(SinglePostRoute.name, path: 'single-post-page/:postId'),
         _i1.RouteConfig(HomeRoute.name, path: '/home-page', children: [
-          _i1.RouteConfig(SavePostRoute.name, path: ''),
+          _i1.RouteConfig(SavePostRoute.name, path: 'save-post-page'),
           _i1.RouteConfig(PostsRoute.name, path: 'posts-page'),
           _i1.RouteConfig(ActivityFeedRoute.name, path: 'activity-feed-page'),
           _i1.RouteConfig(ProfileRoute.name, path: 'profile-page/:profileId'),
@@ -201,7 +201,7 @@ class HomeRoute extends _i1.PageRouteInfo {
 }
 
 class SavePostRoute extends _i1.PageRouteInfo {
-  const SavePostRoute() : super(name, path: '');
+  const SavePostRoute() : super(name, path: 'save-post-page');
 
   static const String name = 'SavePostRoute';
 }
