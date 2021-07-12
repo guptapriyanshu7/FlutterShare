@@ -13,7 +13,7 @@ _$_Post _$_$_PostFromJson(Map<String, dynamic> json) {
     mediaUrl: json['mediaUrl'] as String,
     caption: json['caption'] as String,
     location: json['location'] as String,
-    likes: json['likes'] as Map<String, dynamic>,
+    likes: Map<String, bool>.from(json['likes'] as Map),
   );
 }
 

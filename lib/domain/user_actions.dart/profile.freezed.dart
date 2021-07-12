@@ -19,12 +19,14 @@ class _$ProfileTearOff {
   _Profile call(
       {required User user,
       required List<Post> posts,
+      required String currentUserId,
       required int followers,
       required int following,
       required bool isFollowing}) {
     return _Profile(
       user: user,
       posts: posts,
+      currentUserId: currentUserId,
       followers: followers,
       following: following,
       isFollowing: isFollowing,
@@ -39,6 +41,7 @@ const $Profile = _$ProfileTearOff();
 mixin _$Profile {
   User get user => throw _privateConstructorUsedError;
   List<Post> get posts => throw _privateConstructorUsedError;
+  String get currentUserId => throw _privateConstructorUsedError;
   int get followers => throw _privateConstructorUsedError;
   int get following => throw _privateConstructorUsedError;
   bool get isFollowing => throw _privateConstructorUsedError;
@@ -54,6 +57,7 @@ abstract class $ProfileCopyWith<$Res> {
   $Res call(
       {User user,
       List<Post> posts,
+      String currentUserId,
       int followers,
       int following,
       bool isFollowing});
@@ -73,6 +77,7 @@ class _$ProfileCopyWithImpl<$Res> implements $ProfileCopyWith<$Res> {
   $Res call({
     Object? user = freezed,
     Object? posts = freezed,
+    Object? currentUserId = freezed,
     Object? followers = freezed,
     Object? following = freezed,
     Object? isFollowing = freezed,
@@ -86,6 +91,10 @@ class _$ProfileCopyWithImpl<$Res> implements $ProfileCopyWith<$Res> {
           ? _value.posts
           : posts // ignore: cast_nullable_to_non_nullable
               as List<Post>,
+      currentUserId: currentUserId == freezed
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String,
       followers: followers == freezed
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
@@ -117,6 +126,7 @@ abstract class _$ProfileCopyWith<$Res> implements $ProfileCopyWith<$Res> {
   $Res call(
       {User user,
       List<Post> posts,
+      String currentUserId,
       int followers,
       int following,
       bool isFollowing});
@@ -138,6 +148,7 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
   $Res call({
     Object? user = freezed,
     Object? posts = freezed,
+    Object? currentUserId = freezed,
     Object? followers = freezed,
     Object? following = freezed,
     Object? isFollowing = freezed,
@@ -151,6 +162,10 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
           ? _value.posts
           : posts // ignore: cast_nullable_to_non_nullable
               as List<Post>,
+      currentUserId: currentUserId == freezed
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String,
       followers: followers == freezed
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
@@ -173,6 +188,7 @@ class _$_Profile implements _Profile {
   const _$_Profile(
       {required this.user,
       required this.posts,
+      required this.currentUserId,
       required this.followers,
       required this.following,
       required this.isFollowing});
@@ -182,6 +198,8 @@ class _$_Profile implements _Profile {
   @override
   final List<Post> posts;
   @override
+  final String currentUserId;
+  @override
   final int followers;
   @override
   final int following;
@@ -190,7 +208,7 @@ class _$_Profile implements _Profile {
 
   @override
   String toString() {
-    return 'Profile(user: $user, posts: $posts, followers: $followers, following: $following, isFollowing: $isFollowing)';
+    return 'Profile(user: $user, posts: $posts, currentUserId: $currentUserId, followers: $followers, following: $following, isFollowing: $isFollowing)';
   }
 
   @override
@@ -201,6 +219,9 @@ class _$_Profile implements _Profile {
                 const DeepCollectionEquality().equals(other.user, user)) &&
             (identical(other.posts, posts) ||
                 const DeepCollectionEquality().equals(other.posts, posts)) &&
+            (identical(other.currentUserId, currentUserId) ||
+                const DeepCollectionEquality()
+                    .equals(other.currentUserId, currentUserId)) &&
             (identical(other.followers, followers) ||
                 const DeepCollectionEquality()
                     .equals(other.followers, followers)) &&
@@ -217,6 +238,7 @@ class _$_Profile implements _Profile {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(user) ^
       const DeepCollectionEquality().hash(posts) ^
+      const DeepCollectionEquality().hash(currentUserId) ^
       const DeepCollectionEquality().hash(followers) ^
       const DeepCollectionEquality().hash(following) ^
       const DeepCollectionEquality().hash(isFollowing);
@@ -231,6 +253,7 @@ abstract class _Profile implements Profile {
   const factory _Profile(
       {required User user,
       required List<Post> posts,
+      required String currentUserId,
       required int followers,
       required int following,
       required bool isFollowing}) = _$_Profile;
@@ -239,6 +262,8 @@ abstract class _Profile implements Profile {
   User get user => throw _privateConstructorUsedError;
   @override
   List<Post> get posts => throw _privateConstructorUsedError;
+  @override
+  String get currentUserId => throw _privateConstructorUsedError;
   @override
   int get followers => throw _privateConstructorUsedError;
   @override

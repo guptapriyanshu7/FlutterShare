@@ -26,7 +26,7 @@ class _$PostTearOff {
       required String mediaUrl,
       required String caption,
       required String location,
-      required Map<String, dynamic> likes}) {
+      required Map<String, bool> likes}) {
     return _Post(
       id: id,
       ownerid: ownerid,
@@ -52,7 +52,7 @@ mixin _$Post {
   String get mediaUrl => throw _privateConstructorUsedError;
   String get caption => throw _privateConstructorUsedError;
   String get location => throw _privateConstructorUsedError;
-  Map<String, dynamic> get likes => throw _privateConstructorUsedError;
+  Map<String, bool> get likes => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -69,7 +69,7 @@ abstract class $PostCopyWith<$Res> {
       String mediaUrl,
       String caption,
       String location,
-      Map<String, dynamic> likes});
+      Map<String, bool> likes});
 }
 
 /// @nodoc
@@ -113,7 +113,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
       likes: likes == freezed
           ? _value.likes
           : likes // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
+              as Map<String, bool>,
     ));
   }
 }
@@ -129,7 +129,7 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       String mediaUrl,
       String caption,
       String location,
-      Map<String, dynamic> likes});
+      Map<String, bool> likes});
 }
 
 /// @nodoc
@@ -174,7 +174,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
       likes: likes == freezed
           ? _value.likes
           : likes // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
+              as Map<String, bool>,
     ));
   }
 }
@@ -204,7 +204,7 @@ class _$_Post implements _Post {
   @override
   final String location;
   @override
-  final Map<String, dynamic> likes;
+  final Map<String, bool> likes;
 
   @override
   String toString() {
@@ -261,7 +261,7 @@ abstract class _Post implements Post {
       required String mediaUrl,
       required String caption,
       required String location,
-      required Map<String, dynamic> likes}) = _$_Post;
+      required Map<String, bool> likes}) = _$_Post;
 
   factory _Post.fromJson(Map<String, dynamic> json) = _$_Post.fromJson;
 
@@ -276,7 +276,7 @@ abstract class _Post implements Post {
   @override
   String get location => throw _privateConstructorUsedError;
   @override
-  Map<String, dynamic> get likes => throw _privateConstructorUsedError;
+  Map<String, bool> get likes => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$PostCopyWith<_Post> get copyWith => throw _privateConstructorUsedError;

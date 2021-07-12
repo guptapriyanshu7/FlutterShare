@@ -21,8 +21,14 @@ class PostRepositoryImpl implements IPostRepository {
       final currentUser =
           userOption.getOrElse(() => throw NotAuthenticatedError());
       final userDoc = await _firestore.collection('posts').doc(currentUser.id);
-      // final postDto = postDto.fromDomain(post);
-      await userDoc.collection('userPosts').doc(post.id).set(post.toJson());
+      final updatedPost = post.copyWith(
+          ownerid: currentUser.id,
+          mediaUrl:
+              'https://firebasestorage.googleapis.com/v0/b/flutter-share-d228b.appspot.com/o/post_173f6a52-fe2e-4ca0-af33-fe81a5abc1ad.jpg?alt=media&token=90df9b6d-288a-4471-9967-4940b7c827ae');
+      await userDoc
+          .collection('userPosts')
+          .doc(post.id)
+          .set(updatedPost.toJson());
       return right(unit);
     } on FirebaseException catch (e) {
       if (e.code == 'permission-denied') {

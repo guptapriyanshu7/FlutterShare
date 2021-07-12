@@ -9,6 +9,7 @@ class Profile with _$Profile {
   const factory Profile({
     required User user,
     required List<Post> posts,
+    required String currentUserId,
     required int followers,
     required int following,
     required bool isFollowing,

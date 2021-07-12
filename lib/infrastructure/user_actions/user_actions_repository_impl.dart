@@ -31,9 +31,9 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
           .get();
       final followingCount = followingQuery.size;
       final followerQuery = await _firestore
-          .collection('follower')
+          .collection('followers')
           .doc(userId)
-          .collection('userFollower')
+          .collection('userFollowers')
           .get();
       final followerCount = followerQuery.size;
       final postsQuery = await _firestore
@@ -57,6 +57,7 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
           .get();
       final profile = Profile(
         user: userDomain,
+        currentUserId: currentUser.id,
         following: followingCount,
         followers: followerCount,
         posts: postsDomainList,
@@ -70,6 +71,132 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
         return left(const UserActionsFailure.notFound());
       } else {
         return left(const UserActionsFailure.unableToFetch());
+      }
+    }
+  }
+
+  @override
+  Future<Option<UserActionsFailure>> likePost(Post post) async {
+    try {
+      final userOption = await getIt<IAuthFacade>().getSignedInUser();
+      final currentUser =
+          userOption.getOrElse(() => throw NotAuthenticatedError());
+      getIt<FirebaseFirestore>()
+          .collection('posts')
+          .doc(post.ownerid)
+          .collection('userPosts')
+          .doc(post.id)
+          .update(post.toJson());
+      if (post.likes['${currentUser.id}']!) {
+        getIt<FirebaseFirestore>()
+            .collection('feed')
+            .doc(post.ownerid)
+            .collection('userFeed')
+            .add({
+          'type': 'like',
+          'timestamp': DateTime.now(),
+          'photoUrl': currentUser.photoUrl,
+          'username': currentUser.username,
+          'userId': currentUser.id,
+          'postId': post.id,
+          "mediaUrl": post.mediaUrl,
+        });
+      } else {
+        getIt<FirebaseFirestore>()
+            .collection('feed')
+            .doc(post.ownerid)
+            .collection('userFeed')
+            .where('userId', isEqualTo: currentUser.id)
+            .where('postId', isEqualTo: post.id)
+            .where('type', isEqualTo: 'like')
+            .get()
+            .then((value) {
+          for (final doc in value.docs) {
+            doc.reference.delete();
+          }
+        });
+      }
+      return none();
+    } on FirebaseException catch (e) {
+      if (e.code == 'permission-denied') {
+        return some(const UserActionsFailure.insufficientPermissions());
+      } else if (e.code == 'not-found') {
+        return some(const UserActionsFailure.notFound());
+      } else {
+        return some(const UserActionsFailure.unableToFetch());
+      }
+    }
+  }
+
+  @override
+  Future<Option<UserActionsFailure>> followProfile(
+    bool isFollowing,
+    String userId,
+  ) async {
+    try {
+      final userOption = await getIt<IAuthFacade>().getSignedInUser();
+      final currentUser =
+          userOption.getOrElse(() => throw NotAuthenticatedError());
+      if (isFollowing) {
+        getIt<FirebaseFirestore>()
+            .collection('following')
+            .doc(currentUser.id)
+            .collection('userFollowing')
+            .doc(userId)
+            .set({});
+        getIt<FirebaseFirestore>()
+            .collection('followers')
+            .doc(userId)
+            .collection('userFollowers')
+            .doc(currentUser.id)
+            .set({});
+        getIt<FirebaseFirestore>()
+            .collection('feed')
+            .doc(userId)
+            .collection('userFeed')
+            .add({
+          'type': 'follow',
+          'timestamp': DateTime.now(),
+          'photoUrl': currentUser.photoUrl,
+          'username': currentUser.username,
+          'userId': currentUser.id,
+        });
+      } else {
+        getIt<FirebaseFirestore>()
+            .collection('following')
+            .doc(currentUser.id)
+            .collection('userFollowing')
+            .doc(userId)
+            .delete();
+        getIt<FirebaseFirestore>()
+            .collection('followers')
+            .doc(userId)
+            .collection('userFollowers')
+            .doc(currentUser.id)
+            .delete();
+        getIt<FirebaseFirestore>()
+            .collection('feed')
+            .doc(userId)
+            .collection('userFeed')
+            .where('userId', isEqualTo: currentUser.id)
+            .where('type', isEqualTo: 'follow')
+            .get()
+            .then(
+          (value) {
+            for (final doc in value.docs) {
+              doc.reference.delete();
+            }
+          },
+        );
+      }
+      return none();
+    } on FirebaseException catch (e) {
+      if (e.code == 'permission-denied') {
+        return some(const UserActionsFailure.insufficientPermissions());
+      } else if (e.code == 'not-found') {
+        return some(const UserActionsFailure.notFound());
+      } else {
+        return some(const UserActionsFailure.unableToFetch());
       }
     }
   }

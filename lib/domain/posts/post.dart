@@ -12,7 +12,7 @@ class Post with _$Post {
     required String mediaUrl,
     required String caption,
     required String location,
-    required Map<String, dynamic> likes,
+    required Map<String, bool> likes,
   }) = _Post;
 
   factory Post.empty() => Post(
@@ -25,5 +25,4 @@ class Post with _$Post {
       );
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
-  // Map<String, dynamic> toJson() => _$PostToJson(this);
 }

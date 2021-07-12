@@ -21,6 +21,25 @@ class _$UserActionsEventTearOff {
       userId,
     );
   }
+
+  _CheckLikeStatus checkLikeStatus(Post post) {
+    return _CheckLikeStatus(
+      post,
+    );
+  }
+
+  _LikePost likePost(bool likeStatus, Post post) {
+    return _LikePost(
+      likeStatus,
+      post,
+    );
+  }
+
+  _FollowUser followProfile(Profile profile) {
+    return _FollowUser(
+      profile,
+    );
+  }
 }
 
 /// @nodoc
@@ -28,33 +47,39 @@ const $UserActionsEvent = _$UserActionsEventTearOff();
 
 /// @nodoc
 mixin _$UserActionsEvent {
-  String get userId => throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String userId) fetchProfile,
+    required TResult Function(Post post) checkLikeStatus,
+    required TResult Function(bool likeStatus, Post post) likePost,
+    required TResult Function(Profile profile) followProfile,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String userId)? fetchProfile,
+    TResult Function(Post post)? checkLikeStatus,
+    TResult Function(bool likeStatus, Post post)? likePost,
+    TResult Function(Profile profile)? followProfile,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_FetchProfile value) fetchProfile,
+    required TResult Function(_CheckLikeStatus value) checkLikeStatus,
+    required TResult Function(_LikePost value) likePost,
+    required TResult Function(_FollowUser value) followProfile,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_FetchProfile value)? fetchProfile,
+    TResult Function(_CheckLikeStatus value)? checkLikeStatus,
+    TResult Function(_LikePost value)? likePost,
+    TResult Function(_FollowUser value)? followProfile,
     required TResult orElse(),
   }) =>
-      throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
-  $UserActionsEventCopyWith<UserActionsEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -63,7 +88,6 @@ abstract class $UserActionsEventCopyWith<$Res> {
   factory $UserActionsEventCopyWith(
           UserActionsEvent value, $Res Function(UserActionsEvent) then) =
       _$UserActionsEventCopyWithImpl<$Res>;
-  $Res call({String userId});
 }
 
 /// @nodoc
@@ -74,27 +98,13 @@ class _$UserActionsEventCopyWithImpl<$Res>
   final UserActionsEvent _value;
   // ignore: unused_field
   final $Res Function(UserActionsEvent) _then;
-
-  @override
-  $Res call({
-    Object? userId = freezed,
-  }) {
-    return _then(_value.copyWith(
-      userId: userId == freezed
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
 }
 
 /// @nodoc
-abstract class _$FetchProfileCopyWith<$Res>
-    implements $UserActionsEventCopyWith<$Res> {
+abstract class _$FetchProfileCopyWith<$Res> {
   factory _$FetchProfileCopyWith(
           _FetchProfile value, $Res Function(_FetchProfile) then) =
       __$FetchProfileCopyWithImpl<$Res>;
-  @override
   $Res call({String userId});
 }
 
@@ -156,6 +166,9 @@ class _$_FetchProfile implements _FetchProfile {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String userId) fetchProfile,
+    required TResult Function(Post post) checkLikeStatus,
+    required TResult Function(bool likeStatus, Post post) likePost,
+    required TResult Function(Profile profile) followProfile,
   }) {
     return fetchProfile(userId);
   }
@@ -164,6 +177,9 @@ class _$_FetchProfile implements _FetchProfile {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String userId)? fetchProfile,
+    TResult Function(Post post)? checkLikeStatus,
+    TResult Function(bool likeStatus, Post post)? likePost,
+    TResult Function(Profile profile)? followProfile,
     required TResult orElse(),
   }) {
     if (fetchProfile != null) {
@@ -176,6 +192,9 @@ class _$_FetchProfile implements _FetchProfile {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_FetchProfile value) fetchProfile,
+    required TResult Function(_CheckLikeStatus value) checkLikeStatus,
+    required TResult Function(_LikePost value) likePost,
+    required TResult Function(_FollowUser value) followProfile,
   }) {
     return fetchProfile(this);
   }
@@ -184,6 +203,9 @@ class _$_FetchProfile implements _FetchProfile {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_FetchProfile value)? fetchProfile,
+    TResult Function(_CheckLikeStatus value)? checkLikeStatus,
+    TResult Function(_LikePost value)? likePost,
+    TResult Function(_FollowUser value)? followProfile,
     required TResult orElse(),
   }) {
     if (fetchProfile != null) {
@@ -196,11 +218,418 @@ class _$_FetchProfile implements _FetchProfile {
 abstract class _FetchProfile implements UserActionsEvent {
   const factory _FetchProfile(String userId) = _$_FetchProfile;
 
-  @override
   String get userId => throw _privateConstructorUsedError;
-  @override
   @JsonKey(ignore: true)
   _$FetchProfileCopyWith<_FetchProfile> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$CheckLikeStatusCopyWith<$Res> {
+  factory _$CheckLikeStatusCopyWith(
+          _CheckLikeStatus value, $Res Function(_CheckLikeStatus) then) =
+      __$CheckLikeStatusCopyWithImpl<$Res>;
+  $Res call({Post post});
+
+  $PostCopyWith<$Res> get post;
+}
+
+/// @nodoc
+class __$CheckLikeStatusCopyWithImpl<$Res>
+    extends _$UserActionsEventCopyWithImpl<$Res>
+    implements _$CheckLikeStatusCopyWith<$Res> {
+  __$CheckLikeStatusCopyWithImpl(
+      _CheckLikeStatus _value, $Res Function(_CheckLikeStatus) _then)
+      : super(_value, (v) => _then(v as _CheckLikeStatus));
+
+  @override
+  _CheckLikeStatus get _value => super._value as _CheckLikeStatus;
+
+  @override
+  $Res call({
+    Object? post = freezed,
+  }) {
+    return _then(_CheckLikeStatus(
+      post == freezed
+          ? _value.post
+          : post // ignore: cast_nullable_to_non_nullable
+              as Post,
+    ));
+  }
+
+  @override
+  $PostCopyWith<$Res> get post {
+    return $PostCopyWith<$Res>(_value.post, (value) {
+      return _then(_value.copyWith(post: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_CheckLikeStatus implements _CheckLikeStatus {
+  const _$_CheckLikeStatus(this.post);
+
+  @override
+  final Post post;
+
+  @override
+  String toString() {
+    return 'UserActionsEvent.checkLikeStatus(post: $post)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _CheckLikeStatus &&
+            (identical(other.post, post) ||
+                const DeepCollectionEquality().equals(other.post, post)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(post);
+
+  @JsonKey(ignore: true)
+  @override
+  _$CheckLikeStatusCopyWith<_CheckLikeStatus> get copyWith =>
+      __$CheckLikeStatusCopyWithImpl<_CheckLikeStatus>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String userId) fetchProfile,
+    required TResult Function(Post post) checkLikeStatus,
+    required TResult Function(bool likeStatus, Post post) likePost,
+    required TResult Function(Profile profile) followProfile,
+  }) {
+    return checkLikeStatus(post);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String userId)? fetchProfile,
+    TResult Function(Post post)? checkLikeStatus,
+    TResult Function(bool likeStatus, Post post)? likePost,
+    TResult Function(Profile profile)? followProfile,
+    required TResult orElse(),
+  }) {
+    if (checkLikeStatus != null) {
+      return checkLikeStatus(post);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FetchProfile value) fetchProfile,
+    required TResult Function(_CheckLikeStatus value) checkLikeStatus,
+    required TResult Function(_LikePost value) likePost,
+    required TResult Function(_FollowUser value) followProfile,
+  }) {
+    return checkLikeStatus(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FetchProfile value)? fetchProfile,
+    TResult Function(_CheckLikeStatus value)? checkLikeStatus,
+    TResult Function(_LikePost value)? likePost,
+    TResult Function(_FollowUser value)? followProfile,
+    required TResult orElse(),
+  }) {
+    if (checkLikeStatus != null) {
+      return checkLikeStatus(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CheckLikeStatus implements UserActionsEvent {
+  const factory _CheckLikeStatus(Post post) = _$_CheckLikeStatus;
+
+  Post get post => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$CheckLikeStatusCopyWith<_CheckLikeStatus> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$LikePostCopyWith<$Res> {
+  factory _$LikePostCopyWith(_LikePost value, $Res Function(_LikePost) then) =
+      __$LikePostCopyWithImpl<$Res>;
+  $Res call({bool likeStatus, Post post});
+
+  $PostCopyWith<$Res> get post;
+}
+
+/// @nodoc
+class __$LikePostCopyWithImpl<$Res> extends _$UserActionsEventCopyWithImpl<$Res>
+    implements _$LikePostCopyWith<$Res> {
+  __$LikePostCopyWithImpl(_LikePost _value, $Res Function(_LikePost) _then)
+      : super(_value, (v) => _then(v as _LikePost));
+
+  @override
+  _LikePost get _value => super._value as _LikePost;
+
+  @override
+  $Res call({
+    Object? likeStatus = freezed,
+    Object? post = freezed,
+  }) {
+    return _then(_LikePost(
+      likeStatus == freezed
+          ? _value.likeStatus
+          : likeStatus // ignore: cast_nullable_to_non_nullable
+              as bool,
+      post == freezed
+          ? _value.post
+          : post // ignore: cast_nullable_to_non_nullable
+              as Post,
+    ));
+  }
+
+  @override
+  $PostCopyWith<$Res> get post {
+    return $PostCopyWith<$Res>(_value.post, (value) {
+      return _then(_value.copyWith(post: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_LikePost implements _LikePost {
+  const _$_LikePost(this.likeStatus, this.post);
+
+  @override
+  final bool likeStatus;
+  @override
+  final Post post;
+
+  @override
+  String toString() {
+    return 'UserActionsEvent.likePost(likeStatus: $likeStatus, post: $post)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _LikePost &&
+            (identical(other.likeStatus, likeStatus) ||
+                const DeepCollectionEquality()
+                    .equals(other.likeStatus, likeStatus)) &&
+            (identical(other.post, post) ||
+                const DeepCollectionEquality().equals(other.post, post)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(likeStatus) ^
+      const DeepCollectionEquality().hash(post);
+
+  @JsonKey(ignore: true)
+  @override
+  _$LikePostCopyWith<_LikePost> get copyWith =>
+      __$LikePostCopyWithImpl<_LikePost>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String userId) fetchProfile,
+    required TResult Function(Post post) checkLikeStatus,
+    required TResult Function(bool likeStatus, Post post) likePost,
+    required TResult Function(Profile profile) followProfile,
+  }) {
+    return likePost(likeStatus, post);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String userId)? fetchProfile,
+    TResult Function(Post post)? checkLikeStatus,
+    TResult Function(bool likeStatus, Post post)? likePost,
+    TResult Function(Profile profile)? followProfile,
+    required TResult orElse(),
+  }) {
+    if (likePost != null) {
+      return likePost(likeStatus, post);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FetchProfile value) fetchProfile,
+    required TResult Function(_CheckLikeStatus value) checkLikeStatus,
+    required TResult Function(_LikePost value) likePost,
+    required TResult Function(_FollowUser value) followProfile,
+  }) {
+    return likePost(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FetchProfile value)? fetchProfile,
+    TResult Function(_CheckLikeStatus value)? checkLikeStatus,
+    TResult Function(_LikePost value)? likePost,
+    TResult Function(_FollowUser value)? followProfile,
+    required TResult orElse(),
+  }) {
+    if (likePost != null) {
+      return likePost(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _LikePost implements UserActionsEvent {
+  const factory _LikePost(bool likeStatus, Post post) = _$_LikePost;
+
+  bool get likeStatus => throw _privateConstructorUsedError;
+  Post get post => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$LikePostCopyWith<_LikePost> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$FollowUserCopyWith<$Res> {
+  factory _$FollowUserCopyWith(
+          _FollowUser value, $Res Function(_FollowUser) then) =
+      __$FollowUserCopyWithImpl<$Res>;
+  $Res call({Profile profile});
+
+  $ProfileCopyWith<$Res> get profile;
+}
+
+/// @nodoc
+class __$FollowUserCopyWithImpl<$Res>
+    extends _$UserActionsEventCopyWithImpl<$Res>
+    implements _$FollowUserCopyWith<$Res> {
+  __$FollowUserCopyWithImpl(
+      _FollowUser _value, $Res Function(_FollowUser) _then)
+      : super(_value, (v) => _then(v as _FollowUser));
+
+  @override
+  _FollowUser get _value => super._value as _FollowUser;
+
+  @override
+  $Res call({
+    Object? profile = freezed,
+  }) {
+    return _then(_FollowUser(
+      profile == freezed
+          ? _value.profile
+          : profile // ignore: cast_nullable_to_non_nullable
+              as Profile,
+    ));
+  }
+
+  @override
+  $ProfileCopyWith<$Res> get profile {
+    return $ProfileCopyWith<$Res>(_value.profile, (value) {
+      return _then(_value.copyWith(profile: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_FollowUser implements _FollowUser {
+  const _$_FollowUser(this.profile);
+
+  @override
+  final Profile profile;
+
+  @override
+  String toString() {
+    return 'UserActionsEvent.followProfile(profile: $profile)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _FollowUser &&
+            (identical(other.profile, profile) ||
+                const DeepCollectionEquality().equals(other.profile, profile)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(profile);
+
+  @JsonKey(ignore: true)
+  @override
+  _$FollowUserCopyWith<_FollowUser> get copyWith =>
+      __$FollowUserCopyWithImpl<_FollowUser>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String userId) fetchProfile,
+    required TResult Function(Post post) checkLikeStatus,
+    required TResult Function(bool likeStatus, Post post) likePost,
+    required TResult Function(Profile profile) followProfile,
+  }) {
+    return followProfile(profile);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String userId)? fetchProfile,
+    TResult Function(Post post)? checkLikeStatus,
+    TResult Function(bool likeStatus, Post post)? likePost,
+    TResult Function(Profile profile)? followProfile,
+    required TResult orElse(),
+  }) {
+    if (followProfile != null) {
+      return followProfile(profile);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FetchProfile value) fetchProfile,
+    required TResult Function(_CheckLikeStatus value) checkLikeStatus,
+    required TResult Function(_LikePost value) likePost,
+    required TResult Function(_FollowUser value) followProfile,
+  }) {
+    return followProfile(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FetchProfile value)? fetchProfile,
+    TResult Function(_CheckLikeStatus value)? checkLikeStatus,
+    TResult Function(_LikePost value)? likePost,
+    TResult Function(_FollowUser value)? followProfile,
+    required TResult orElse(),
+  }) {
+    if (followProfile != null) {
+      return followProfile(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _FollowUser implements UserActionsEvent {
+  const factory _FollowUser(Profile profile) = _$_FollowUser;
+
+  Profile get profile => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$FollowUserCopyWith<_FollowUser> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -212,12 +641,18 @@ class _$UserActionsStateTearOff {
     return const _Initial();
   }
 
-  Loading loading() {
-    return const Loading();
+  _Loading loading() {
+    return const _Loading();
   }
 
-  Error error(UserActionsFailure failure) {
-    return Error(
+  _LikeStatus likeStatus(bool isLiked) {
+    return _LikeStatus(
+      isLiked,
+    );
+  }
+
+  _Error error(UserActionsFailure failure) {
+    return _Error(
       failure,
     );
   }
@@ -238,6 +673,7 @@ mixin _$UserActionsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function(bool isLiked) likeStatus,
     required TResult Function(UserActionsFailure failure) error,
     required TResult Function(Profile profile) loaded,
   }) =>
@@ -246,6 +682,7 @@ mixin _$UserActionsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function(bool isLiked)? likeStatus,
     TResult Function(UserActionsFailure failure)? error,
     TResult Function(Profile profile)? loaded,
     required TResult orElse(),
@@ -254,16 +691,18 @@ mixin _$UserActionsState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(Loading value) loading,
-    required TResult Function(Error value) error,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_LikeStatus value) likeStatus,
+    required TResult Function(_Error value) error,
     required TResult Function(_Loaded value) loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(Loading value)? loading,
-    TResult Function(Error value)? error,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_LikeStatus value)? likeStatus,
+    TResult Function(_Error value)? error,
     TResult Function(_Loaded value)? loaded,
     required TResult orElse(),
   }) =>
@@ -326,6 +765,7 @@ class _$_Initial implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function(bool isLiked) likeStatus,
     required TResult Function(UserActionsFailure failure) error,
     required TResult Function(Profile profile) loaded,
   }) {
@@ -337,6 +777,7 @@ class _$_Initial implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function(bool isLiked)? likeStatus,
     TResult Function(UserActionsFailure failure)? error,
     TResult Function(Profile profile)? loaded,
     required TResult orElse(),
@@ -351,8 +792,9 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(Loading value) loading,
-    required TResult Function(Error value) error,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_LikeStatus value) likeStatus,
+    required TResult Function(_Error value) error,
     required TResult Function(_Loaded value) loaded,
   }) {
     return initial(this);
@@ -362,8 +804,9 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(Loading value)? loading,
-    TResult Function(Error value)? error,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_LikeStatus value)? likeStatus,
+    TResult Function(_Error value)? error,
     TResult Function(_Loaded value)? loaded,
     required TResult orElse(),
   }) {
@@ -379,25 +822,25 @@ abstract class _Initial implements UserActionsState {
 }
 
 /// @nodoc
-abstract class $LoadingCopyWith<$Res> {
-  factory $LoadingCopyWith(Loading value, $Res Function(Loading) then) =
-      _$LoadingCopyWithImpl<$Res>;
+abstract class _$LoadingCopyWith<$Res> {
+  factory _$LoadingCopyWith(_Loading value, $Res Function(_Loading) then) =
+      __$LoadingCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$LoadingCopyWithImpl<$Res> extends _$UserActionsStateCopyWithImpl<$Res>
-    implements $LoadingCopyWith<$Res> {
-  _$LoadingCopyWithImpl(Loading _value, $Res Function(Loading) _then)
-      : super(_value, (v) => _then(v as Loading));
+class __$LoadingCopyWithImpl<$Res> extends _$UserActionsStateCopyWithImpl<$Res>
+    implements _$LoadingCopyWith<$Res> {
+  __$LoadingCopyWithImpl(_Loading _value, $Res Function(_Loading) _then)
+      : super(_value, (v) => _then(v as _Loading));
 
   @override
-  Loading get _value => super._value as Loading;
+  _Loading get _value => super._value as _Loading;
 }
 
 /// @nodoc
 
-class _$Loading implements Loading {
-  const _$Loading();
+class _$_Loading implements _Loading {
+  const _$_Loading();
 
   @override
   String toString() {
@@ -406,7 +849,7 @@ class _$Loading implements Loading {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is Loading);
+    return identical(this, other) || (other is _Loading);
   }
 
   @override
@@ -417,6 +860,7 @@ class _$Loading implements Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function(bool isLiked) likeStatus,
     required TResult Function(UserActionsFailure failure) error,
     required TResult Function(Profile profile) loaded,
   }) {
@@ -428,6 +872,7 @@ class _$Loading implements Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function(bool isLiked)? likeStatus,
     TResult Function(UserActionsFailure failure)? error,
     TResult Function(Profile profile)? loaded,
     required TResult orElse(),
@@ -442,8 +887,9 @@ class _$Loading implements Loading {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(Loading value) loading,
-    required TResult Function(Error value) error,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_LikeStatus value) likeStatus,
+    required TResult Function(_Error value) error,
     required TResult Function(_Loaded value) loaded,
   }) {
     return loading(this);
@@ -453,8 +899,9 @@ class _$Loading implements Loading {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(Loading value)? loading,
-    TResult Function(Error value)? error,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_LikeStatus value)? likeStatus,
+    TResult Function(_Error value)? error,
     TResult Function(_Loaded value)? loaded,
     required TResult orElse(),
   }) {
@@ -465,33 +912,161 @@ class _$Loading implements Loading {
   }
 }
 
-abstract class Loading implements UserActionsState {
-  const factory Loading() = _$Loading;
+abstract class _Loading implements UserActionsState {
+  const factory _Loading() = _$_Loading;
 }
 
 /// @nodoc
-abstract class $ErrorCopyWith<$Res> {
-  factory $ErrorCopyWith(Error value, $Res Function(Error) then) =
-      _$ErrorCopyWithImpl<$Res>;
+abstract class _$LikeStatusCopyWith<$Res> {
+  factory _$LikeStatusCopyWith(
+          _LikeStatus value, $Res Function(_LikeStatus) then) =
+      __$LikeStatusCopyWithImpl<$Res>;
+  $Res call({bool isLiked});
+}
+
+/// @nodoc
+class __$LikeStatusCopyWithImpl<$Res>
+    extends _$UserActionsStateCopyWithImpl<$Res>
+    implements _$LikeStatusCopyWith<$Res> {
+  __$LikeStatusCopyWithImpl(
+      _LikeStatus _value, $Res Function(_LikeStatus) _then)
+      : super(_value, (v) => _then(v as _LikeStatus));
+
+  @override
+  _LikeStatus get _value => super._value as _LikeStatus;
+
+  @override
+  $Res call({
+    Object? isLiked = freezed,
+  }) {
+    return _then(_LikeStatus(
+      isLiked == freezed
+          ? _value.isLiked
+          : isLiked // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_LikeStatus implements _LikeStatus {
+  const _$_LikeStatus(this.isLiked);
+
+  @override
+  final bool isLiked;
+
+  @override
+  String toString() {
+    return 'UserActionsState.likeStatus(isLiked: $isLiked)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _LikeStatus &&
+            (identical(other.isLiked, isLiked) ||
+                const DeepCollectionEquality().equals(other.isLiked, isLiked)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(isLiked);
+
+  @JsonKey(ignore: true)
+  @override
+  _$LikeStatusCopyWith<_LikeStatus> get copyWith =>
+      __$LikeStatusCopyWithImpl<_LikeStatus>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(bool isLiked) likeStatus,
+    required TResult Function(UserActionsFailure failure) error,
+    required TResult Function(Profile profile) loaded,
+  }) {
+    return likeStatus(isLiked);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(bool isLiked)? likeStatus,
+    TResult Function(UserActionsFailure failure)? error,
+    TResult Function(Profile profile)? loaded,
+    required TResult orElse(),
+  }) {
+    if (likeStatus != null) {
+      return likeStatus(isLiked);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_LikeStatus value) likeStatus,
+    required TResult Function(_Error value) error,
+    required TResult Function(_Loaded value) loaded,
+  }) {
+    return likeStatus(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_LikeStatus value)? likeStatus,
+    TResult Function(_Error value)? error,
+    TResult Function(_Loaded value)? loaded,
+    required TResult orElse(),
+  }) {
+    if (likeStatus != null) {
+      return likeStatus(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _LikeStatus implements UserActionsState {
+  const factory _LikeStatus(bool isLiked) = _$_LikeStatus;
+
+  bool get isLiked => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$LikeStatusCopyWith<_LikeStatus> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$ErrorCopyWith<$Res> {
+  factory _$ErrorCopyWith(_Error value, $Res Function(_Error) then) =
+      __$ErrorCopyWithImpl<$Res>;
   $Res call({UserActionsFailure failure});
 
   $UserActionsFailureCopyWith<$Res> get failure;
 }
 
 /// @nodoc
-class _$ErrorCopyWithImpl<$Res> extends _$UserActionsStateCopyWithImpl<$Res>
-    implements $ErrorCopyWith<$Res> {
-  _$ErrorCopyWithImpl(Error _value, $Res Function(Error) _then)
-      : super(_value, (v) => _then(v as Error));
+class __$ErrorCopyWithImpl<$Res> extends _$UserActionsStateCopyWithImpl<$Res>
+    implements _$ErrorCopyWith<$Res> {
+  __$ErrorCopyWithImpl(_Error _value, $Res Function(_Error) _then)
+      : super(_value, (v) => _then(v as _Error));
 
   @override
-  Error get _value => super._value as Error;
+  _Error get _value => super._value as _Error;
 
   @override
   $Res call({
     Object? failure = freezed,
   }) {
-    return _then(Error(
+    return _then(_Error(
       failure == freezed
           ? _value.failure
           : failure // ignore: cast_nullable_to_non_nullable
@@ -509,8 +1084,8 @@ class _$ErrorCopyWithImpl<$Res> extends _$UserActionsStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Error implements Error {
-  const _$Error(this.failure);
+class _$_Error implements _Error {
+  const _$_Error(this.failure);
 
   @override
   final UserActionsFailure failure;
@@ -523,7 +1098,7 @@ class _$Error implements Error {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is Error &&
+        (other is _Error &&
             (identical(other.failure, failure) ||
                 const DeepCollectionEquality().equals(other.failure, failure)));
   }
@@ -534,14 +1109,15 @@ class _$Error implements Error {
 
   @JsonKey(ignore: true)
   @override
-  $ErrorCopyWith<Error> get copyWith =>
-      _$ErrorCopyWithImpl<Error>(this, _$identity);
+  _$ErrorCopyWith<_Error> get copyWith =>
+      __$ErrorCopyWithImpl<_Error>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function(bool isLiked) likeStatus,
     required TResult Function(UserActionsFailure failure) error,
     required TResult Function(Profile profile) loaded,
   }) {
@@ -553,6 +1129,7 @@ class _$Error implements Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function(bool isLiked)? likeStatus,
     TResult Function(UserActionsFailure failure)? error,
     TResult Function(Profile profile)? loaded,
     required TResult orElse(),
@@ -567,8 +1144,9 @@ class _$Error implements Error {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(Loading value) loading,
-    required TResult Function(Error value) error,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_LikeStatus value) likeStatus,
+    required TResult Function(_Error value) error,
     required TResult Function(_Loaded value) loaded,
   }) {
     return error(this);
@@ -578,8 +1156,9 @@ class _$Error implements Error {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(Loading value)? loading,
-    TResult Function(Error value)? error,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_LikeStatus value)? likeStatus,
+    TResult Function(_Error value)? error,
     TResult Function(_Loaded value)? loaded,
     required TResult orElse(),
   }) {
@@ -590,12 +1169,12 @@ class _$Error implements Error {
   }
 }
 
-abstract class Error implements UserActionsState {
-  const factory Error(UserActionsFailure failure) = _$Error;
+abstract class _Error implements UserActionsState {
+  const factory _Error(UserActionsFailure failure) = _$_Error;
 
   UserActionsFailure get failure => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ErrorCopyWith<Error> get copyWith => throw _privateConstructorUsedError;
+  _$ErrorCopyWith<_Error> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -671,6 +1250,7 @@ class _$_Loaded implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function(bool isLiked) likeStatus,
     required TResult Function(UserActionsFailure failure) error,
     required TResult Function(Profile profile) loaded,
   }) {
@@ -682,6 +1262,7 @@ class _$_Loaded implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function(bool isLiked)? likeStatus,
     TResult Function(UserActionsFailure failure)? error,
     TResult Function(Profile profile)? loaded,
     required TResult orElse(),
@@ -696,8 +1277,9 @@ class _$_Loaded implements _Loaded {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(Loading value) loading,
-    required TResult Function(Error value) error,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_LikeStatus value) likeStatus,
+    required TResult Function(_Error value) error,
     required TResult Function(_Loaded value) loaded,
   }) {
     return loaded(this);
@@ -707,8 +1289,9 @@ class _$_Loaded implements _Loaded {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(Loading value)? loading,
-    TResult Function(Error value)? error,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_LikeStatus value)? likeStatus,
+    TResult Function(_Error value)? error,
     TResult Function(_Loaded value)? loaded,
     required TResult orElse(),
   }) {

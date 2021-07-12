@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_share/application/auth/auth_bloc.dart';
-import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,9 +10,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-        return state.map(
-          initial: (_) => CircularProgressIndicator(),
-          unauthenticated: (_) => throw NotAuthenticatedError(),
+        return state.maybeMap(
+          orElse: () => CircularProgressIndicator(),
           authenticated: (_) => AutoTabsScaffold(
             routes: [
               SavePostRoute(),
