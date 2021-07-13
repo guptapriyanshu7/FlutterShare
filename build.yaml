@@ -13,8 +13,5 @@ targets:
       freezed|freezed:
         enabled: true
 
-      # injectable_generator|injectable_builder:
-      #   enabled: true
-
-      # injectable_generator|injectable_config_builder:
+      # injectable_generator|injectable_generator:
       #   enabled: true

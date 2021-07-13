@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
@@ -13,24 +14,24 @@ import 'package:flutter_share/infrastructure/auth/firebase_user_mapper.dart';
 class FirebaseAuthFacade implements IAuthFacade {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+  final FirebaseMessaging _firebaseMessaging;
 
   FirebaseAuthFacade(
     this._firebaseAuth,
     this._googleSignIn,
+    this._firebaseMessaging,
   );
   @override
   Future<Either<AuthFailure, Unit>> registerWithEmailAndPassword({
     required String emailAddress,
     required String password,
   }) async {
-    // final emailAddressStr = emailAddress.getOrCrash();
-    // final passwordStr = password.getOrCrash();
     try {
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
-      _saveUserDocToDatabase(credential);
+      await _saveUserDocToDatabase(credential);
       return right(unit);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -46,8 +47,6 @@ class FirebaseAuthFacade implements IAuthFacade {
     required String emailAddress,
     required String password,
   }) async {
-    // final emailAddressStr = emailAddress.getOrCrash();
-    // final passwordStr = password.getOrCrash();
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
         email: emailAddress,
@@ -90,12 +89,16 @@ class FirebaseAuthFacade implements IAuthFacade {
 
   Future<void> _saveUserDocToDatabase(UserCredential credential) async {
     final firebaseUser = credential.user;
-    final userDomain = firebaseUser?.toDomain();
-    final userJson = userDomain?.toJson();
+    final userDomain = firebaseUser!.toDomain();
+    final userJson = userDomain.toJson();
+
+    final token = await _firebaseMessaging.getToken();
+    final updatedUserJson = {...userJson, 'androidNotificationToken': token};
+
     await getIt<FirebaseFirestore>()
         .collection('users')
-        .doc(userDomain!.id)
-        .set(userJson!);
+        .doc(userDomain.id)
+        .set(updatedUserJson);
   }
 
   @override

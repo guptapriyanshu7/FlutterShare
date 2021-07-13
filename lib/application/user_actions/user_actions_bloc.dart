@@ -57,6 +57,14 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
         final userOption = await getIt<IAuthFacade>().getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
+        // final likesMap = e.post.likes;
+        // final updatedLikesMap = likesMap.map((key, value) {
+        //   if (key == currentUser.id) {
+        //     return MapEntry(key, e.likeStatus);
+        //   }
+        //   return MapEntry(key, value);
+        // });
+        // final updatedPost = e.post.copyWith(likes: updatedLikesMap);
         e.post.likes[currentUser.id] = e.likeStatus;
         _userActionsRepository.likePost(e.post);
         yield UserActionsState.likeStatus(e.likeStatus);
