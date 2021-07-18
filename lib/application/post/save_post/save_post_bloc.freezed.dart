@@ -35,6 +35,12 @@ class _$SavePostEventTearOff {
       value,
     );
   }
+
+  _FilePicked filePicked(File file) {
+    return _FilePicked(
+      file,
+    );
+  }
 }
 
 /// @nodoc
@@ -48,6 +54,7 @@ mixin _$SavePostEvent {
     required TResult Function() autoValidate,
     required TResult Function(String value) captionChanged,
     required TResult Function(String value) locationChanged,
+    required TResult Function(File file) filePicked,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -56,6 +63,7 @@ mixin _$SavePostEvent {
     TResult Function()? autoValidate,
     TResult Function(String value)? captionChanged,
     TResult Function(String value)? locationChanged,
+    TResult Function(File file)? filePicked,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -65,6 +73,7 @@ mixin _$SavePostEvent {
     required TResult Function(_AutoValidate value) autoValidate,
     required TResult Function(_CaptionChanged value) captionChanged,
     required TResult Function(_LocationChanged value) locationChanged,
+    required TResult Function(_FilePicked value) filePicked,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -73,6 +82,7 @@ mixin _$SavePostEvent {
     TResult Function(_AutoValidate value)? autoValidate,
     TResult Function(_CaptionChanged value)? captionChanged,
     TResult Function(_LocationChanged value)? locationChanged,
+    TResult Function(_FilePicked value)? filePicked,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -136,6 +146,7 @@ class _$_Save implements _Save {
     required TResult Function() autoValidate,
     required TResult Function(String value) captionChanged,
     required TResult Function(String value) locationChanged,
+    required TResult Function(File file) filePicked,
   }) {
     return save();
   }
@@ -147,6 +158,7 @@ class _$_Save implements _Save {
     TResult Function()? autoValidate,
     TResult Function(String value)? captionChanged,
     TResult Function(String value)? locationChanged,
+    TResult Function(File file)? filePicked,
     required TResult orElse(),
   }) {
     if (save != null) {
@@ -162,6 +174,7 @@ class _$_Save implements _Save {
     required TResult Function(_AutoValidate value) autoValidate,
     required TResult Function(_CaptionChanged value) captionChanged,
     required TResult Function(_LocationChanged value) locationChanged,
+    required TResult Function(_FilePicked value) filePicked,
   }) {
     return save(this);
   }
@@ -173,6 +186,7 @@ class _$_Save implements _Save {
     TResult Function(_AutoValidate value)? autoValidate,
     TResult Function(_CaptionChanged value)? captionChanged,
     TResult Function(_LocationChanged value)? locationChanged,
+    TResult Function(_FilePicked value)? filePicked,
     required TResult orElse(),
   }) {
     if (save != null) {
@@ -230,6 +244,7 @@ class _$_AutoValidate implements _AutoValidate {
     required TResult Function() autoValidate,
     required TResult Function(String value) captionChanged,
     required TResult Function(String value) locationChanged,
+    required TResult Function(File file) filePicked,
   }) {
     return autoValidate();
   }
@@ -241,6 +256,7 @@ class _$_AutoValidate implements _AutoValidate {
     TResult Function()? autoValidate,
     TResult Function(String value)? captionChanged,
     TResult Function(String value)? locationChanged,
+    TResult Function(File file)? filePicked,
     required TResult orElse(),
   }) {
     if (autoValidate != null) {
@@ -256,6 +272,7 @@ class _$_AutoValidate implements _AutoValidate {
     required TResult Function(_AutoValidate value) autoValidate,
     required TResult Function(_CaptionChanged value) captionChanged,
     required TResult Function(_LocationChanged value) locationChanged,
+    required TResult Function(_FilePicked value) filePicked,
   }) {
     return autoValidate(this);
   }
@@ -267,6 +284,7 @@ class _$_AutoValidate implements _AutoValidate {
     TResult Function(_AutoValidate value)? autoValidate,
     TResult Function(_CaptionChanged value)? captionChanged,
     TResult Function(_LocationChanged value)? locationChanged,
+    TResult Function(_FilePicked value)? filePicked,
     required TResult orElse(),
   }) {
     if (autoValidate != null) {
@@ -349,6 +367,7 @@ class _$_CaptionChanged implements _CaptionChanged {
     required TResult Function() autoValidate,
     required TResult Function(String value) captionChanged,
     required TResult Function(String value) locationChanged,
+    required TResult Function(File file) filePicked,
   }) {
     return captionChanged(value);
   }
@@ -360,6 +379,7 @@ class _$_CaptionChanged implements _CaptionChanged {
     TResult Function()? autoValidate,
     TResult Function(String value)? captionChanged,
     TResult Function(String value)? locationChanged,
+    TResult Function(File file)? filePicked,
     required TResult orElse(),
   }) {
     if (captionChanged != null) {
@@ -375,6 +395,7 @@ class _$_CaptionChanged implements _CaptionChanged {
     required TResult Function(_AutoValidate value) autoValidate,
     required TResult Function(_CaptionChanged value) captionChanged,
     required TResult Function(_LocationChanged value) locationChanged,
+    required TResult Function(_FilePicked value) filePicked,
   }) {
     return captionChanged(this);
   }
@@ -386,6 +407,7 @@ class _$_CaptionChanged implements _CaptionChanged {
     TResult Function(_AutoValidate value)? autoValidate,
     TResult Function(_CaptionChanged value)? captionChanged,
     TResult Function(_LocationChanged value)? locationChanged,
+    TResult Function(_FilePicked value)? filePicked,
     required TResult orElse(),
   }) {
     if (captionChanged != null) {
@@ -473,6 +495,7 @@ class _$_LocationChanged implements _LocationChanged {
     required TResult Function() autoValidate,
     required TResult Function(String value) captionChanged,
     required TResult Function(String value) locationChanged,
+    required TResult Function(File file) filePicked,
   }) {
     return locationChanged(value);
   }
@@ -484,6 +507,7 @@ class _$_LocationChanged implements _LocationChanged {
     TResult Function()? autoValidate,
     TResult Function(String value)? captionChanged,
     TResult Function(String value)? locationChanged,
+    TResult Function(File file)? filePicked,
     required TResult orElse(),
   }) {
     if (locationChanged != null) {
@@ -499,6 +523,7 @@ class _$_LocationChanged implements _LocationChanged {
     required TResult Function(_AutoValidate value) autoValidate,
     required TResult Function(_CaptionChanged value) captionChanged,
     required TResult Function(_LocationChanged value) locationChanged,
+    required TResult Function(_FilePicked value) filePicked,
   }) {
     return locationChanged(this);
   }
@@ -510,6 +535,7 @@ class _$_LocationChanged implements _LocationChanged {
     TResult Function(_AutoValidate value)? autoValidate,
     TResult Function(_CaptionChanged value)? captionChanged,
     TResult Function(_LocationChanged value)? locationChanged,
+    TResult Function(_FilePicked value)? filePicked,
     required TResult orElse(),
   }) {
     if (locationChanged != null) {
@@ -529,17 +555,146 @@ abstract class _LocationChanged implements SavePostEvent {
 }
 
 /// @nodoc
+abstract class _$FilePickedCopyWith<$Res> {
+  factory _$FilePickedCopyWith(
+          _FilePicked value, $Res Function(_FilePicked) then) =
+      __$FilePickedCopyWithImpl<$Res>;
+  $Res call({File file});
+}
+
+/// @nodoc
+class __$FilePickedCopyWithImpl<$Res> extends _$SavePostEventCopyWithImpl<$Res>
+    implements _$FilePickedCopyWith<$Res> {
+  __$FilePickedCopyWithImpl(
+      _FilePicked _value, $Res Function(_FilePicked) _then)
+      : super(_value, (v) => _then(v as _FilePicked));
+
+  @override
+  _FilePicked get _value => super._value as _FilePicked;
+
+  @override
+  $Res call({
+    Object? file = freezed,
+  }) {
+    return _then(_FilePicked(
+      file == freezed
+          ? _value.file
+          : file // ignore: cast_nullable_to_non_nullable
+              as File,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_FilePicked implements _FilePicked {
+  const _$_FilePicked(this.file);
+
+  @override
+  final File file;
+
+  @override
+  String toString() {
+    return 'SavePostEvent.filePicked(file: $file)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _FilePicked &&
+            (identical(other.file, file) ||
+                const DeepCollectionEquality().equals(other.file, file)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(file);
+
+  @JsonKey(ignore: true)
+  @override
+  _$FilePickedCopyWith<_FilePicked> get copyWith =>
+      __$FilePickedCopyWithImpl<_FilePicked>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() save,
+    required TResult Function() autoValidate,
+    required TResult Function(String value) captionChanged,
+    required TResult Function(String value) locationChanged,
+    required TResult Function(File file) filePicked,
+  }) {
+    return filePicked(file);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? save,
+    TResult Function()? autoValidate,
+    TResult Function(String value)? captionChanged,
+    TResult Function(String value)? locationChanged,
+    TResult Function(File file)? filePicked,
+    required TResult orElse(),
+  }) {
+    if (filePicked != null) {
+      return filePicked(file);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Save value) save,
+    required TResult Function(_AutoValidate value) autoValidate,
+    required TResult Function(_CaptionChanged value) captionChanged,
+    required TResult Function(_LocationChanged value) locationChanged,
+    required TResult Function(_FilePicked value) filePicked,
+  }) {
+    return filePicked(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Save value)? save,
+    TResult Function(_AutoValidate value)? autoValidate,
+    TResult Function(_CaptionChanged value)? captionChanged,
+    TResult Function(_LocationChanged value)? locationChanged,
+    TResult Function(_FilePicked value)? filePicked,
+    required TResult orElse(),
+  }) {
+    if (filePicked != null) {
+      return filePicked(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _FilePicked implements SavePostEvent {
+  const factory _FilePicked(File file) = _$_FilePicked;
+
+  File get file => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$FilePickedCopyWith<_FilePicked> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 class _$SavePostStateTearOff {
   const _$SavePostStateTearOff();
 
   _SavePost call(
       {required Post post,
+      required File file,
       required bool showErrorMessages,
       required bool isEditing,
       required bool isSaving,
       required Option<PostFailure> failureOption}) {
     return _SavePost(
       post: post,
+      file: file,
       showErrorMessages: showErrorMessages,
       isEditing: isEditing,
       isSaving: isSaving,
@@ -554,6 +709,7 @@ const $SavePostState = _$SavePostStateTearOff();
 /// @nodoc
 mixin _$SavePostState {
   Post get post => throw _privateConstructorUsedError;
+  File get file => throw _privateConstructorUsedError;
   bool get showErrorMessages => throw _privateConstructorUsedError;
   bool get isEditing => throw _privateConstructorUsedError;
   bool get isSaving => throw _privateConstructorUsedError;
@@ -571,6 +727,7 @@ abstract class $SavePostStateCopyWith<$Res> {
       _$SavePostStateCopyWithImpl<$Res>;
   $Res call(
       {Post post,
+      File file,
       bool showErrorMessages,
       bool isEditing,
       bool isSaving,
@@ -591,6 +748,7 @@ class _$SavePostStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? post = freezed,
+    Object? file = freezed,
     Object? showErrorMessages = freezed,
     Object? isEditing = freezed,
     Object? isSaving = freezed,
@@ -601,6 +759,10 @@ class _$SavePostStateCopyWithImpl<$Res>
           ? _value.post
           : post // ignore: cast_nullable_to_non_nullable
               as Post,
+      file: file == freezed
+          ? _value.file
+          : file // ignore: cast_nullable_to_non_nullable
+              as File,
       showErrorMessages: showErrorMessages == freezed
           ? _value.showErrorMessages
           : showErrorMessages // ignore: cast_nullable_to_non_nullable
@@ -636,6 +798,7 @@ abstract class _$SavePostCopyWith<$Res>
   @override
   $Res call(
       {Post post,
+      File file,
       bool showErrorMessages,
       bool isEditing,
       bool isSaving,
@@ -657,6 +820,7 @@ class __$SavePostCopyWithImpl<$Res> extends _$SavePostStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? post = freezed,
+    Object? file = freezed,
     Object? showErrorMessages = freezed,
     Object? isEditing = freezed,
     Object? isSaving = freezed,
@@ -667,6 +831,10 @@ class __$SavePostCopyWithImpl<$Res> extends _$SavePostStateCopyWithImpl<$Res>
           ? _value.post
           : post // ignore: cast_nullable_to_non_nullable
               as Post,
+      file: file == freezed
+          ? _value.file
+          : file // ignore: cast_nullable_to_non_nullable
+              as File,
       showErrorMessages: showErrorMessages == freezed
           ? _value.showErrorMessages
           : showErrorMessages // ignore: cast_nullable_to_non_nullable
@@ -692,6 +860,7 @@ class __$SavePostCopyWithImpl<$Res> extends _$SavePostStateCopyWithImpl<$Res>
 class _$_SavePost implements _SavePost {
   const _$_SavePost(
       {required this.post,
+      required this.file,
       required this.showErrorMessages,
       required this.isEditing,
       required this.isSaving,
@@ -699,6 +868,8 @@ class _$_SavePost implements _SavePost {
 
   @override
   final Post post;
+  @override
+  final File file;
   @override
   final bool showErrorMessages;
   @override
@@ -710,7 +881,7 @@ class _$_SavePost implements _SavePost {
 
   @override
   String toString() {
-    return 'SavePostState(post: $post, showErrorMessages: $showErrorMessages, isEditing: $isEditing, isSaving: $isSaving, failureOption: $failureOption)';
+    return 'SavePostState(post: $post, file: $file, showErrorMessages: $showErrorMessages, isEditing: $isEditing, isSaving: $isSaving, failureOption: $failureOption)';
   }
 
   @override
@@ -719,6 +890,8 @@ class _$_SavePost implements _SavePost {
         (other is _SavePost &&
             (identical(other.post, post) ||
                 const DeepCollectionEquality().equals(other.post, post)) &&
+            (identical(other.file, file) ||
+                const DeepCollectionEquality().equals(other.file, file)) &&
             (identical(other.showErrorMessages, showErrorMessages) ||
                 const DeepCollectionEquality()
                     .equals(other.showErrorMessages, showErrorMessages)) &&
@@ -737,6 +910,7 @@ class _$_SavePost implements _SavePost {
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(post) ^
+      const DeepCollectionEquality().hash(file) ^
       const DeepCollectionEquality().hash(showErrorMessages) ^
       const DeepCollectionEquality().hash(isEditing) ^
       const DeepCollectionEquality().hash(isSaving) ^
@@ -751,6 +925,7 @@ class _$_SavePost implements _SavePost {
 abstract class _SavePost implements SavePostState {
   const factory _SavePost(
       {required Post post,
+      required File file,
       required bool showErrorMessages,
       required bool isEditing,
       required bool isSaving,
@@ -758,6 +933,8 @@ abstract class _SavePost implements SavePostState {
 
   @override
   Post get post => throw _privateConstructorUsedError;
+  @override
+  File get file => throw _privateConstructorUsedError;
   @override
   bool get showErrorMessages => throw _privateConstructorUsedError;
   @override

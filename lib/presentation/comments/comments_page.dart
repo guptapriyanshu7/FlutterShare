@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/domain/auth/i_auth_facade.dart';
 import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/injection.dart';
-import 'package:flutter_share/pages/home.dart';
-import 'package:flutter_share/widgets/header.dart';
-import 'package:flutter_share/widgets/progress.dart';
 import 'package:timeago/timeago.dart';
 
 class CommentsPage extends StatelessWidget {
@@ -20,14 +17,15 @@ class CommentsPage extends StatelessWidget {
   Widget showComments() {
     // If this happens
     return StreamBuilder(
-      stream: commentsRef
+      stream: getIt<FirebaseFirestore>()
+          .collection('comments')
           .doc(postId)
           .collection('comments')
           .orderBy('timestamp', descending: false)
           .snapshots(),
       builder: (context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-        if (!snapshot.hasData) return circularIndicator();
+        if (!snapshot.hasData) return CircularProgressIndicator();
         final comments = snapshot.data?.docs.map<ListTile>((doc) {
           return ListTile(
             leading: CircleAvatar(
@@ -47,7 +45,8 @@ class CommentsPage extends StatelessWidget {
     final userOption = await getIt<IAuthFacade>().getSignedInUser();
     final currentUser =
         userOption.getOrElse(() => throw NotAuthenticatedError());
-    commentsRef.doc(postId).collection("comments").add({
+    getIt<FirebaseFirestore>()
+          .collection('comments').doc(postId).collection("comments").add({
       'comment': commentController.text,
       'timestamp': DateTime.now(),
       'userId': currentUser.id,
@@ -55,7 +54,8 @@ class CommentsPage extends StatelessWidget {
       'avatar': currentUser.photoUrl,
     });
     // if (currentUser.id != postOwner) {
-    feedRef.doc(postOwner).collection('userFeed').add({
+    getIt<FirebaseFirestore>()
+          .collection('feed').doc(postOwner).collection('userFeed').add({
       'type': 'comment',
       'comment': commentController.text,
       'timestamp': DateTime.now(),
@@ -72,7 +72,7 @@ class CommentsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context, 'Comments'),
+      appBar: AppBar(title: Text('Comments')),
       body: Column(
         children: [
           Expanded(child: showComments()),

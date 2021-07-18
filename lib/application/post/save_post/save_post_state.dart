@@ -4,6 +4,7 @@ part of 'save_post_bloc.dart';
 class SavePostState with _$SavePostState {
   const factory SavePostState({
     required Post post,
+    required File file,
     required bool showErrorMessages,
     required bool isEditing,
     required bool isSaving,
@@ -12,6 +13,7 @@ class SavePostState with _$SavePostState {
 
   factory SavePostState.initial() => SavePostState(
         isEditing: false,
+        file: File('some path'),
         isSaving: false,
         post: Post.empty(),
         showErrorMessages: false,

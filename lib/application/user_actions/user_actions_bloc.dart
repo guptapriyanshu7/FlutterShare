@@ -4,11 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_share/domain/auth/i_auth_facade.dart';
 import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/domain/posts/post.dart';
-import 'package:flutter_share/domain/user_actions.dart/profile.dart';
+import 'package:flutter_share/domain/user_actions/profile.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter_share/domain/user_actions.dart/i_user_actions_repository.dart';
-import 'package:flutter_share/domain/user_actions.dart/user_actions_failure.dart';
+import 'package:flutter_share/domain/user_actions/i_user_actions_repository.dart';
+import 'package:flutter_share/domain/user_actions/user_actions_failure.dart';
 import 'package:injectable/injectable.dart';
 
 part 'user_actions_bloc.freezed.dart';

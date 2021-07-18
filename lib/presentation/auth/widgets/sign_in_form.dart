@@ -53,13 +53,13 @@ class SignInForm extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.all(12),
               children: [
-                SizedBox(height: 12),
-                Text(
-                  '📝',
-                  style: TextStyle(fontSize: 130),
-                  textAlign: TextAlign.center,
+                SizedBox(height: 50),
+                Icon(
+                  Icons.verified_user_outlined,
+                  size: 90,
+                  color: Colors.red,
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 20),
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.emailAddress,

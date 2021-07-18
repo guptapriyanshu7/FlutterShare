@@ -7,7 +7,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_share/application/user_actions/user_actions_bloc.dart';
 import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/posts/post.dart';
-import 'package:flutter_share/domain/user_actions.dart/profile.dart';
+import 'package:flutter_share/domain/user_actions/profile.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/profile/widgets/single_post.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
@@ -86,7 +86,7 @@ class ProfilePage extends HookWidget {
       child: currentUserId == id
           ? OutlinedButton(
               // onPressed: editProfile,
-              onPressed: null,
+              onPressed: () {},
               child: const Text('Edit Profile'),
             )
           : OutlinedButton(

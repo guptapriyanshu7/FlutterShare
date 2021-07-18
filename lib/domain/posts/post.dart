@@ -16,7 +16,7 @@ class Post with _$Post {
   }) = _Post;
 
   factory Post.empty() => Post(
-        id: const Uuid().v4(),
+        id: Uuid().v4(),
         ownerid: '',
         mediaUrl: '',
         caption: '',

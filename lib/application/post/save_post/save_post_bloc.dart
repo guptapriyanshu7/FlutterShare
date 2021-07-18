@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
@@ -27,11 +28,19 @@ class SavePostBloc extends Bloc<SavePostEvent, SavePostState> {
           isSaving: true,
           failureOption: none(),
         );
+        final imageUrl =
+            await _postRepository.saveImage(state.file, state.post.id);
+        final imageUrll = imageUrl.fold((l) => null, id);
         Either<PostFailure, Unit> failureOrSuccess = state.isEditing
             ? await _postRepository.update(state.post)
-            : await _postRepository.create(state.post);
+            : await _postRepository.create(
+                state.post.copyWith(
+                  mediaUrl: imageUrll!,
+                ),
+              );
         yield state.copyWith(
           isSaving: false,
+          post: Post.empty(),
           // showErrorMessages: true,
           failureOption: failureOrSuccess.fold(
             (f) => some(f),
@@ -49,6 +58,12 @@ class SavePostBloc extends Bloc<SavePostEvent, SavePostState> {
           post: state.post.copyWith(
             caption: e.value,
           ),
+          // failureOption: none(),
+        );
+      },
+      filePicked: (e) async* {
+        yield state.copyWith(
+          file: e.file,
           // failureOption: none(),
         );
       },

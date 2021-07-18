@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_share/domain/auth/i_auth_facade.dart';
 import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/domain/posts/i_post_repository.dart';
@@ -12,8 +15,9 @@ import 'package:rxdart/rxdart.dart';
 @LazySingleton(as: IPostRepository)
 class PostRepositoryImpl implements IPostRepository {
   final FirebaseFirestore _firestore;
+  final FirebaseStorage _firebaseStorage;
 
-  PostRepositoryImpl(this._firestore);
+  PostRepositoryImpl(this._firestore, this._firebaseStorage);
   @override
   Future<Either<PostFailure, Unit>> create(Post post) async {
     try {
@@ -21,10 +25,7 @@ class PostRepositoryImpl implements IPostRepository {
       final currentUser =
           userOption.getOrElse(() => throw NotAuthenticatedError());
       final userDoc = await _firestore.collection('posts').doc(currentUser.id);
-      final updatedPost = post.copyWith(
-          ownerid: currentUser.id,
-          mediaUrl:
-              'https://firebasestorage.googleapis.com/v0/b/flutter-share-d228b.appspot.com/o/post_173f6a52-fe2e-4ca0-af33-fe81a5abc1ad.jpg?alt=media&token=90df9b6d-288a-4471-9967-4940b7c827ae');
+      final updatedPost = post.copyWith(ownerid: currentUser.id);
       await userDoc
           .collection('userPosts')
           .doc(post.id)
@@ -96,5 +97,15 @@ class PostRepositoryImpl implements IPostRepository {
   Future<Either<PostFailure, Unit>> update(Post post) {
     // TODO: implement update
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<PostFailure, String>> saveImage(
+    File file,
+    String postId,
+  ) async {
+    final taskSnap =
+        await _firebaseStorage.ref('postImg_$postId.jpg').putFile(file);
+    return right(await taskSnap.ref.getDownloadURL());
   }
 }

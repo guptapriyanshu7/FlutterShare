@@ -5,11 +5,11 @@ extension FirebaseUserDomainX on firebaseUser.User {
   User toDomain() {
     return User(
       id: uid,
-      bio: 'Dummy bio',
+      bio: '',
       displayName: displayName ?? 'Dummy name',
       email: email!,
       photoUrl: photoURL ?? 'Some dummy photo url',
-      username: 'Some random username'
+      username: email!,
     );
   }
 }

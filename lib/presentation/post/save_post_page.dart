@@ -1,14 +1,11 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_share/application/auth/auth_bloc.dart';
 import 'package:flutter_share/application/post/save_post/save_post_bloc.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/post/widgets/caption_field.dart';
 import 'package:flutter_share/presentation/post/widgets/get_location_widget.dart';
 import 'package:flutter_share/presentation/post/widgets/upload_post_image_widget.dart';
-import 'package:flutter_share/presentation/routes/router.gr.dart';
 
 class SavePostPage extends HookWidget {
   const SavePostPage({Key? key}) : super(key: key);
@@ -25,48 +22,47 @@ class SavePostPage extends HookWidget {
 
     return BlocProvider(
       create: (context) => getIt<SavePostBloc>(),
-      child: BlocListener<AuthBloc, AuthState>(
+      child: BlocConsumer<SavePostBloc, SavePostState>(
+        listenWhen: (previous, current) =>
+            previous.isSaving != current.isSaving,
         listener: (context, state) {
-          state.maybeMap(
-            unauthenticated: (_) => context.replaceRoute(SignInRoute()),
-            orElse: () {},
-          );
+          if (state.isSaving)
+            showDialog(
+              context: context,
+              builder: (_) {
+                return Center(child: CircularProgressIndicator());
+              },
+            );
+          else
+            Navigator.pop(context);
         },
-        child: BlocBuilder<SavePostBloc, SavePostState>(
-          builder: (context, state) {
-            return Scaffold(
-              floatingActionButton: IconButton(
-                icon: Icon(Icons.exit_to_app),
-                onPressed: () {
-                  context.read<AuthBloc>().add(const AuthEvent.signedOut());
-                },
-              ),
-              appBar: AppBar(
-                title: Text('Save Post'),
-                actions: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.check),
-                    onPressed: () => _handleSubmit(context, _formKey),
-                  )
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Save Post'),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.check),
+                  onPressed: () => _handleSubmit(context, _formKey),
+                )
+              ],
+            ),
+            body: Form(
+              key: _formKey,
+              autovalidateMode: state.showErrorMessages
+                  ? AutovalidateMode.always
+                  : AutovalidateMode.disabled,
+              child: ListView(
+                children: [
+                  const UploadPostImageWidget(),
+                  const CaptionField(),
+                  const Divider(),
+                  const GetLocationWidget(),
                 ],
               ),
-              body: Form(
-                key: _formKey,
-                autovalidateMode: state.showErrorMessages
-                    ? AutovalidateMode.always
-                    : AutovalidateMode.disabled,
-                child: ListView(
-                  children: [
-                    const UploadPostImageWidget(),
-                    const CaptionField(),
-                    const Divider(),
-                    const GetLocationWidget(),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
