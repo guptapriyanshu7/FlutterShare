@@ -86,9 +86,10 @@ class _HomePageState extends State<HomePage> {
           authenticated: (_) => AutoTabsScaffold(
             key: _scaffoldKey,
             routes: [
+              PostsRoute(),
+              SearchRoute(),
               SavePostRoute(),
               ActivityFeedRoute(),
-              SearchRoute(),
               ProfileRoute(id: _.currentUser.id),
             ],
             bottomNavigationBuilder: (_, tabsRouter) {
@@ -97,18 +98,23 @@ class _HomePageState extends State<HomePage> {
                 onTap: tabsRouter.setActiveIndex,
                 items: [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.add_a_photo_outlined),
+                    icon: Icon(Icons.home),
+                    label: 'Home',
+                    backgroundColor: Colors.red,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.search),
+                    label: 'Search',
+                    backgroundColor: Colors.red,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.camera_alt),
                     label: 'New Post',
                     backgroundColor: Colors.red,
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.notifications),
                     label: 'Notifications',
-                    backgroundColor: Colors.red,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.search),
-                    label: 'Search',
                     backgroundColor: Colors.red,
                   ),
                   BottomNavigationBarItem(

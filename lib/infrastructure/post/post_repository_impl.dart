@@ -65,10 +65,10 @@ class PostRepositoryImpl implements IPostRepository {
     final userOption = await getIt<IAuthFacade>().getSignedInUser();
     final currentUser =
         userOption.getOrElse(() => throw NotAuthenticatedError());
-    final userDoc = await _firestore.collection('posts').doc(currentUser.id);
+    final userDoc = await _firestore.collection('timeline').doc(currentUser.id);
     print(userDoc);
     yield* userDoc
-        .collection('userPosts')
+        .collection('timelinePosts')
         // .orderBy('serverTimeStamp', descending: true)
         .snapshots()
         .map((snapshot) {

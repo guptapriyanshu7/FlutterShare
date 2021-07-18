@@ -68,8 +68,13 @@ class _ActivityFeedPageState extends State<ActivityFeedPage>
                                   .get();
                               final userJson = userDoc.data();
                               final user = User.fromJson(userJson!);
-                              context.pushRoute(SinglePostRoute(
-                                  id: post.id, post: post, user: user));
+                              context.pushRoute(
+                                SinglePostRoute(
+                                  id: post.id,
+                                  post: post,
+                                  user: user,
+                                ),
+                              );
                             }
                           },
                           child: ListTile(
