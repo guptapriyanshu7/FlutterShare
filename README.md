@@ -1,6 +1,9 @@
 # FlutterShare
 
-An Instagram clone app made with flutter/dart.
+An Instagram clone app made with flutter/dart.  
+Uses [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc) from state management.
+
+https://user-images.githubusercontent.com/60141300/126169052-745fc7a2-aa53-4ec5-a65a-3993050f9edc.mp4
 
 ## Features
 
@@ -46,5 +49,5 @@ lib
     └───splash
 ```
 
-### Credits
-https://github.com/reedbarger/fluttershare
+### License
+https://github.com/guptapriyanshu7/FlutterShare/blob/main/LICENSE
