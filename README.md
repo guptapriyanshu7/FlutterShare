@@ -1,16 +1,50 @@
-# flutter_share
+# FlutterShare
 
-A new Flutter project.
+An Instagram clone app made with flutter/dart.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Sign In with email/password or google account.
+- Create post with caption and live location.
+- Like and comment on posts.
+- Follow users using search.
+- Notifications on other users activity.
+- See followers/following count.
 
-A few resources to get you started if this is your first Flutter project:
+## Folder Structure
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```
+lib
+├───application
+│   ├───auth
+│   │   └───sign_in_form
+│   ├───post
+│   │   └───save_post
+│   └───user_actions
+├───domain
+│   ├───auth
+│   ├───core
+│   ├───posts
+│   └───user_actions
+├───helper
+├───infrastructure
+│   ├───auth
+│   ├───core
+│   ├───post
+│   └───user_actions
+└───presentation
+    ├───activity_feed
+    ├───auth
+    │   └───widgets
+    ├───comments
+    ├───post
+    │   └───widgets
+    ├───profile
+    │   └───widgets
+    ├───routes
+    ├───search
+    └───splash
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Credits
+https://github.com/reedbarger/fluttershare
