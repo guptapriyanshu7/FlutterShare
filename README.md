@@ -50,4 +50,4 @@ lib
 ```
 
 ### License
-https://github.com/guptapriyanshu7/FlutterShare/blob/main/LICENSE
+[MIT](https://github.com/guptapriyanshu7/FlutterShare/blob/main/LICENSE)
