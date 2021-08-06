@@ -23,29 +23,27 @@ class PostsPage extends StatelessWidget {
             orElse: () {},
           );
         },
-        child: BlocBuilder<PostBloc, PostState>(
-          builder: (context, state) {
-            print('object');
-            return state.maybeMap(
-              readFailure: (state) {
-                print('readFailure');
-                return Text('');
-              },
-              readSuccess: (state) => Scaffold(
-                appBar: AppBar(
-                  title: Text('Flutter Share'),
-                  actions: [
-                    IconButton(
-                      icon: Icon(Icons.exit_to_app),
-                      onPressed: () {
-                        context
-                            .read<AuthBloc>()
-                            .add(const AuthEvent.signedOut());
-                      },
-                    ),
-                  ],
-                ),
-                body: ListView.builder(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Flutter Share'),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.exit_to_app),
+                onPressed: () {
+                  context.read<AuthBloc>().add(const AuthEvent.signedOut());
+                },
+              ),
+            ],
+          ),
+          body: BlocBuilder<PostBloc, PostState>(
+            builder: (context, state) {
+              print('object');
+              return state.maybeMap(
+                readFailure: (state) {
+                  print('readFailure');
+                  return Text('');
+                },
+                readSuccess: (state) => ListView.builder(
                   itemCount: state.posts.length,
                   itemBuilder: (_, index) {
                     final post = state.posts[index];
@@ -62,15 +60,15 @@ class PostsPage extends StatelessWidget {
                           final user = User.fromJson(userJson!);
                           return SinglePost(post, user);
                         } else
-                          return Center(child: CircularProgressIndicator());
+                          return Text('');
                       },
                     );
                   },
                 ),
-              ),
-              orElse: () => CircularProgressIndicator(),
-            );
-          },
+                orElse: () => Center(child: CircularProgressIndicator()),
+              );
+            },
+          ),
         ),
       ),
     );

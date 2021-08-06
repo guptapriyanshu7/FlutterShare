@@ -34,9 +34,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       },
       read: (value) async* {
         yield PostState.loading();
-        _postRepository.read().forEach((element) {
-          print(element);
-        });
         yield* _postRepository.read().map(
               (failureOrPosts) => failureOrPosts.fold(
                 (f) => PostState.readFailure(f),

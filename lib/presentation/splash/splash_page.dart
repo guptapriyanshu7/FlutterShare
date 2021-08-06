@@ -17,7 +17,11 @@ class SplashPage extends StatelessWidget {
           authenticated: (_) => context.replaceRoute(HomeRoute()),
         );
       },
-      child: Scaffold(body: FlutterLogo()),
+      child: Scaffold(
+          body: Center(
+              child: FlutterLogo(
+        size: 100,
+      ))),
     );
   }
 }

@@ -59,20 +59,35 @@ class PostRepositoryImpl implements IPostRepository {
     }
   }
 
+  Future<Tuple2<Post, User>> fetchUser(
+      QueryDocumentSnapshot<Map<String, dynamic>> doc) async {
+    final post = Post.fromJson(doc.data());
+    final userDoc = await getIt<FirebaseFirestore>()
+        .collection('users')
+        .doc(post.ownerid)
+        .get();
+    final userJson = userDoc.data()!;
+    final user = User.fromJson(userJson);
+    return Tuple2(post, user);
+  }
+
   @override
-  Stream<Either<PostFailure, List<Post>>> read() async* {
+  Stream<Either<PostFailure, List<Tuple2<Post, User>>>> read() async* {
     final currentUser = getIt<IAuthFacade>()
         .getSignedInUser()
         .getOrElse(() => throw NotAuthenticatedError());
     final userTimelineDoc = _firestore.timelineCollection.doc(currentUser.id);
-    yield* userTimelineDoc.timelinePostsCollection.snapshots().map((snapshot) {
-      return right<PostFailure, List<Post>>(
-        snapshot.docs.map((doc) {
-          final note = Post.fromJson(doc.data());
-          return note;
-        }).toList(),
-      );
-    }).onErrorReturnWith((e, _) {
+    userTimelineDoc.timelinePostsCollection
+        .snapshots()
+        .asyncMap(
+          (snapshot) =>
+              Future.wait([for (var s in snapshot.docs) fetchUser(s)]),
+          // return right<PostFailure, List<Post>>(
+          //   snapshot.docs.map((doc) {}),
+          // );
+        )
+        .map((event) => right(event))
+        .onErrorReturnWith((e, _) {
       if (e is FirebaseException && e.code == 'permission-denied') {
         print(e);
         return left(const PostFailure.insufficientPermission());

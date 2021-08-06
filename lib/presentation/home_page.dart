@@ -82,7 +82,8 @@ class _HomePageState extends State<HomePage> {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         return state.maybeMap(
-          orElse: () => Center(child: CircularProgressIndicator()),
+          orElse: () =>
+              Material(child: Center(child: CircularProgressIndicator())),
           authenticated: (_) => AutoTabsScaffold(
             key: _scaffoldKey,
             routes: [
