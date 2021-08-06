@@ -24,7 +24,7 @@ class SinglePostPage extends StatelessWidget {
             appBar: AppBar(title: Text('FlutterShare')),
             body: state.maybeMap(
               orElse: () {
-                return CircularProgressIndicator();
+                return Center(child: CircularProgressIndicator());
               },
               getPostSuccess: (_) {
                 return SingleChildScrollView(

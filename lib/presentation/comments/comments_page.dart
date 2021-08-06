@@ -25,7 +25,8 @@ class CommentsPage extends StatelessWidget {
           .snapshots(),
       builder: (context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-        if (!snapshot.hasData) return CircularProgressIndicator();
+        if (!snapshot.hasData)
+          return Center(child: CircularProgressIndicator());
         final comments = snapshot.data?.docs.map<ListTile>((doc) {
           return ListTile(
             leading: CircleAvatar(
@@ -46,7 +47,10 @@ class CommentsPage extends StatelessWidget {
     final currentUser =
         userOption.getOrElse(() => throw NotAuthenticatedError());
     getIt<FirebaseFirestore>()
-          .collection('comments').doc(postId).collection("comments").add({
+        .collection('comments')
+        .doc(postId)
+        .collection("comments")
+        .add({
       'comment': commentController.text,
       'timestamp': DateTime.now(),
       'userId': currentUser.id,
@@ -55,7 +59,10 @@ class CommentsPage extends StatelessWidget {
     });
     // if (currentUser.id != postOwner) {
     getIt<FirebaseFirestore>()
-          .collection('feed').doc(postOwner).collection('userFeed').add({
+        .collection('feed')
+        .doc(postOwner)
+        .collection('userFeed')
+        .add({
       'type': 'comment',
       'comment': commentController.text,
       'timestamp': DateTime.now(),

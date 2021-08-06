@@ -194,7 +194,7 @@ class ProfilePage extends HookWidget {
                 .add(UserActionsEvent.fetchProfile(id)),
             child: Scaffold(
               body: state.maybeMap(
-                orElse: () => CircularProgressIndicator(),
+                orElse: () => Center(child: CircularProgressIndicator()),
                 error: (_) => Text(''),
                 loaded: (state) {
                   final profile = state.profile;
@@ -202,6 +202,7 @@ class ProfilePage extends HookWidget {
                   final posts = profile.posts;
                   return ListView(
                     children: [
+                      SizedBox(height: 4),
                       Padding(
                         padding: const EdgeInsets.all(12),
                         child: Column(

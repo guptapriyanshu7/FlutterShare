@@ -4,28 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_share/application/auth/auth_bloc.dart';
-import 'package:flutter_share/domain/auth/user.dart';
-import 'package:flutter_share/domain/posts/post.dart';
-// import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
 import 'package:timeago/timeago.dart';
-// import 'package:dartz/dartz.dart' hide State;
 
-class ActivityFeedPage extends StatefulWidget {
-  // const ActivityFeedPage({Key key}) : super(key: key);
-  @override
-  _ActivityFeedPageState createState() => _ActivityFeedPageState();
-}
-
-class _ActivityFeedPageState extends State<ActivityFeedPage>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
+class ActivityFeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Scaffold(
       appBar: AppBar(title: Text('Notifications')),
       body: BlocBuilder<AuthBloc, AuthState>(
@@ -44,7 +29,8 @@ class _ActivityFeedPageState extends State<ActivityFeedPage>
                     .get(),
                 builder:
                     (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
-                  if (!snapshot.hasData) return CircularProgressIndicator();
+                  if (!snapshot.hasData)
+                    return Center(child: CircularProgressIndicator());
                   return ListView(
                     children: snapshot.data?.docs.map<GestureDetector>(
                       (doc) {
@@ -54,24 +40,10 @@ class _ActivityFeedPageState extends State<ActivityFeedPage>
                               context.pushRoute(
                                   ProfileRoute(id: doc['userId'] as String));
                             } else {
-                              final postDoc = await getIt<FirebaseFirestore>()
-                                  .collection('posts')
-                                  .doc(currentUser.id)
-                                  .collection('userPosts')
-                                  .doc(doc['postId'] as String)
-                                  .get();
-                              final postJson = postDoc.data();
-                              final post = Post.fromJson(postJson!);
-                              final userDoc = await getIt<FirebaseFirestore>()
-                                  .collection('users')
-                                  .doc(post.ownerid)
-                                  .get();
-                              final userJson = userDoc.data();
-                              final user = User.fromJson(userJson!);
                               context.pushRoute(
                                 SinglePostRoute(
-                                  userId: user.id,
-                                  postId: post.id,
+                                  userId: currentUser.id,
+                                  postId: doc['postId'] as String,
                                 ),
                               );
                             }
