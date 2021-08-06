@@ -7,8 +7,6 @@
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 
-import '../../domain/auth/user.dart' as _i14;
-import '../../domain/posts/post.dart' as _i13;
 import '../activity_feed/activity_feed_page.dart' as _i11;
 import '../auth/sign_in_page.dart' as _i4;
 import '../comments/comments_page.dart' as _i5;
@@ -55,9 +53,12 @@ class Router extends _i1.RootStackRouter {
     SinglePostRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (data) {
-          final args = data.argsAs<SinglePostRouteArgs>();
-          return _i7.SinglePostPage(args.id, args.post, args.user,
-              key: args.key);
+          final pathParams = data.pathParams;
+          final args = data.argsAs<SinglePostRouteArgs>(
+              orElse: () => SinglePostRouteArgs(
+                  userId: pathParams.getString('userId'),
+                  postId: pathParams.getString('postId')));
+          return _i7.SinglePostPage(args.userId, args.postId, key: args.key);
         }),
     HomeRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
@@ -92,7 +93,8 @@ class Router extends _i1.RootStackRouter {
         _i1.RouteConfig(SignInRoute.name, path: '/sign-in-page'),
         _i1.RouteConfig(CommentsRoute.name, path: '/comments-page'),
         _i1.RouteConfig(ProfileRoute.name, path: 'profile-page/:profileId'),
-        _i1.RouteConfig(SinglePostRoute.name, path: 'single-post-page/:postId'),
+        _i1.RouteConfig(SinglePostRoute.name,
+            path: 'single-post-page/:userId/:postId'),
         _i1.RouteConfig(HomeRoute.name, path: '/home-page', children: [
           _i1.RouteConfig(SavePostRoute.name, path: 'save-post-page'),
           _i1.RouteConfig(PostsRoute.name, path: 'posts-page'),
@@ -168,27 +170,22 @@ class ProfileRouteArgs {
 
 class SinglePostRoute extends _i1.PageRouteInfo<SinglePostRouteArgs> {
   SinglePostRoute(
-      {required dynamic id,
-      required _i13.Post post,
-      required _i14.User user,
-      _i2.Key? key})
+      {required String userId, required String postId, _i2.Key? key})
       : super(name,
-            path: 'single-post-page/:postId',
-            args: SinglePostRouteArgs(id: id, post: post, user: user, key: key),
-            rawPathParams: {'postId': id});
+            path: 'single-post-page/:userId/:postId',
+            args: SinglePostRouteArgs(userId: userId, postId: postId, key: key),
+            rawPathParams: {'userId': userId, 'postId': postId});
 
   static const String name = 'SinglePostRoute';
 }
 
 class SinglePostRouteArgs {
   const SinglePostRouteArgs(
-      {required this.id, required this.post, required this.user, this.key});
+      {required this.userId, required this.postId, this.key});
 
-  final dynamic id;
+  final String userId;
 
-  final _i13.Post post;
-
-  final _i14.User user;
+  final String postId;
 
   final _i2.Key? key;
 }

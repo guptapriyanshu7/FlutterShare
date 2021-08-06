@@ -70,9 +70,8 @@ class _ActivityFeedPageState extends State<ActivityFeedPage>
                               final user = User.fromJson(userJson!);
                               context.pushRoute(
                                 SinglePostRoute(
-                                  id: post.id,
-                                  post: post,
-                                  user: user,
+                                  userId: user.id,
+                                  postId: post.id,
                                 ),
                               );
                             }

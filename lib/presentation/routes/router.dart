@@ -13,7 +13,7 @@ import 'package:flutter_share/presentation/splash/splash_page.dart';
 import 'package:injectable/injectable.dart';
 
 const PROFILE_ROUTE_PATH = 'profile-page/:profileId';
-const SINGLE_POST_ROUTE_PATH = 'single-post-page/:postId';
+const SINGLE_POST_ROUTE_PATH = 'single-post-page/:userId/:postId';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',

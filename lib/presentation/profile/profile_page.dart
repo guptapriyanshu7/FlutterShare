@@ -32,9 +32,8 @@ class ProfilePage extends HookWidget {
   Widget postTile(BuildContext context, Post post, User user) {
     return GestureDetector(
       onTap: () => context.pushRoute(SinglePostRoute(
-        id: post.id,
-        post: post,
-        user: user,
+        userId: user.id,
+        postId: post.id,
       )),
       child: cachedImage(post.mediaUrl),
     );
