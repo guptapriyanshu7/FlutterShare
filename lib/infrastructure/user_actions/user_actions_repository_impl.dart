@@ -9,50 +9,47 @@ import 'package:flutter_share/domain/user_actions/profile.dart';
 import 'package:flutter_share/domain/user_actions/user_actions_failure.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:injectable/injectable.dart';
+import 'package:flutter_share/infrastructure/core/firebase_helpers.dart';
 
 @LazySingleton(as: IUserActionsRepository)
 class UserActionsRepositoryImpl implements IUserActionsRepository {
   final FirebaseFirestore _firestore;
-
   UserActionsRepositoryImpl(this._firestore);
+
   @override
   Future<Either<UserActionsFailure, Profile>> fetchProfile(
     String userId,
   ) async {
+    final currentUser = getIt<IAuthFacade>()
+        .getSignedInUser()
+        .getOrElse(() => throw NotAuthenticatedError());
     try {
-      final userDoc = await _firestore.collection('users').doc(userId).get();
+      final userDoc = await _firestore.usersCollection.doc(userId).get();
       final userJson = userDoc.data();
-      print(userJson);
       final userDomain = User.fromJson(userJson!);
-      final followingQuery = await _firestore
-          .collection('following')
+      final followingQuery = await _firestore.followingCollection
           .doc(userId)
-          .collection('userFollowing')
+          .userFollowingCollection
           .get();
       final followingCount = followingQuery.size;
-      final followerQuery = await _firestore
-          .collection('followers')
+      final followerQuery = await _firestore.followersCollection
           .doc(userId)
-          .collection('userFollowers')
+          .userFollowersCollection
           .get();
       final followerCount = followerQuery.size;
-      final postsQuery = await _firestore
-          .collection('posts')
+      final postsQuery = await _firestore.postsCollection
           .doc(userId)
-          .collection('userPosts')
+          .userPostsCollection
           .get();
       final postsQueryList = postsQuery.docs;
       final postsDomainList = postsQueryList.map((postsQueryDoc) {
         final postJson = postsQueryDoc.data();
         return Post.fromJson(postJson);
       }).toList();
-      final userOption = await getIt<IAuthFacade>().getSignedInUser();
-      final currentUser =
-          userOption.getOrElse(() => throw NotAuthenticatedError());
-      final followingDoc = await _firestore
-          .collection('following')
+
+      final followingDoc = await _firestore.followingCollection
           .doc(currentUser.id)
-          .collection('userFollowing')
+          .userFollowingCollection
           .doc(userId)
           .get();
       final profile = Profile(
@@ -77,21 +74,19 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
 
   @override
   Future<Option<UserActionsFailure>> likePost(Post post) async {
+    final currentUser = getIt<IAuthFacade>()
+        .getSignedInUser()
+        .getOrElse(() => throw NotAuthenticatedError());
     try {
-      final userOption = await getIt<IAuthFacade>().getSignedInUser();
-      final currentUser =
-          userOption.getOrElse(() => throw NotAuthenticatedError());
-      getIt<FirebaseFirestore>()
-          .collection('posts')
+      await _firestore.postsCollection
           .doc(post.ownerid)
-          .collection('userPosts')
+          .userPostsCollection
           .doc(post.id)
           .update(post.toJson());
       if (post.likes['${currentUser.id}']!) {
-        getIt<FirebaseFirestore>()
-            .collection('feed')
+        await _firestore.feedCollection
             .doc(post.ownerid)
-            .collection('userFeed')
+            .userFeedCollection
             .add({
           'type': 'like',
           'timestamp': DateTime.now(),
@@ -102,17 +97,16 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
           "mediaUrl": post.mediaUrl,
         });
       } else {
-        getIt<FirebaseFirestore>()
-            .collection('feed')
+        _firestore.feedCollection
             .doc(post.ownerid)
-            .collection('userFeed')
+            .userFeedCollection
             .where('userId', isEqualTo: currentUser.id)
             .where('postId', isEqualTo: post.id)
             .where('type', isEqualTo: 'like')
             .get()
-            .then((value) {
+            .then((value) async {
           for (final doc in value.docs) {
-            doc.reference.delete();
+            await doc.reference.delete();
           }
         });
       }
@@ -133,28 +127,22 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
     bool isFollowing,
     String userId,
   ) async {
+    final currentUser = getIt<IAuthFacade>()
+        .getSignedInUser()
+        .getOrElse(() => throw NotAuthenticatedError());
     try {
-      final userOption = await getIt<IAuthFacade>().getSignedInUser();
-      final currentUser =
-          userOption.getOrElse(() => throw NotAuthenticatedError());
       if (isFollowing) {
-        getIt<FirebaseFirestore>()
-            .collection('following')
+        await _firestore.followingCollection
             .doc(currentUser.id)
-            .collection('userFollowing')
+            .userFollowingCollection
             .doc(userId)
             .set({});
-        getIt<FirebaseFirestore>()
-            .collection('followers')
+        await _firestore.followersCollection
             .doc(userId)
-            .collection('userFollowers')
+            .userFollowersCollection
             .doc(currentUser.id)
             .set({});
-        getIt<FirebaseFirestore>()
-            .collection('feed')
-            .doc(userId)
-            .collection('userFeed')
-            .add({
+        await _firestore.feedCollection.doc(userId).userFeedCollection.add({
           'type': 'follow',
           'timestamp': DateTime.now(),
           'photoUrl': currentUser.photoUrl,
@@ -162,29 +150,26 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
           'userId': currentUser.id,
         });
       } else {
-        getIt<FirebaseFirestore>()
-            .collection('following')
+        await _firestore.followingCollection
             .doc(currentUser.id)
-            .collection('userFollowing')
+            .userFollowingCollection
             .doc(userId)
             .delete();
-        getIt<FirebaseFirestore>()
-            .collection('followers')
+        await _firestore.followersCollection
             .doc(userId)
-            .collection('userFollowers')
+            .userFollowersCollection
             .doc(currentUser.id)
             .delete();
-        getIt<FirebaseFirestore>()
-            .collection('feed')
+        _firestore.feedCollection
             .doc(userId)
-            .collection('userFeed')
+            .userFeedCollection
             .where('userId', isEqualTo: currentUser.id)
             .where('type', isEqualTo: 'follow')
             .get()
             .then(
-          (value) {
+          (value) async {
             for (final doc in value.docs) {
-              doc.reference.delete();
+              await doc.reference.delete();
             }
           },
         );

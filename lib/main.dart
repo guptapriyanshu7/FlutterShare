@@ -45,7 +45,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   // final CameraDescription camera;
-  // final _router = Router();
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

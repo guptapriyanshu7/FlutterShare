@@ -17,7 +17,6 @@ part 'save_post_bloc.freezed.dart';
 class SavePostBloc extends Bloc<SavePostEvent, SavePostState> {
   final IPostRepository _postRepository;
   SavePostBloc(this._postRepository) : super(SavePostState.initial());
-
   @override
   Stream<SavePostState> mapEventToState(
     SavePostEvent event,

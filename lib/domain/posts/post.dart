@@ -1,3 +1,6 @@
+import 'package:flutter_share/domain/auth/i_auth_facade.dart';
+import 'package:flutter_share/domain/core/errors.dart';
+import 'package:flutter_share/injection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -14,10 +17,12 @@ class Post with _$Post {
     required String location,
     required Map<String, bool> likes,
   }) = _Post;
-
   factory Post.empty() => Post(
         id: Uuid().v4(),
-        ownerid: '',
+        ownerid: getIt<IAuthFacade>()
+            .getSignedInUser()
+            .getOrElse(() => throw NotAuthenticatedError())
+            .id,
         mediaUrl: '',
         caption: '',
         location: '',

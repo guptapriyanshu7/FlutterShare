@@ -25,6 +25,13 @@ class _$PostEventTearOff {
       post,
     );
   }
+
+  _GetPost getPost(String userId, String postId) {
+    return _GetPost(
+      userId,
+      postId,
+    );
+  }
 }
 
 /// @nodoc
@@ -36,12 +43,14 @@ mixin _$PostEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() read,
     required TResult Function(Post post) delete,
+    required TResult Function(String userId, String postId) getPost,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? read,
     TResult Function(Post post)? delete,
+    TResult Function(String userId, String postId)? getPost,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -49,12 +58,14 @@ mixin _$PostEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_Read value) read,
     required TResult Function(_Delete value) delete,
+    required TResult Function(_GetPost value) getPost,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Read value)? read,
     TResult Function(_Delete value)? delete,
+    TResult Function(_GetPost value)? getPost,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -114,6 +125,7 @@ class _$_Read implements _Read {
   TResult when<TResult extends Object?>({
     required TResult Function() read,
     required TResult Function(Post post) delete,
+    required TResult Function(String userId, String postId) getPost,
   }) {
     return read();
   }
@@ -123,6 +135,7 @@ class _$_Read implements _Read {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? read,
     TResult Function(Post post)? delete,
+    TResult Function(String userId, String postId)? getPost,
     required TResult orElse(),
   }) {
     if (read != null) {
@@ -136,6 +149,7 @@ class _$_Read implements _Read {
   TResult map<TResult extends Object?>({
     required TResult Function(_Read value) read,
     required TResult Function(_Delete value) delete,
+    required TResult Function(_GetPost value) getPost,
   }) {
     return read(this);
   }
@@ -145,6 +159,7 @@ class _$_Read implements _Read {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Read value)? read,
     TResult Function(_Delete value)? delete,
+    TResult Function(_GetPost value)? getPost,
     required TResult orElse(),
   }) {
     if (read != null) {
@@ -231,6 +246,7 @@ class _$_Delete implements _Delete {
   TResult when<TResult extends Object?>({
     required TResult Function() read,
     required TResult Function(Post post) delete,
+    required TResult Function(String userId, String postId) getPost,
   }) {
     return delete(post);
   }
@@ -240,6 +256,7 @@ class _$_Delete implements _Delete {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? read,
     TResult Function(Post post)? delete,
+    TResult Function(String userId, String postId)? getPost,
     required TResult orElse(),
   }) {
     if (delete != null) {
@@ -253,6 +270,7 @@ class _$_Delete implements _Delete {
   TResult map<TResult extends Object?>({
     required TResult Function(_Read value) read,
     required TResult Function(_Delete value) delete,
+    required TResult Function(_GetPost value) getPost,
   }) {
     return delete(this);
   }
@@ -262,6 +280,7 @@ class _$_Delete implements _Delete {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Read value)? read,
     TResult Function(_Delete value)? delete,
+    TResult Function(_GetPost value)? getPost,
     required TResult orElse(),
   }) {
     if (delete != null) {
@@ -277,6 +296,135 @@ abstract class _Delete implements PostEvent {
   Post get post => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$DeleteCopyWith<_Delete> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$GetPostCopyWith<$Res> {
+  factory _$GetPostCopyWith(_GetPost value, $Res Function(_GetPost) then) =
+      __$GetPostCopyWithImpl<$Res>;
+  $Res call({String userId, String postId});
+}
+
+/// @nodoc
+class __$GetPostCopyWithImpl<$Res> extends _$PostEventCopyWithImpl<$Res>
+    implements _$GetPostCopyWith<$Res> {
+  __$GetPostCopyWithImpl(_GetPost _value, $Res Function(_GetPost) _then)
+      : super(_value, (v) => _then(v as _GetPost));
+
+  @override
+  _GetPost get _value => super._value as _GetPost;
+
+  @override
+  $Res call({
+    Object? userId = freezed,
+    Object? postId = freezed,
+  }) {
+    return _then(_GetPost(
+      userId == freezed
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      postId == freezed
+          ? _value.postId
+          : postId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_GetPost implements _GetPost {
+  const _$_GetPost(this.userId, this.postId);
+
+  @override
+  final String userId;
+  @override
+  final String postId;
+
+  @override
+  String toString() {
+    return 'PostEvent.getPost(userId: $userId, postId: $postId)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _GetPost &&
+            (identical(other.userId, userId) ||
+                const DeepCollectionEquality().equals(other.userId, userId)) &&
+            (identical(other.postId, postId) ||
+                const DeepCollectionEquality().equals(other.postId, postId)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(userId) ^
+      const DeepCollectionEquality().hash(postId);
+
+  @JsonKey(ignore: true)
+  @override
+  _$GetPostCopyWith<_GetPost> get copyWith =>
+      __$GetPostCopyWithImpl<_GetPost>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() read,
+    required TResult Function(Post post) delete,
+    required TResult Function(String userId, String postId) getPost,
+  }) {
+    return getPost(userId, postId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? read,
+    TResult Function(Post post)? delete,
+    TResult Function(String userId, String postId)? getPost,
+    required TResult orElse(),
+  }) {
+    if (getPost != null) {
+      return getPost(userId, postId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Read value) read,
+    required TResult Function(_Delete value) delete,
+    required TResult Function(_GetPost value) getPost,
+  }) {
+    return getPost(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Read value)? read,
+    TResult Function(_Delete value)? delete,
+    TResult Function(_GetPost value)? getPost,
+    required TResult orElse(),
+  }) {
+    if (getPost != null) {
+      return getPost(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetPost implements PostEvent {
+  const factory _GetPost(String userId, String postId) = _$_GetPost;
+
+  String get userId => throw _privateConstructorUsedError;
+  String get postId => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$GetPostCopyWith<_GetPost> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -303,6 +451,19 @@ class _$PostStateTearOff {
     );
   }
 
+  _GetPostSuccess getPostSuccess(Post post, User user) {
+    return _GetPostSuccess(
+      post,
+      user,
+    );
+  }
+
+  _GetPostFailure getPostFailure(PostFailure failure) {
+    return _GetPostFailure(
+      failure,
+    );
+  }
+
   _DeleteFailure deleteFailure(PostFailure failure) {
     return _DeleteFailure(
       failure,
@@ -325,6 +486,8 @@ mixin _$PostState {
     required TResult Function() loading,
     required TResult Function(List<Post> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
+    required TResult Function(Post post, User user) getPostSuccess,
+    required TResult Function(PostFailure failure) getPostFailure,
     required TResult Function(PostFailure failure) deleteFailure,
     required TResult Function() deleteSuccess,
   }) =>
@@ -335,6 +498,8 @@ mixin _$PostState {
     TResult Function()? loading,
     TResult Function(List<Post> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
+    TResult Function(Post post, User user)? getPostSuccess,
+    TResult Function(PostFailure failure)? getPostFailure,
     TResult Function(PostFailure failure)? deleteFailure,
     TResult Function()? deleteSuccess,
     required TResult orElse(),
@@ -346,6 +511,8 @@ mixin _$PostState {
     required TResult Function(_Loading value) loading,
     required TResult Function(_ReadSuccess value) readSuccess,
     required TResult Function(_ReadFailure value) readFailure,
+    required TResult Function(_GetPostSuccess value) getPostSuccess,
+    required TResult Function(_GetPostFailure value) getPostFailure,
     required TResult Function(_DeleteFailure value) deleteFailure,
     required TResult Function(_DeleteSuccess value) deleteSuccess,
   }) =>
@@ -356,6 +523,8 @@ mixin _$PostState {
     TResult Function(_Loading value)? loading,
     TResult Function(_ReadSuccess value)? readSuccess,
     TResult Function(_ReadFailure value)? readFailure,
+    TResult Function(_GetPostSuccess value)? getPostSuccess,
+    TResult Function(_GetPostFailure value)? getPostFailure,
     TResult Function(_DeleteFailure value)? deleteFailure,
     TResult Function(_DeleteSuccess value)? deleteSuccess,
     required TResult orElse(),
@@ -419,6 +588,8 @@ class _$_Initial implements _Initial {
     required TResult Function() loading,
     required TResult Function(List<Post> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
+    required TResult Function(Post post, User user) getPostSuccess,
+    required TResult Function(PostFailure failure) getPostFailure,
     required TResult Function(PostFailure failure) deleteFailure,
     required TResult Function() deleteSuccess,
   }) {
@@ -432,6 +603,8 @@ class _$_Initial implements _Initial {
     TResult Function()? loading,
     TResult Function(List<Post> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
+    TResult Function(Post post, User user)? getPostSuccess,
+    TResult Function(PostFailure failure)? getPostFailure,
     TResult Function(PostFailure failure)? deleteFailure,
     TResult Function()? deleteSuccess,
     required TResult orElse(),
@@ -449,6 +622,8 @@ class _$_Initial implements _Initial {
     required TResult Function(_Loading value) loading,
     required TResult Function(_ReadSuccess value) readSuccess,
     required TResult Function(_ReadFailure value) readFailure,
+    required TResult Function(_GetPostSuccess value) getPostSuccess,
+    required TResult Function(_GetPostFailure value) getPostFailure,
     required TResult Function(_DeleteFailure value) deleteFailure,
     required TResult Function(_DeleteSuccess value) deleteSuccess,
   }) {
@@ -462,6 +637,8 @@ class _$_Initial implements _Initial {
     TResult Function(_Loading value)? loading,
     TResult Function(_ReadSuccess value)? readSuccess,
     TResult Function(_ReadFailure value)? readFailure,
+    TResult Function(_GetPostSuccess value)? getPostSuccess,
+    TResult Function(_GetPostFailure value)? getPostFailure,
     TResult Function(_DeleteFailure value)? deleteFailure,
     TResult Function(_DeleteSuccess value)? deleteSuccess,
     required TResult orElse(),
@@ -518,6 +695,8 @@ class _$_Loading implements _Loading {
     required TResult Function() loading,
     required TResult Function(List<Post> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
+    required TResult Function(Post post, User user) getPostSuccess,
+    required TResult Function(PostFailure failure) getPostFailure,
     required TResult Function(PostFailure failure) deleteFailure,
     required TResult Function() deleteSuccess,
   }) {
@@ -531,6 +710,8 @@ class _$_Loading implements _Loading {
     TResult Function()? loading,
     TResult Function(List<Post> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
+    TResult Function(Post post, User user)? getPostSuccess,
+    TResult Function(PostFailure failure)? getPostFailure,
     TResult Function(PostFailure failure)? deleteFailure,
     TResult Function()? deleteSuccess,
     required TResult orElse(),
@@ -548,6 +729,8 @@ class _$_Loading implements _Loading {
     required TResult Function(_Loading value) loading,
     required TResult Function(_ReadSuccess value) readSuccess,
     required TResult Function(_ReadFailure value) readFailure,
+    required TResult Function(_GetPostSuccess value) getPostSuccess,
+    required TResult Function(_GetPostFailure value) getPostFailure,
     required TResult Function(_DeleteFailure value) deleteFailure,
     required TResult Function(_DeleteSuccess value) deleteSuccess,
   }) {
@@ -561,6 +744,8 @@ class _$_Loading implements _Loading {
     TResult Function(_Loading value)? loading,
     TResult Function(_ReadSuccess value)? readSuccess,
     TResult Function(_ReadFailure value)? readFailure,
+    TResult Function(_GetPostSuccess value)? getPostSuccess,
+    TResult Function(_GetPostFailure value)? getPostFailure,
     TResult Function(_DeleteFailure value)? deleteFailure,
     TResult Function(_DeleteSuccess value)? deleteSuccess,
     required TResult orElse(),
@@ -644,6 +829,8 @@ class _$_ReadSuccess implements _ReadSuccess {
     required TResult Function() loading,
     required TResult Function(List<Post> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
+    required TResult Function(Post post, User user) getPostSuccess,
+    required TResult Function(PostFailure failure) getPostFailure,
     required TResult Function(PostFailure failure) deleteFailure,
     required TResult Function() deleteSuccess,
   }) {
@@ -657,6 +844,8 @@ class _$_ReadSuccess implements _ReadSuccess {
     TResult Function()? loading,
     TResult Function(List<Post> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
+    TResult Function(Post post, User user)? getPostSuccess,
+    TResult Function(PostFailure failure)? getPostFailure,
     TResult Function(PostFailure failure)? deleteFailure,
     TResult Function()? deleteSuccess,
     required TResult orElse(),
@@ -674,6 +863,8 @@ class _$_ReadSuccess implements _ReadSuccess {
     required TResult Function(_Loading value) loading,
     required TResult Function(_ReadSuccess value) readSuccess,
     required TResult Function(_ReadFailure value) readFailure,
+    required TResult Function(_GetPostSuccess value) getPostSuccess,
+    required TResult Function(_GetPostFailure value) getPostFailure,
     required TResult Function(_DeleteFailure value) deleteFailure,
     required TResult Function(_DeleteSuccess value) deleteSuccess,
   }) {
@@ -687,6 +878,8 @@ class _$_ReadSuccess implements _ReadSuccess {
     TResult Function(_Loading value)? loading,
     TResult Function(_ReadSuccess value)? readSuccess,
     TResult Function(_ReadFailure value)? readFailure,
+    TResult Function(_GetPostSuccess value)? getPostSuccess,
+    TResult Function(_GetPostFailure value)? getPostFailure,
     TResult Function(_DeleteFailure value)? deleteFailure,
     TResult Function(_DeleteSuccess value)? deleteSuccess,
     required TResult orElse(),
@@ -784,6 +977,8 @@ class _$_ReadFailure implements _ReadFailure {
     required TResult Function() loading,
     required TResult Function(List<Post> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
+    required TResult Function(Post post, User user) getPostSuccess,
+    required TResult Function(PostFailure failure) getPostFailure,
     required TResult Function(PostFailure failure) deleteFailure,
     required TResult Function() deleteSuccess,
   }) {
@@ -797,6 +992,8 @@ class _$_ReadFailure implements _ReadFailure {
     TResult Function()? loading,
     TResult Function(List<Post> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
+    TResult Function(Post post, User user)? getPostSuccess,
+    TResult Function(PostFailure failure)? getPostFailure,
     TResult Function(PostFailure failure)? deleteFailure,
     TResult Function()? deleteSuccess,
     required TResult orElse(),
@@ -814,6 +1011,8 @@ class _$_ReadFailure implements _ReadFailure {
     required TResult Function(_Loading value) loading,
     required TResult Function(_ReadSuccess value) readSuccess,
     required TResult Function(_ReadFailure value) readFailure,
+    required TResult Function(_GetPostSuccess value) getPostSuccess,
+    required TResult Function(_GetPostFailure value) getPostFailure,
     required TResult Function(_DeleteFailure value) deleteFailure,
     required TResult Function(_DeleteSuccess value) deleteSuccess,
   }) {
@@ -827,6 +1026,8 @@ class _$_ReadFailure implements _ReadFailure {
     TResult Function(_Loading value)? loading,
     TResult Function(_ReadSuccess value)? readSuccess,
     TResult Function(_ReadFailure value)? readFailure,
+    TResult Function(_GetPostSuccess value)? getPostSuccess,
+    TResult Function(_GetPostFailure value)? getPostFailure,
     TResult Function(_DeleteFailure value)? deleteFailure,
     TResult Function(_DeleteSuccess value)? deleteSuccess,
     required TResult orElse(),
@@ -844,6 +1045,322 @@ abstract class _ReadFailure implements PostState {
   PostFailure get failure => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$ReadFailureCopyWith<_ReadFailure> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$GetPostSuccessCopyWith<$Res> {
+  factory _$GetPostSuccessCopyWith(
+          _GetPostSuccess value, $Res Function(_GetPostSuccess) then) =
+      __$GetPostSuccessCopyWithImpl<$Res>;
+  $Res call({Post post, User user});
+
+  $PostCopyWith<$Res> get post;
+  $UserCopyWith<$Res> get user;
+}
+
+/// @nodoc
+class __$GetPostSuccessCopyWithImpl<$Res> extends _$PostStateCopyWithImpl<$Res>
+    implements _$GetPostSuccessCopyWith<$Res> {
+  __$GetPostSuccessCopyWithImpl(
+      _GetPostSuccess _value, $Res Function(_GetPostSuccess) _then)
+      : super(_value, (v) => _then(v as _GetPostSuccess));
+
+  @override
+  _GetPostSuccess get _value => super._value as _GetPostSuccess;
+
+  @override
+  $Res call({
+    Object? post = freezed,
+    Object? user = freezed,
+  }) {
+    return _then(_GetPostSuccess(
+      post == freezed
+          ? _value.post
+          : post // ignore: cast_nullable_to_non_nullable
+              as Post,
+      user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User,
+    ));
+  }
+
+  @override
+  $PostCopyWith<$Res> get post {
+    return $PostCopyWith<$Res>(_value.post, (value) {
+      return _then(_value.copyWith(post: value));
+    });
+  }
+
+  @override
+  $UserCopyWith<$Res> get user {
+    return $UserCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_GetPostSuccess implements _GetPostSuccess {
+  const _$_GetPostSuccess(this.post, this.user);
+
+  @override
+  final Post post;
+  @override
+  final User user;
+
+  @override
+  String toString() {
+    return 'PostState.getPostSuccess(post: $post, user: $user)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _GetPostSuccess &&
+            (identical(other.post, post) ||
+                const DeepCollectionEquality().equals(other.post, post)) &&
+            (identical(other.user, user) ||
+                const DeepCollectionEquality().equals(other.user, user)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(post) ^
+      const DeepCollectionEquality().hash(user);
+
+  @JsonKey(ignore: true)
+  @override
+  _$GetPostSuccessCopyWith<_GetPostSuccess> get copyWith =>
+      __$GetPostSuccessCopyWithImpl<_GetPostSuccess>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<Post> posts) readSuccess,
+    required TResult Function(PostFailure failure) readFailure,
+    required TResult Function(Post post, User user) getPostSuccess,
+    required TResult Function(PostFailure failure) getPostFailure,
+    required TResult Function(PostFailure failure) deleteFailure,
+    required TResult Function() deleteSuccess,
+  }) {
+    return getPostSuccess(post, user);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<Post> posts)? readSuccess,
+    TResult Function(PostFailure failure)? readFailure,
+    TResult Function(Post post, User user)? getPostSuccess,
+    TResult Function(PostFailure failure)? getPostFailure,
+    TResult Function(PostFailure failure)? deleteFailure,
+    TResult Function()? deleteSuccess,
+    required TResult orElse(),
+  }) {
+    if (getPostSuccess != null) {
+      return getPostSuccess(post, user);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_ReadSuccess value) readSuccess,
+    required TResult Function(_ReadFailure value) readFailure,
+    required TResult Function(_GetPostSuccess value) getPostSuccess,
+    required TResult Function(_GetPostFailure value) getPostFailure,
+    required TResult Function(_DeleteFailure value) deleteFailure,
+    required TResult Function(_DeleteSuccess value) deleteSuccess,
+  }) {
+    return getPostSuccess(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_ReadSuccess value)? readSuccess,
+    TResult Function(_ReadFailure value)? readFailure,
+    TResult Function(_GetPostSuccess value)? getPostSuccess,
+    TResult Function(_GetPostFailure value)? getPostFailure,
+    TResult Function(_DeleteFailure value)? deleteFailure,
+    TResult Function(_DeleteSuccess value)? deleteSuccess,
+    required TResult orElse(),
+  }) {
+    if (getPostSuccess != null) {
+      return getPostSuccess(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetPostSuccess implements PostState {
+  const factory _GetPostSuccess(Post post, User user) = _$_GetPostSuccess;
+
+  Post get post => throw _privateConstructorUsedError;
+  User get user => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$GetPostSuccessCopyWith<_GetPostSuccess> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$GetPostFailureCopyWith<$Res> {
+  factory _$GetPostFailureCopyWith(
+          _GetPostFailure value, $Res Function(_GetPostFailure) then) =
+      __$GetPostFailureCopyWithImpl<$Res>;
+  $Res call({PostFailure failure});
+
+  $PostFailureCopyWith<$Res> get failure;
+}
+
+/// @nodoc
+class __$GetPostFailureCopyWithImpl<$Res> extends _$PostStateCopyWithImpl<$Res>
+    implements _$GetPostFailureCopyWith<$Res> {
+  __$GetPostFailureCopyWithImpl(
+      _GetPostFailure _value, $Res Function(_GetPostFailure) _then)
+      : super(_value, (v) => _then(v as _GetPostFailure));
+
+  @override
+  _GetPostFailure get _value => super._value as _GetPostFailure;
+
+  @override
+  $Res call({
+    Object? failure = freezed,
+  }) {
+    return _then(_GetPostFailure(
+      failure == freezed
+          ? _value.failure
+          : failure // ignore: cast_nullable_to_non_nullable
+              as PostFailure,
+    ));
+  }
+
+  @override
+  $PostFailureCopyWith<$Res> get failure {
+    return $PostFailureCopyWith<$Res>(_value.failure, (value) {
+      return _then(_value.copyWith(failure: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_GetPostFailure implements _GetPostFailure {
+  const _$_GetPostFailure(this.failure);
+
+  @override
+  final PostFailure failure;
+
+  @override
+  String toString() {
+    return 'PostState.getPostFailure(failure: $failure)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _GetPostFailure &&
+            (identical(other.failure, failure) ||
+                const DeepCollectionEquality().equals(other.failure, failure)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(failure);
+
+  @JsonKey(ignore: true)
+  @override
+  _$GetPostFailureCopyWith<_GetPostFailure> get copyWith =>
+      __$GetPostFailureCopyWithImpl<_GetPostFailure>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<Post> posts) readSuccess,
+    required TResult Function(PostFailure failure) readFailure,
+    required TResult Function(Post post, User user) getPostSuccess,
+    required TResult Function(PostFailure failure) getPostFailure,
+    required TResult Function(PostFailure failure) deleteFailure,
+    required TResult Function() deleteSuccess,
+  }) {
+    return getPostFailure(failure);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<Post> posts)? readSuccess,
+    TResult Function(PostFailure failure)? readFailure,
+    TResult Function(Post post, User user)? getPostSuccess,
+    TResult Function(PostFailure failure)? getPostFailure,
+    TResult Function(PostFailure failure)? deleteFailure,
+    TResult Function()? deleteSuccess,
+    required TResult orElse(),
+  }) {
+    if (getPostFailure != null) {
+      return getPostFailure(failure);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_ReadSuccess value) readSuccess,
+    required TResult Function(_ReadFailure value) readFailure,
+    required TResult Function(_GetPostSuccess value) getPostSuccess,
+    required TResult Function(_GetPostFailure value) getPostFailure,
+    required TResult Function(_DeleteFailure value) deleteFailure,
+    required TResult Function(_DeleteSuccess value) deleteSuccess,
+  }) {
+    return getPostFailure(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_ReadSuccess value)? readSuccess,
+    TResult Function(_ReadFailure value)? readFailure,
+    TResult Function(_GetPostSuccess value)? getPostSuccess,
+    TResult Function(_GetPostFailure value)? getPostFailure,
+    TResult Function(_DeleteFailure value)? deleteFailure,
+    TResult Function(_DeleteSuccess value)? deleteSuccess,
+    required TResult orElse(),
+  }) {
+    if (getPostFailure != null) {
+      return getPostFailure(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetPostFailure implements PostState {
+  const factory _GetPostFailure(PostFailure failure) = _$_GetPostFailure;
+
+  PostFailure get failure => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$GetPostFailureCopyWith<_GetPostFailure> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -924,6 +1441,8 @@ class _$_DeleteFailure implements _DeleteFailure {
     required TResult Function() loading,
     required TResult Function(List<Post> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
+    required TResult Function(Post post, User user) getPostSuccess,
+    required TResult Function(PostFailure failure) getPostFailure,
     required TResult Function(PostFailure failure) deleteFailure,
     required TResult Function() deleteSuccess,
   }) {
@@ -937,6 +1456,8 @@ class _$_DeleteFailure implements _DeleteFailure {
     TResult Function()? loading,
     TResult Function(List<Post> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
+    TResult Function(Post post, User user)? getPostSuccess,
+    TResult Function(PostFailure failure)? getPostFailure,
     TResult Function(PostFailure failure)? deleteFailure,
     TResult Function()? deleteSuccess,
     required TResult orElse(),
@@ -954,6 +1475,8 @@ class _$_DeleteFailure implements _DeleteFailure {
     required TResult Function(_Loading value) loading,
     required TResult Function(_ReadSuccess value) readSuccess,
     required TResult Function(_ReadFailure value) readFailure,
+    required TResult Function(_GetPostSuccess value) getPostSuccess,
+    required TResult Function(_GetPostFailure value) getPostFailure,
     required TResult Function(_DeleteFailure value) deleteFailure,
     required TResult Function(_DeleteSuccess value) deleteSuccess,
   }) {
@@ -967,6 +1490,8 @@ class _$_DeleteFailure implements _DeleteFailure {
     TResult Function(_Loading value)? loading,
     TResult Function(_ReadSuccess value)? readSuccess,
     TResult Function(_ReadFailure value)? readFailure,
+    TResult Function(_GetPostSuccess value)? getPostSuccess,
+    TResult Function(_GetPostFailure value)? getPostFailure,
     TResult Function(_DeleteFailure value)? deleteFailure,
     TResult Function(_DeleteSuccess value)? deleteSuccess,
     required TResult orElse(),
@@ -1030,6 +1555,8 @@ class _$_DeleteSuccess implements _DeleteSuccess {
     required TResult Function() loading,
     required TResult Function(List<Post> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
+    required TResult Function(Post post, User user) getPostSuccess,
+    required TResult Function(PostFailure failure) getPostFailure,
     required TResult Function(PostFailure failure) deleteFailure,
     required TResult Function() deleteSuccess,
   }) {
@@ -1043,6 +1570,8 @@ class _$_DeleteSuccess implements _DeleteSuccess {
     TResult Function()? loading,
     TResult Function(List<Post> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
+    TResult Function(Post post, User user)? getPostSuccess,
+    TResult Function(PostFailure failure)? getPostFailure,
     TResult Function(PostFailure failure)? deleteFailure,
     TResult Function()? deleteSuccess,
     required TResult orElse(),
@@ -1060,6 +1589,8 @@ class _$_DeleteSuccess implements _DeleteSuccess {
     required TResult Function(_Loading value) loading,
     required TResult Function(_ReadSuccess value) readSuccess,
     required TResult Function(_ReadFailure value) readFailure,
+    required TResult Function(_GetPostSuccess value) getPostSuccess,
+    required TResult Function(_GetPostFailure value) getPostFailure,
     required TResult Function(_DeleteFailure value) deleteFailure,
     required TResult Function(_DeleteSuccess value) deleteSuccess,
   }) {
@@ -1073,6 +1604,8 @@ class _$_DeleteSuccess implements _DeleteSuccess {
     TResult Function(_Loading value)? loading,
     TResult Function(_ReadSuccess value)? readSuccess,
     TResult Function(_ReadFailure value)? readFailure,
+    TResult Function(_GetPostSuccess value)? getPostSuccess,
+    TResult Function(_GetPostFailure value)? getPostFailure,
     TResult Function(_DeleteFailure value)? deleteFailure,
     TResult Function(_DeleteSuccess value)? deleteSuccess,
     required TResult orElse(),
