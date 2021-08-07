@@ -3,9 +3,6 @@ targets:
     builders:
       auto_route_generator|autoRouteGenerator:
         enabled: true
-        generate_for:
-          include:
-            - lib/presentation/routes/router.dart
 
       json_serializable:
         enabled: true

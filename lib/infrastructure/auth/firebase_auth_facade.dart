@@ -16,13 +16,13 @@ class FirebaseAuthFacade implements IAuthFacade {
   final FirebaseFirestore _firestore;
   final GoogleSignIn _googleSignIn;
   final FirebaseMessaging _firebaseMessaging;
-
   FirebaseAuthFacade(
     this._firebaseAuth,
     this._firestore,
     this._googleSignIn,
     this._firebaseMessaging,
   );
+
   @override
   Future<Either<AuthFailure, Unit>> registerWithEmailAndPassword({
     required String emailAddress,
@@ -101,10 +101,12 @@ class FirebaseAuthFacade implements IAuthFacade {
     final firebaseUser = _firebaseAuth.currentUser;
     return optionOf(firebaseUser?.toDomain());
   }
-  //TODO: Remove FCM token
+
   @override
-  Future<void> signOut() => Future.wait([
-        _firebaseAuth.signOut(),
-        _googleSignIn.signOut(),
-      ]);
+  Future<void> signOut() async {
+    final user = getSignedInUser().fold(() {}, id)!;
+    await _firestore.usersCollection.doc(user.id).set(user.toJson());
+    await _firebaseAuth.signOut();
+    await _googleSignIn.signOut();
+  }
 }

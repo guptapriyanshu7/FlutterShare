@@ -439,7 +439,7 @@ class _$PostStateTearOff {
     return const _Loading();
   }
 
-  _ReadSuccess readSuccess(List<Post> posts) {
+  _ReadSuccess readSuccess(List<Tuple2<Post, User>> posts) {
     return _ReadSuccess(
       posts,
     );
@@ -484,7 +484,7 @@ mixin _$PostState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Post> posts) readSuccess,
+    required TResult Function(List<Tuple2<Post, User>> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
     required TResult Function(Post post, User user) getPostSuccess,
     required TResult Function(PostFailure failure) getPostFailure,
@@ -496,7 +496,7 @@ mixin _$PostState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Post> posts)? readSuccess,
+    TResult Function(List<Tuple2<Post, User>> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
     TResult Function(Post post, User user)? getPostSuccess,
     TResult Function(PostFailure failure)? getPostFailure,
@@ -586,7 +586,7 @@ class _$_Initial implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Post> posts) readSuccess,
+    required TResult Function(List<Tuple2<Post, User>> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
     required TResult Function(Post post, User user) getPostSuccess,
     required TResult Function(PostFailure failure) getPostFailure,
@@ -601,7 +601,7 @@ class _$_Initial implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Post> posts)? readSuccess,
+    TResult Function(List<Tuple2<Post, User>> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
     TResult Function(Post post, User user)? getPostSuccess,
     TResult Function(PostFailure failure)? getPostFailure,
@@ -693,7 +693,7 @@ class _$_Loading implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Post> posts) readSuccess,
+    required TResult Function(List<Tuple2<Post, User>> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
     required TResult Function(Post post, User user) getPostSuccess,
     required TResult Function(PostFailure failure) getPostFailure,
@@ -708,7 +708,7 @@ class _$_Loading implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Post> posts)? readSuccess,
+    TResult Function(List<Tuple2<Post, User>> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
     TResult Function(Post post, User user)? getPostSuccess,
     TResult Function(PostFailure failure)? getPostFailure,
@@ -766,7 +766,7 @@ abstract class _$ReadSuccessCopyWith<$Res> {
   factory _$ReadSuccessCopyWith(
           _ReadSuccess value, $Res Function(_ReadSuccess) then) =
       __$ReadSuccessCopyWithImpl<$Res>;
-  $Res call({List<Post> posts});
+  $Res call({List<Tuple2<Post, User>> posts});
 }
 
 /// @nodoc
@@ -787,7 +787,7 @@ class __$ReadSuccessCopyWithImpl<$Res> extends _$PostStateCopyWithImpl<$Res>
       posts == freezed
           ? _value.posts
           : posts // ignore: cast_nullable_to_non_nullable
-              as List<Post>,
+              as List<Tuple2<Post, User>>,
     ));
   }
 }
@@ -798,7 +798,7 @@ class _$_ReadSuccess implements _ReadSuccess {
   const _$_ReadSuccess(this.posts);
 
   @override
-  final List<Post> posts;
+  final List<Tuple2<Post, User>> posts;
 
   @override
   String toString() {
@@ -827,7 +827,7 @@ class _$_ReadSuccess implements _ReadSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Post> posts) readSuccess,
+    required TResult Function(List<Tuple2<Post, User>> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
     required TResult Function(Post post, User user) getPostSuccess,
     required TResult Function(PostFailure failure) getPostFailure,
@@ -842,7 +842,7 @@ class _$_ReadSuccess implements _ReadSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Post> posts)? readSuccess,
+    TResult Function(List<Tuple2<Post, User>> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
     TResult Function(Post post, User user)? getPostSuccess,
     TResult Function(PostFailure failure)? getPostFailure,
@@ -892,9 +892,9 @@ class _$_ReadSuccess implements _ReadSuccess {
 }
 
 abstract class _ReadSuccess implements PostState {
-  const factory _ReadSuccess(List<Post> posts) = _$_ReadSuccess;
+  const factory _ReadSuccess(List<Tuple2<Post, User>> posts) = _$_ReadSuccess;
 
-  List<Post> get posts => throw _privateConstructorUsedError;
+  List<Tuple2<Post, User>> get posts => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$ReadSuccessCopyWith<_ReadSuccess> get copyWith =>
       throw _privateConstructorUsedError;
@@ -975,7 +975,7 @@ class _$_ReadFailure implements _ReadFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Post> posts) readSuccess,
+    required TResult Function(List<Tuple2<Post, User>> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
     required TResult Function(Post post, User user) getPostSuccess,
     required TResult Function(PostFailure failure) getPostFailure,
@@ -990,7 +990,7 @@ class _$_ReadFailure implements _ReadFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Post> posts)? readSuccess,
+    TResult Function(List<Tuple2<Post, User>> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
     TResult Function(Post post, User user)? getPostSuccess,
     TResult Function(PostFailure failure)? getPostFailure,
@@ -1142,7 +1142,7 @@ class _$_GetPostSuccess implements _GetPostSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Post> posts) readSuccess,
+    required TResult Function(List<Tuple2<Post, User>> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
     required TResult Function(Post post, User user) getPostSuccess,
     required TResult Function(PostFailure failure) getPostFailure,
@@ -1157,7 +1157,7 @@ class _$_GetPostSuccess implements _GetPostSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Post> posts)? readSuccess,
+    TResult Function(List<Tuple2<Post, User>> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
     TResult Function(Post post, User user)? getPostSuccess,
     TResult Function(PostFailure failure)? getPostFailure,
@@ -1291,7 +1291,7 @@ class _$_GetPostFailure implements _GetPostFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Post> posts) readSuccess,
+    required TResult Function(List<Tuple2<Post, User>> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
     required TResult Function(Post post, User user) getPostSuccess,
     required TResult Function(PostFailure failure) getPostFailure,
@@ -1306,7 +1306,7 @@ class _$_GetPostFailure implements _GetPostFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Post> posts)? readSuccess,
+    TResult Function(List<Tuple2<Post, User>> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
     TResult Function(Post post, User user)? getPostSuccess,
     TResult Function(PostFailure failure)? getPostFailure,
@@ -1439,7 +1439,7 @@ class _$_DeleteFailure implements _DeleteFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Post> posts) readSuccess,
+    required TResult Function(List<Tuple2<Post, User>> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
     required TResult Function(Post post, User user) getPostSuccess,
     required TResult Function(PostFailure failure) getPostFailure,
@@ -1454,7 +1454,7 @@ class _$_DeleteFailure implements _DeleteFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Post> posts)? readSuccess,
+    TResult Function(List<Tuple2<Post, User>> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
     TResult Function(Post post, User user)? getPostSuccess,
     TResult Function(PostFailure failure)? getPostFailure,
@@ -1553,7 +1553,7 @@ class _$_DeleteSuccess implements _DeleteSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Post> posts) readSuccess,
+    required TResult Function(List<Tuple2<Post, User>> posts) readSuccess,
     required TResult Function(PostFailure failure) readFailure,
     required TResult Function(Post post, User user) getPostSuccess,
     required TResult Function(PostFailure failure) getPostFailure,
@@ -1568,7 +1568,7 @@ class _$_DeleteSuccess implements _DeleteSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Post> posts)? readSuccess,
+    TResult Function(List<Tuple2<Post, User>> posts)? readSuccess,
     TResult Function(PostFailure failure)? readFailure,
     TResult Function(Post post, User user)? getPostSuccess,
     TResult Function(PostFailure failure)? getPostFailure,

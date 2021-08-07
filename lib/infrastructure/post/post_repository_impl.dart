@@ -77,16 +77,13 @@ class PostRepositoryImpl implements IPostRepository {
         .getSignedInUser()
         .getOrElse(() => throw NotAuthenticatedError());
     final userTimelineDoc = _firestore.timelineCollection.doc(currentUser.id);
-    userTimelineDoc.timelinePostsCollection
+    yield* userTimelineDoc.timelinePostsCollection
         .snapshots()
         .asyncMap(
           (snapshot) =>
               Future.wait([for (var s in snapshot.docs) fetchUser(s)]),
-          // return right<PostFailure, List<Post>>(
-          //   snapshot.docs.map((doc) {}),
-          // );
         )
-        .map((event) => right(event))
+        .map((event) => right<PostFailure, List<Tuple2<Post, User>>>(event))
         .onErrorReturnWith((e, _) {
       if (e is FirebaseException && e.code == 'permission-denied') {
         print(e);
