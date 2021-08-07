@@ -8,7 +8,7 @@ extension FirebaseUserDomainX on firebaseUser.User {
       bio: '',
       displayName: displayName ?? 'Dummy name',
       email: email!,
-      photoUrl: photoURL ?? 'Some dummy photo url',
+      photoUrl: photoURL ?? 'https://bit.ly/3yyK8ti',
       username: email!,
     );
   }

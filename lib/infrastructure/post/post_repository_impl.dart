@@ -59,8 +59,9 @@ class PostRepositoryImpl implements IPostRepository {
     }
   }
 
-  Future<Tuple2<Post, User>> fetchUser(
-      QueryDocumentSnapshot<Map<String, dynamic>> doc) async {
+  Future<Tuple2<Post, User>> makeTuple(
+    QueryDocumentSnapshot<Map<String, dynamic>> doc,
+  ) async {
     final post = Post.fromJson(doc.data());
     final userDoc = await getIt<FirebaseFirestore>()
         .collection('users')
@@ -81,7 +82,7 @@ class PostRepositoryImpl implements IPostRepository {
         .snapshots()
         .asyncMap(
           (snapshot) =>
-              Future.wait([for (var s in snapshot.docs) fetchUser(s)]),
+              Future.wait([for (var s in snapshot.docs) makeTuple(s)]),
         )
         .map((event) => right<PostFailure, List<Tuple2<Post, User>>>(event))
         .onErrorReturnWith((e, _) {

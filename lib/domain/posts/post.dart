@@ -17,17 +17,20 @@ class Post with _$Post {
     required String location,
     required Map<String, bool> likes,
   }) = _Post;
-  factory Post.empty() => Post(
-        id: Uuid().v4(),
-        ownerid: getIt<IAuthFacade>()
-            .getSignedInUser()
-            .getOrElse(() => throw NotAuthenticatedError())
-            .id,
-        mediaUrl: '',
-        caption: '',
-        location: '',
-        likes: {},
-      );
+  factory Post.empty() {
+    final currentUserId = getIt<IAuthFacade>()
+        .getSignedInUser()
+        .getOrElse(() => throw NotAuthenticatedError())
+        .id;
+    return Post(
+      id: Uuid().v4(),
+      ownerid: currentUserId,
+      mediaUrl: '',
+      caption: '',
+      location: '',
+      likes: {},
+    );
+  }
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
 }
