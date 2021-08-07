@@ -13,7 +13,6 @@ import 'package:flutter_share/presentation/profile/widgets/single_post.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
 
 Widget cachedImage(String mediaUrl) {
-  print(mediaUrl);
   return CachedNetworkImage(
     imageUrl: mediaUrl,
     fit: BoxFit.cover,

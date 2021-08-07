@@ -35,10 +35,8 @@ class PostsPage extends StatelessWidget {
           ),
           body: BlocBuilder<PostBloc, PostState>(
             builder: (context, state) {
-              print('object');
               return state.maybeMap(
                 readFailure: (state) {
-                  print('readFailure');
                   return Text('');
                 },
                 readSuccess: (state) => ListView.builder(

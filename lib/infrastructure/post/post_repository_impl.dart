@@ -86,10 +86,8 @@ class PostRepositoryImpl implements IPostRepository {
         .map((event) => right<PostFailure, List<Tuple2<Post, User>>>(event))
         .onErrorReturnWith((e, _) {
       if (e is FirebaseException && e.code == 'permission-denied') {
-        print(e);
         return left(const PostFailure.insufficientPermission());
       } else {
-        print(e);
         return left(const PostFailure.unexpected());
       }
     });
