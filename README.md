@@ -1,5 +1,10 @@
 # FlutterShare
 
+[![GitHub issues](https://img.shields.io/github/issues/guptapriyanshu7/FlutterShare?style=for-the-badge)](https://github.com/guptapriyanshu7/FlutterShare/issues)
+[![GitHub license](https://img.shields.io/github/license/guptapriyanshu7/FlutterShare?style=for-the-badge)](https://github.com/guptapriyanshu7/FlutterShare/blob/main/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/guptapriyanshu7/FlutterShare?style=for-the-badge)](https://github.com/guptapriyanshu7/FlutterShare/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/guptapriyanshu7/FlutterShare?style=for-the-badge)](https://github.com/guptapriyanshu7/FlutterShare/network)
+
 An Instagram clone app made with flutter/dart.  
 Uses [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc) from state management.
 
@@ -49,5 +54,5 @@ lib
     └───splash
 ```
 
-### License
-[MIT](https://github.com/guptapriyanshu7/FlutterShare/blob/main/LICENSE)
+## License
+FlutterShare is licensed under the MIT License, © 2021 Priyanshu Gupta. See [LICENSE](https://github.com/guptapriyanshu7/FlutterShare/blob/main/LICENSE) for more details.
