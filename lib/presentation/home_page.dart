@@ -17,9 +17,9 @@ class _HomePageState extends State<HomePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<void> _setUpInitial() async {
-    RemoteMessage? initialMessage =
+    final RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
-    RemoteNotification? notification = initialMessage?.notification;
+    final RemoteNotification? notification = initialMessage?.notification;
     if (notification != null) {
       showDialog(
         context: context,
@@ -38,8 +38,8 @@ class _HomePageState extends State<HomePage> {
     _setUpInitial();
     FirebaseMessaging.onMessage.listen(
       (message) {
-        RemoteNotification? notification = message.notification;
-        AndroidNotification? android = message.notification?.android;
+        final RemoteNotification? notification = message.notification;
+        final AndroidNotification? android = message.notification?.android;
 
         if (notification != null && android != null) {
           flutterLocalNotificationsPlugin.show(
@@ -60,8 +60,8 @@ class _HomePageState extends State<HomePage> {
     );
     FirebaseMessaging.onMessageOpenedApp.listen(
       (message) {
-        RemoteNotification? notification = message.notification;
-        AndroidNotification? android = message.notification?.android;
+        final RemoteNotification? notification = message.notification;
+        final AndroidNotification? android = message.notification?.android;
 
         if (notification != null && android != null) {
           showDialog(
@@ -83,21 +83,21 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state) {
         return state.maybeMap(
           orElse: () =>
-              Material(child: Center(child: CircularProgressIndicator())),
+              const Material(child: Center(child: CircularProgressIndicator())),
           authenticated: (_) => AutoTabsScaffold(
             key: _scaffoldKey,
             routes: [
-              PostsRoute(),
-              SearchRoute(),
-              SavePostRoute(),
-              ActivityFeedRoute(),
+              const PostsRoute(),
+              const SearchRoute(),
+              const SavePostRoute(),
+              const ActivityFeedRoute(),
               ProfileRoute(id: _.currentUser.id),
             ],
             bottomNavigationBuilder: (_, tabsRouter) {
               return BottomNavigationBar(
                 currentIndex: tabsRouter.activeIndex,
                 onTap: tabsRouter.setActiveIndex,
-                items: [
+                items: const [
                   BottomNavigationBarItem(
                     icon: Icon(Icons.home),
                     label: 'Home',

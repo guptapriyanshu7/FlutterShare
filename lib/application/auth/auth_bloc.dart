@@ -1,17 +1,18 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_share/domain/auth/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:flutter_share/domain/auth/i_auth_facade.dart';
 
+import 'package:flutter_share/domain/auth/i_auth_facade.dart';
+import 'package:flutter_share/domain/auth/user.dart';
+
+part 'auth_bloc.freezed.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
-part 'auth_bloc.freezed.dart';
 
 @injectable
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final IAuthFacade _authFacade;
-  AuthBloc(this._authFacade) : super(_Initial());
+  AuthBloc(this._authFacade) : super(const _Initial());
 
   @override
   Stream<AuthState> mapEventToState(
@@ -21,7 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       authCheckRequested: (_) async* {
         final userOption = _authFacade.getSignedInUser();
         yield userOption.fold(
-          () => AuthState.unauthenticated(),
+          () => const AuthState.unauthenticated(),
           (currentUser) => AuthState.authenticated(currentUser),
         );
       },

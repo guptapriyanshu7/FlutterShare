@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+
 import 'package:flutter_share/application/user_actions/user_actions_bloc.dart';
 import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/posts/post.dart';
@@ -25,7 +26,7 @@ Widget cachedImage(String mediaUrl) {
 }
 
 class ProfilePage extends HookWidget {
-  ProfilePage(@PathParam('profileId') this.id, {Key? key}) : super(key: key);
+  const ProfilePage(@PathParam('profileId') this.id, {Key? key}) : super(key: key);
   final String id;
 
   Widget postTile(BuildContext context, Post post, User user) {
@@ -193,15 +194,15 @@ class ProfilePage extends HookWidget {
                 .add(UserActionsEvent.fetchProfile(id)),
             child: Scaffold(
               body: state.maybeMap(
-                orElse: () => Center(child: CircularProgressIndicator()),
-                error: (_) => Text(''),
+                orElse: () => const Center(child: CircularProgressIndicator()),
+                error: (_) => const Text(''),
                 loaded: (state) {
                   final profile = state.profile;
                   final user = profile.user;
                   final posts = profile.posts;
                   return ListView(
                     children: [
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Padding(
                         padding: const EdgeInsets.all(12),
                         child: Column(

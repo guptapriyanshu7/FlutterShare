@@ -1,8 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_share/application/auth/auth_bloc.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
-import 'package:auto_route/auto_route.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -13,15 +13,17 @@ class SplashPage extends StatelessWidget {
       listener: (context, state) {
         state.map(
           initial: (_) {},
-          unauthenticated: (_) => context.replaceRoute(SignInRoute()),
-          authenticated: (_) => context.replaceRoute(HomeRoute()),
+          unauthenticated: (_) => context.replaceRoute(const SignInRoute()),
+          authenticated: (_) => context.replaceRoute(const HomeRoute()),
         );
       },
-      child: Scaffold(
-          body: Center(
-              child: FlutterLogo(
-        size: 100,
-      ))),
+      child: const Scaffold(
+        body: Center(
+          child: FlutterLogo(
+            size: 100,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_share/application/auth/auth_bloc.dart';
 import 'package:flutter_share/injection.dart';
-import 'package:injectable/injectable.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
+import 'package:injectable/injectable.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
@@ -49,15 +49,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          getIt<AuthBloc>()..add(AuthEvent.authCheckRequested()),
+          getIt<AuthBloc>()..add(const AuthEvent.authCheckRequested()),
       child: MaterialApp.router(
         routeInformationParser: getIt<Router>().defaultRouteParser(),
         routerDelegate: getIt<Router>().delegate(),
         title: 'FlutterShare',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.red,
-          accentColor: Colors.pink[200],
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
+              .copyWith(secondary: Colors.pink[200]),
         ),
       ),
     );

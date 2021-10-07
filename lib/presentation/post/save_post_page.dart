@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+
 import 'package:flutter_share/application/post/save_post/save_post_bloc.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/post/widgets/caption_field.dart';
@@ -26,23 +27,24 @@ class SavePostPage extends HookWidget {
         listenWhen: (previous, current) =>
             previous.isSaving != current.isSaving,
         listener: (context, state) {
-          if (state.isSaving)
+          if (state.isSaving) {
             showDialog(
               context: context,
               builder: (_) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               },
             );
-          else
+          } else {
             Navigator.pop(context);
+          }
         },
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('Save Post'),
+              title: const Text('Save Post'),
               actions: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.check),
+                  icon: const Icon(Icons.check),
                   onPressed: () => _handleSubmit(context, _formKey),
                 )
               ],
@@ -53,11 +55,11 @@ class SavePostPage extends HookWidget {
                   ? AutovalidateMode.always
                   : AutovalidateMode.disabled,
               child: ListView(
-                children: [
-                  const UploadPostImageWidget(),
-                  const CaptionField(),
-                  const Divider(),
-                  const GetLocationWidget(),
+                children: const [
+                  UploadPostImageWidget(),
+                  CaptionField(),
+                  Divider(),
+                  GetLocationWidget(),
                 ],
               ),
             ),

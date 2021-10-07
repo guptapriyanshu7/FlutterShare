@@ -3,8 +3,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/domain/auth/user.dart';
-import 'package:flutter_share/presentation/routes/router.gr.dart';
 import 'package:flutter_share/injection.dart';
+import 'package:flutter_share/presentation/routes/router.gr.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -78,18 +78,16 @@ class _SearchPageState extends State<SearchPage> {
                 builder:
                     (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
                   if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                   final List<UserResult> searchResults = [];
-                  snapshot.data!.docs.forEach(
-                    (doc) {
+                  for (var doc in snapshot.data!.docs) {
                       final userJson = doc.data() as Map<String, dynamic>;
                       final user = User.fromJson(userJson);
                       // User.fromDocument(doc as DocumentSnapshot<Object>);
                       final searchResult = UserResult(user);
                       searchResults.add(searchResult);
-                    },
-                  );
+                    }
                   return ListView(
                     children: searchResults,
                   );

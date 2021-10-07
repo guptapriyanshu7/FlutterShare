@@ -3,16 +3,17 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:injectable/injectable.dart';
+import 'package:rxdart/rxdart.dart';
+
 import 'package:flutter_share/domain/auth/i_auth_facade.dart';
 import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/domain/posts/i_post_repository.dart';
-import 'package:flutter_share/domain/posts/post_failure.dart';
 import 'package:flutter_share/domain/posts/post.dart';
-import 'package:flutter_share/injection.dart';
-import 'package:injectable/injectable.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter_share/domain/posts/post_failure.dart';
 import 'package:flutter_share/infrastructure/core/firebase_helpers.dart';
+import 'package:flutter_share/injection.dart';
 
 @LazySingleton(as: IPostRepository)
 class PostRepositoryImpl implements IPostRepository {

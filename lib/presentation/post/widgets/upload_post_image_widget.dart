@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_share/application/post/save_post/save_post_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:flutter_share/application/post/save_post/save_post_bloc.dart';
 
 class UploadPostImageWidget extends HookWidget {
   const UploadPostImageWidget({Key? key}) : super(key: key);
@@ -12,13 +13,13 @@ class UploadPostImageWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final file = useState(File('some path'));
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.2,
       child: GestureDetector(
         child: file.value.path != 'some path'
             ? Image.file(file.value)
-            : Icon(
+            : const Icon(
                 Icons.camera_alt_rounded,
                 color: Colors.grey,
                 size: 60,

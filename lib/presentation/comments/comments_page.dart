@@ -25,8 +25,9 @@ class CommentsPage extends StatelessWidget {
           .snapshots(),
       builder: (context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-        if (!snapshot.hasData)
-          return Center(child: CircularProgressIndicator());
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
         final comments = snapshot.data?.docs.map<ListTile>((doc) {
           return ListTile(
             leading: CircleAvatar(
@@ -42,8 +43,8 @@ class CommentsPage extends StatelessWidget {
     );
   }
 
-  void addComment() async {
-    final userOption = await getIt<IAuthFacade>().getSignedInUser();
+  void addComment() {
+    final userOption = getIt<IAuthFacade>().getSignedInUser();
     final currentUser =
         userOption.getOrElse(() => throw NotAuthenticatedError());
     getIt<FirebaseFirestore>()
@@ -79,7 +80,7 @@ class CommentsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Comments')),
+      appBar: AppBar(title: const Text('Comments')),
       body: Column(
         children: [
           Expanded(child: showComments()),

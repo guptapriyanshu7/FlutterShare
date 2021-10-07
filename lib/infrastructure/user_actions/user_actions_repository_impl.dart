@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
+
 import 'package:flutter_share/domain/auth/i_auth_facade.dart';
 import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/core/errors.dart';
@@ -7,9 +9,8 @@ import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/domain/user_actions/i_user_actions_repository.dart';
 import 'package:flutter_share/domain/user_actions/profile.dart';
 import 'package:flutter_share/domain/user_actions/user_actions_failure.dart';
-import 'package:flutter_share/injection.dart';
-import 'package:injectable/injectable.dart';
 import 'package:flutter_share/infrastructure/core/firebase_helpers.dart';
+import 'package:flutter_share/injection.dart';
 
 @LazySingleton(as: IUserActionsRepository)
 class UserActionsRepositoryImpl implements IUserActionsRepository {
@@ -83,7 +84,7 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
           .userPostsCollection
           .doc(post.id)
           .update(post.toJson());
-      if (post.likes['${currentUser.id}']!) {
+      if (post.likes[currentUser.id]!) {
         await _firestore.feedCollection
             .doc(post.ownerid)
             .userFeedCollection

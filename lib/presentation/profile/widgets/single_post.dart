@@ -1,19 +1,18 @@
 import 'dart:async';
 
+import 'package:animator/animator.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+
 import 'package:flutter_share/application/user_actions/user_actions_bloc.dart';
 import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/profile/profile_page.dart';
-
-// import 'package:flutter_share/widgets/cached_image.dart';
-import 'package:animator/animator.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
 
 class SinglePost extends HookWidget {
@@ -89,7 +88,7 @@ class SinglePost extends HookWidget {
       child: BlocBuilder<UserActionsBloc, UserActionsState>(
         builder: (context, state) {
           return state.maybeMap(
-            orElse: () => Text(''),
+            orElse: () => const Text(''),
             likeStatus: (status) {
               final isLiked = status.isLiked;
               return Column(

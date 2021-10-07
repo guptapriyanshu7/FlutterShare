@@ -1,11 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_share/application/auth/auth_bloc.dart';
 import 'package:flutter_share/application/post/post_bloc.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/profile/widgets/single_post.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
-import 'package:auto_route/auto_route.dart';
 
 class PostsPage extends StatelessWidget {
   const PostsPage({Key? key}) : super(key: key);
@@ -13,20 +14,20 @@ class PostsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<PostBloc>()..add(PostEvent.read()),
+      create: (context) => getIt<PostBloc>()..add(const PostEvent.read()),
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           state.maybeMap(
-            unauthenticated: (_) => context.replaceRoute(SignInRoute()),
+            unauthenticated: (_) => context.replaceRoute(const SignInRoute()),
             orElse: () {},
           );
         },
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Flutter Share'),
+            title: const Text('Flutter Share'),
             actions: [
               IconButton(
-                icon: Icon(Icons.exit_to_app),
+                icon: const Icon(Icons.exit_to_app),
                 onPressed: () {
                   context.read<AuthBloc>().add(const AuthEvent.signedOut());
                 },
@@ -46,7 +47,7 @@ class PostsPage extends StatelessWidget {
                     return SinglePost(tu.value1, tu.value2);
                   },
                 ),
-                orElse: () => Center(child: CircularProgressIndicator()),
+                orElse: () => const Center(child: CircularProgressIndicator()),
               );
             },
           ),

@@ -1,10 +1,11 @@
 import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_share/application/auth/auth_bloc.dart';
 import 'package:flutter_share/application/auth/sign_in_form/sign_in_form_bloc.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
-import 'package:auto_route/auto_route.dart';
 
 class SignInForm extends StatelessWidget {
   const SignInForm({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class SignInForm extends StatelessWidget {
               context
                   .read<AuthBloc>()
                   .add(const AuthEvent.authCheckRequested());
-              context.replaceRoute(HomeRoute());
+              context.replaceRoute(const HomeRoute());
             },
           ),
         );
@@ -51,20 +52,20 @@ class SignInForm extends StatelessWidget {
               }
             },
             child: ListView(
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               children: [
-                SizedBox(height: 50),
-                Icon(
+                const SizedBox(height: 50),
+                const Icon(
                   Icons.verified_user_outlined,
                   size: 90,
                   color: Colors.red,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.emailAddress,
                   autocorrect: false,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.email),
                     labelText: 'Email',
                   ),
@@ -79,11 +80,11 @@ class SignInForm extends StatelessWidget {
                   //   (r) => null,
                   // ),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 TextFormField(
                   autocorrect: false,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.lock),
                     labelText: 'Password',
                   ),
@@ -98,7 +99,7 @@ class SignInForm extends StatelessWidget {
                   //   (r) => null,
                   // ),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 Row(
                   children: [
                     Expanded(
@@ -106,10 +107,10 @@ class SignInForm extends StatelessWidget {
                         onPressed: () {
                           currentFocus.unfocus();
                           signInFormBloc.add(
-                            SignInFormEvent.signInWithEmailAndPasswordPressed(),
+                            const SignInFormEvent.signInWithEmailAndPasswordPressed(),
                           );
                         },
-                        child: Text('SIGN IN'),
+                        child: const Text('SIGN IN'),
                       ),
                     ),
                     Expanded(
@@ -117,21 +118,21 @@ class SignInForm extends StatelessWidget {
                         onPressed: () {
                           currentFocus.unfocus();
                           signInFormBloc.add(
-                            SignInFormEvent
+                            const SignInFormEvent
                                 .registerWithEmailAndPasswordPressed(),
                           );
                         },
-                        child: Text('REGISTER'),
+                        child: const Text('REGISTER'),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 ElevatedButton(
                   onPressed: () => signInFormBloc.add(
-                    SignInFormEvent.signInWithGooglePressed(),
+                    const SignInFormEvent.signInWithGooglePressed(),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Sign in with Google',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -139,8 +140,8 @@ class SignInForm extends StatelessWidget {
                   ),
                 ),
                 if (state.isSubmitting) ...[
-                  SizedBox(height: 12),
-                  LinearProgressIndicator(),
+                  const SizedBox(height: 12),
+                  const LinearProgressIndicator(),
                 ]
               ],
             ),
