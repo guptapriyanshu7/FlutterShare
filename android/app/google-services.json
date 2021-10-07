@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "299851431829-mhi8nnhk4r725vuejmvli4i3j4oqd55v.apps.googleusercontent.com",
+          "client_id": "299851431829-tg53earmtvluoh4nr2dth2vvc6ql3lqh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.priyanshugupta.fluttershare",
-            "certificate_hash": "bdcb7a626a07b9144c1e39ee33dbfeca0abd7cdc"
+            "certificate_hash": "c79d4e63b81d4b57be9760573084785bc95f42db"
           }
         },
         {
