@@ -34,7 +34,7 @@ class ActivityFeedPage extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   }
                   return ListView(
-                    children: snapshot.data?.docs.map<GestureDetector>(
+                    children: snapshot.data!.docs.map<GestureDetector>(
                       (doc) {
                         return GestureDetector(
                           onTap: () async {
@@ -104,7 +104,7 @@ class ActivityFeedPage extends StatelessWidget {
                           ),
                         );
                       },
-                    ).toList() as List<GestureDetector>,
+                    ).toList(),
                   );
                 },
               );

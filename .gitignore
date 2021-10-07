@@ -52,3 +52,5 @@ lib/application/*/*/*.freezed.dart
 lib/domain/*/*.freezed.dart
 lib/generated_plugin_registrant.dart
 lib/domain/*/*.g.dart
+
+android/app/google-services.json

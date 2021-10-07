@@ -4,10 +4,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:injectable/injectable.dart';
+
 import 'package:flutter_share/application/auth/auth_bloc.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
-import 'package:injectable/injectable.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
