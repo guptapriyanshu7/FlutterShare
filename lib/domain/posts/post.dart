@@ -23,7 +23,7 @@ class Post with _$Post {
         .getOrElse(() => throw NotAuthenticatedError())
         .id;
     return Post(
-      id: Uuid().v4(),
+      id: const Uuid().v4(),
       ownerid: currentUserId,
       mediaUrl: '',
       caption: '',

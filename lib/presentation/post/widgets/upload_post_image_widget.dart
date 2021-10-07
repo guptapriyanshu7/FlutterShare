@@ -33,8 +33,8 @@ class UploadPostImageWidget extends HookWidget {
           if (pickedFile != null) {
             file.value = File(pickedFile.path);
             context
-            .read<SavePostBloc>()
-            .add(SavePostEvent.filePicked(file.value));
+                .read<SavePostBloc>()
+                .add(SavePostEvent.filePicked(file.value));
           }
           // });
         },

@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart' as firebaseUser;
+import 'package:firebase_auth/firebase_auth.dart' as firebase_user;
 import 'package:flutter_share/domain/auth/user.dart';
 
-extension FirebaseUserDomainX on firebaseUser.User {
+extension FirebaseUserDomainX on firebase_user.User {
   User toDomain() {
     return User(
       id: uid,

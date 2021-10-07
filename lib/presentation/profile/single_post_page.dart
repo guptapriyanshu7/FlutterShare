@@ -9,9 +9,10 @@ class SinglePostPage extends StatelessWidget {
   final String postId;
   final String userId;
   const SinglePostPage(
-      @PathParam('userId') this.userId, @PathParam('postId') this.postId,
-      {Key? key})
-      : super(key: key);
+    @PathParam('userId') this.userId,
+    @PathParam('postId') this.postId, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +22,10 @@ class SinglePostPage extends StatelessWidget {
       child: BlocBuilder<PostBloc, PostState>(
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(title: Text('FlutterShare')),
+            appBar: AppBar(title: const Text('FlutterShare')),
             body: state.maybeMap(
               orElse: () {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               },
               getPostSuccess: (_) {
                 return SingleChildScrollView(

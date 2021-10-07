@@ -35,7 +35,9 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
           e.profile.user.id,
         );
         final updatedProfile = e.profile.copyWith(
-            isFollowing: isFollowingUpdate, followers: followersCountUpdate);
+          isFollowing: isFollowingUpdate,
+          followers: followersCountUpdate,
+        );
         yield UserActionsState.loaded(updatedProfile);
       },
       checkLikeStatus: (e) async* {

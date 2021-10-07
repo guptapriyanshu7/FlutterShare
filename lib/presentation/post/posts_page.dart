@@ -38,7 +38,7 @@ class PostsPage extends StatelessWidget {
             builder: (context, state) {
               return state.maybeMap(
                 readFailure: (state) {
-                  return Text('');
+                  return const Text('');
                 },
                 readSuccess: (state) => ListView.builder(
                   itemCount: state.posts.length,

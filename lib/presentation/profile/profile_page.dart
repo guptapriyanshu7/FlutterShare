@@ -26,15 +26,18 @@ Widget cachedImage(String mediaUrl) {
 }
 
 class ProfilePage extends HookWidget {
-  const ProfilePage(@PathParam('profileId') this.id, {Key? key}) : super(key: key);
+  const ProfilePage(@PathParam('profileId') this.id, {Key? key})
+      : super(key: key);
   final String id;
 
   Widget postTile(BuildContext context, Post post, User user) {
     return GestureDetector(
-      onTap: () => context.pushRoute(SinglePostRoute(
-        userId: user.id,
-        postId: post.id,
-      )),
+      onTap: () => context.pushRoute(
+        SinglePostRoute(
+          userId: user.id,
+          postId: post.id,
+        ),
+      ),
       child: cachedImage(post.mediaUrl),
     );
   }
@@ -121,18 +124,24 @@ class ProfilePage extends HookWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Column(children: [
-                      Text(posts.length.toString()),
-                      const Text('Posts')
-                    ]),
-                    Column(children: [
-                      Text(followers.toString()),
-                      const Text('Followers')
-                    ]),
-                    Column(children: [
-                      Text(following.toString()),
-                      const Text('Following')
-                    ]),
+                    Column(
+                      children: [
+                        Text(posts.length.toString()),
+                        const Text('Posts')
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(followers.toString()),
+                        const Text('Followers')
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(following.toString()),
+                        const Text('Following')
+                      ],
+                    ),
                   ],
                 ),
               ),

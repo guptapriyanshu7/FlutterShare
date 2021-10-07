@@ -30,7 +30,7 @@ class _SearchPageState extends State<SearchPage> {
         });
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).accentColor,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: TextFormField(
@@ -81,13 +81,13 @@ class _SearchPageState extends State<SearchPage> {
                     return const Center(child: CircularProgressIndicator());
                   }
                   final List<UserResult> searchResults = [];
-                  for (var doc in snapshot.data!.docs) {
-                      final userJson = doc.data() as Map<String, dynamic>;
-                      final user = User.fromJson(userJson);
-                      // User.fromDocument(doc as DocumentSnapshot<Object>);
-                      final searchResult = UserResult(user);
-                      searchResults.add(searchResult);
-                    }
+                  for (final doc in snapshot.data!.docs) {
+                    final userJson = doc.data()! as Map<String, dynamic>;
+                    final user = User.fromJson(userJson);
+                    // User.fromDocument(doc as DocumentSnapshot<Object>);
+                    final searchResult = UserResult(user);
+                    searchResults.add(searchResult);
+                  }
                   return ListView(
                     children: searchResults,
                   );

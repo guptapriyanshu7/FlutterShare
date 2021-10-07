@@ -6,5 +6,8 @@ import 'package:flutter_share/domain/user_actions/user_actions_failure.dart';
 abstract class IUserActionsRepository {
   Future<Either<UserActionsFailure, Profile>> fetchProfile(String userId);
   Future<Option<UserActionsFailure>> likePost(Post post);
-  Future<Option<UserActionsFailure>> followProfile(bool isfollowing, String userId);
+  Future<Option<UserActionsFailure>> followProfile(
+    bool isfollowing,
+    String userId,
+  );
 }

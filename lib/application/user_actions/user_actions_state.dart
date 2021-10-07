@@ -7,6 +7,6 @@ class UserActionsState with _$UserActionsState {
   const factory UserActionsState.likeStatus(bool isLiked) = _LikeStatus;
   const factory UserActionsState.error(UserActionsFailure failure) = _Error;
   const factory UserActionsState.loaded(
-    Profile profile
+    Profile profile,
   ) = _Loaded;
 }

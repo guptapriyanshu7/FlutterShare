@@ -23,12 +23,14 @@ class CommentsPage extends StatelessWidget {
           .collection('comments')
           .orderBy('timestamp', descending: false)
           .snapshots(),
-      builder: (context,
-          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+      builder: (
+        context,
+        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
+      ) {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
-        final comments = snapshot.data?.docs.map<ListTile>((doc) {
+        final comments = snapshot.data!.docs.map<ListTile>((doc) {
           return ListTile(
             leading: CircleAvatar(
               backgroundImage:
@@ -37,7 +39,7 @@ class CommentsPage extends StatelessWidget {
             title: Text(doc['comment'] as String),
             subtitle: Text(format(doc['timestamp'].toDate() as DateTime)),
           );
-        }).toList() as List<ListTile>;
+        }).toList();
         return ListView(children: comments);
       },
     );
@@ -93,7 +95,8 @@ class CommentsPage extends StatelessWidget {
             trailing: OutlinedButton(
               style: ButtonStyle(
                 side: MaterialStateProperty.all<BorderSide>(
-                    const BorderSide(color: Colors.red)),
+                  const BorderSide(color: Colors.red),
+                ),
               ),
               onPressed: addComment,
               child: const Text('POST'),

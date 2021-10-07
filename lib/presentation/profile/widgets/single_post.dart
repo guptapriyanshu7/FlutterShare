@@ -117,7 +117,7 @@ class SinglePost extends HookWidget {
                           curve: Curves.elasticOut,
                           tween: Tween(begin: 0.8, end: 1.4),
                           builder: (context, anim, _) => Transform.scale(
-                            scale: anim.value as double,
+                            scale: anim.value! as double,
                             child: const Icon(
                               Icons.favorite,
                               color: Colors.white54,
@@ -142,19 +142,21 @@ class SinglePost extends HookWidget {
                                 .read<UserActionsBloc>()
                                 .add(UserActionsEvent.likePost(!isLiked, post)),
                             iconSize: 28.0,
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                           IconButton(
                             icon: const Icon(Icons.chat),
                             onPressed: () {
-                              context.pushRoute(CommentsRoute(
-                                postId: post.id,
-                                postOwner: post.ownerid,
-                                photoUrl: post.mediaUrl,
-                              ));
+                              context.pushRoute(
+                                CommentsRoute(
+                                  postId: post.id,
+                                  postOwner: post.ownerid,
+                                  photoUrl: post.mediaUrl,
+                                ),
+                              );
                             },
                             iconSize: 28.0,
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ],
                       ),

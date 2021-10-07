@@ -44,3 +44,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+lib/injection.config.dart
+lib/presentation/routes/router.gr.dart
+lib/application/*/*.freezed.dart
+lib/application/*/*/*.freezed.dart
+lib/domain/*/*.freezed.dart
+lib/generated_plugin_registrant.dart
+lib/domain/*/*.g.dart

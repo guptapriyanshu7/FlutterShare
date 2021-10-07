@@ -14,6 +14,7 @@ dependencies:
   animator: ^3.0.0
   another_flushbar: ^1.10.24
   auto_route: ^2.2.0
+  bloc: ^7.2.1
   cached_network_image: ^3.0.0
   camera: ^0.8.1
   cloud_firestore: ^2.2.0
