@@ -54,3 +54,6 @@ lib/generated_plugin_registrant.dart
 lib/domain/*/*.g.dart
 
 android/app/google-services.json
+
+.firebaserc
+firebase.json
