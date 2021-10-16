@@ -19,9 +19,7 @@ class SplashPage extends StatelessWidget {
       },
       child: const Scaffold(
         body: Center(
-          child: FlutterLogo(
-            size: 100,
-          ),
+          child: FlutterLogo(size: 100),
         ),
       ),
     );

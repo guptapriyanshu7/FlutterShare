@@ -6,8 +6,9 @@ import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/profile/widgets/single_post.dart';
 
 class SinglePostPage extends StatelessWidget {
-  final String postId;
   final String userId;
+  final String postId;
+
   const SinglePostPage(
     @PathParam('userId') this.userId,
     @PathParam('postId') this.postId, {
@@ -24,14 +25,9 @@ class SinglePostPage extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(title: const Text('FlutterShare')),
             body: state.maybeMap(
-              orElse: () {
-                return const Center(child: CircularProgressIndicator());
-              },
-              getPostSuccess: (_) {
-                return SingleChildScrollView(
-                  child: SinglePost(_.post, _.user),
-                );
-              },
+              orElse: () => const Center(child: CircularProgressIndicator()),
+              getPostSuccess: (_) =>
+                  SingleChildScrollView(child: SinglePost(_.post, _.user)),
             ),
           );
         },
