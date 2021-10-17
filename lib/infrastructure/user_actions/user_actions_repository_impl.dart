@@ -4,15 +4,12 @@ import 'package:flutter_share/domain/user_actions/comment.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'package:flutter_share/domain/auth/i_auth_facade.dart';
 import 'package:flutter_share/domain/auth/user.dart';
-import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/domain/user_actions/i_user_actions_repository.dart';
 import 'package:flutter_share/domain/user_actions/profile.dart';
 import 'package:flutter_share/domain/user_actions/user_actions_failure.dart';
 import 'package:flutter_share/infrastructure/core/firebase_helpers.dart';
-import 'package:flutter_share/injection.dart';
 
 @LazySingleton(as: IUserActionsRepository)
 class UserActionsRepositoryImpl implements IUserActionsRepository {
@@ -22,10 +19,8 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
   @override
   Future<Either<UserActionsFailure, Profile>> fetchProfile(
     String userId,
+    String currentUserId,
   ) async {
-    final currentUser = getIt<IAuthFacade>()
-        .getSignedInUser()
-        .getOrElse(() => throw NotAuthenticatedError());
     try {
       final userDoc = await _firestore.usersCollection.doc(userId).get();
       final userJson = userDoc.data();
@@ -51,13 +46,13 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
       }).toList();
 
       final followingDoc = await _firestore.followingCollection
-          .doc(currentUser.id)
+          .doc(currentUserId)
           .userFollowingCollection
           .doc(userId)
           .get();
       final profile = Profile(
         user: userDomain,
-        currentUserId: currentUser.id,
+        currentUserId: currentUserId,
         following: followingCount,
         followers: followerCount,
         posts: postsDomainList,
@@ -76,10 +71,10 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
   }
 
   @override
-  Future<Option<UserActionsFailure>> likePost(Post post) async {
-    final currentUser = getIt<IAuthFacade>()
-        .getSignedInUser()
-        .getOrElse(() => throw NotAuthenticatedError());
+  Future<Option<UserActionsFailure>> likePost(
+    Post post,
+    User currentUser,
+  ) async {
     try {
       await _firestore.postsCollection
           .doc(post.ownerid)
@@ -129,10 +124,8 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
   Future<Option<UserActionsFailure>> followProfile(
     bool isFollowing,
     String userId,
+    User currentUser,
   ) async {
-    final currentUser = getIt<IAuthFacade>()
-        .getSignedInUser()
-        .getOrElse(() => throw NotAuthenticatedError());
     try {
       if (isFollowing) {
         await _firestore.followingCollection

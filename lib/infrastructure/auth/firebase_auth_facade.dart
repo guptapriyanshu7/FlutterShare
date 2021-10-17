@@ -104,9 +104,8 @@ class FirebaseAuthFacade implements IAuthFacade {
   }
 
   @override
-  Future<void> signOut() async {
-    final user = getSignedInUser().fold(() {}, id)!;
-    await _firestore.usersCollection.doc(user.id).set(user.toJson());
+  Future<void> signOut(User currentUser) async {
+    await _firestore.usersCollection.doc(currentUser.id).set(currentUser.toJson());
     await _firebaseAuth.signOut();
     await _googleSignIn.signOut();
   }

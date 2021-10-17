@@ -2,8 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_share/application/auth/auth_bloc.dart';
 import 'package:flutter_share/application/user_actions/user_actions_bloc.dart';
-import 'package:flutter_share/domain/auth/i_auth_facade.dart';
+import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:timeago/timeago.dart';
@@ -17,10 +18,7 @@ class CommentsPage extends StatelessWidget {
 
   final commentController = TextEditingController();
 
-  void addComment() {
-    final userOption = getIt<IAuthFacade>().getSignedInUser();
-    final currentUser =
-        userOption.getOrElse(() => throw NotAuthenticatedError());
+  void addComment(User currentUser) {
     getIt<FirebaseFirestore>()
         .collection('comments')
         .doc(postId)
@@ -53,6 +51,11 @@ class CommentsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _authState = context.read<AuthBloc>().state;
+    final currentUser = _authState.maybeMap(
+      authenticated: (_) => _.currentUser,
+      orElse: () => throw NotAuthenticatedError(),
+    );
     return Scaffold(
       appBar: AppBar(title: const Text('Comments')),
       body: Column(
@@ -70,7 +73,7 @@ class CommentsPage extends StatelessWidget {
                   const BorderSide(color: Colors.red),
                 ),
               ),
-              onPressed: addComment,
+              onPressed: () => addComment(currentUser),
               child: const Text('POST'),
             ),
           )

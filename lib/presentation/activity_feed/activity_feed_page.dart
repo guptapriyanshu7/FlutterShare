@@ -2,10 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_share/domain/auth/i_auth_facade.dart';
-import 'package:flutter_share/domain/auth/user.dart';
+import 'package:flutter_share/application/auth/auth_bloc.dart';
 import 'package:flutter_share/domain/core/errors.dart';
 import 'package:timeago/timeago.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
@@ -13,16 +13,17 @@ import 'package:flutter_share/presentation/routes/router.gr.dart';
 class ActivityFeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final userOption = getIt<IAuthFacade>().getSignedInUser();
-    final currentUser =
-        userOption.getOrElse(() => throw NotAuthenticatedError());
-
+    final _authState = context.read<AuthBloc>().state;
+    final currentUserId = _authState.maybeMap(
+      authenticated: (_) => _.currentUser.id,
+      orElse: () => throw NotAuthenticatedError(),
+    );
     return Scaffold(
       appBar: AppBar(title: const Text('Notifications')),
       body: FutureBuilder(
         future: getIt<FirebaseFirestore>()
             .collection('feed')
-            .doc(currentUser.id)
+            .doc(currentUserId)
             .collection('userFeed')
             .orderBy('timestamp', descending: true)
             .limit(50)
@@ -36,7 +37,7 @@ class ActivityFeedPage extends StatelessWidget {
                 .map(
                   (doc) => _OpenProfileOrPost(
                     doc: doc,
-                    currentUser: currentUser,
+                    currentUserId: currentUserId,
                   ),
                 )
                 .toList(),
@@ -50,17 +51,17 @@ class ActivityFeedPage extends StatelessWidget {
 class _OpenProfileOrPost extends StatelessWidget {
   const _OpenProfileOrPost({
     required this.doc,
-    required this.currentUser,
+    required this.currentUserId,
     Key? key,
   }) : super(key: key);
 
   final QueryDocumentSnapshot<Object?> doc;
-  final User currentUser;
+  final String currentUserId;
 
   void _handleRouting(
     QueryDocumentSnapshot<Object?> doc,
     BuildContext context,
-    User currentUser,
+    String currentUserId,
   ) {
     {
       if (doc['type'] == 'follow') {
@@ -70,7 +71,7 @@ class _OpenProfileOrPost extends StatelessWidget {
       } else {
         context.pushRoute(
           SinglePostRoute(
-            userId: currentUser.id,
+            userId: currentUserId,
             postId: doc['postId'] as String,
           ),
         );
@@ -81,7 +82,7 @@ class _OpenProfileOrPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _handleRouting(doc, context, currentUser),
+      onTap: () => _handleRouting(doc, context, currentUserId),
       child: ListTile(
         leading: _OpenProfileByAvatar(doc: doc),
         title: Row(

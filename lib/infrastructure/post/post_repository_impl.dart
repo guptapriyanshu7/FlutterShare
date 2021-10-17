@@ -6,9 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'package:flutter_share/domain/auth/i_auth_facade.dart';
 import 'package:flutter_share/domain/auth/user.dart';
-import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/domain/posts/i_post_repository.dart';
 import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/domain/posts/post_failure.dart';
@@ -23,11 +21,8 @@ class PostRepositoryImpl implements IPostRepository {
 
   @override
   Future<Either<PostFailure, Unit>> create(Post post) async {
-    final currentUser = getIt<IAuthFacade>()
-        .getSignedInUser()
-        .getOrElse(() => throw NotAuthenticatedError());
     try {
-      final userPostsDoc = _firestore.postsCollection.doc(currentUser.id);
+      final userPostsDoc = _firestore.postsCollection.doc(post.ownerid);
       await userPostsDoc.userPostsCollection.doc(post.id).set(post.toJson());
       return right(unit);
     } on FirebaseException catch (e) {
@@ -41,11 +36,8 @@ class PostRepositoryImpl implements IPostRepository {
 
   @override
   Future<Either<PostFailure, Unit>> delete(Post post) async {
-    final currentUser = getIt<IAuthFacade>()
-        .getSignedInUser()
-        .getOrElse(() => throw NotAuthenticatedError());
     try {
-      final userPostsDoc = _firestore.postsCollection.doc(currentUser.id);
+      final userPostsDoc = _firestore.postsCollection.doc(post.ownerid);
       final postId = post.id;
       await userPostsDoc.userPostsCollection.doc(postId).delete();
       return right(unit);
@@ -74,11 +66,10 @@ class PostRepositoryImpl implements IPostRepository {
   }
 
   @override
-  Stream<Either<PostFailure, List<Tuple2<Post, User>>>> read() async* {
-    final currentUser = getIt<IAuthFacade>()
-        .getSignedInUser()
-        .getOrElse(() => throw NotAuthenticatedError());
-    final userTimelineDoc = _firestore.timelineCollection.doc(currentUser.id);
+  Stream<Either<PostFailure, List<Tuple2<Post, User>>>> read(
+    String currentUserId,
+  ) async* {
+    final userTimelineDoc = _firestore.timelineCollection.doc(currentUserId);
     yield* userTimelineDoc.timelinePostsCollection
         .snapshots()
         .asyncMap(

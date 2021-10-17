@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_share/domain/core/errors.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
@@ -27,7 +28,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
       },
       signedOut: (_) async* {
-        await _authFacade.signOut();
+        final userOption = _authFacade.getSignedInUser();
+        final currentUser =
+            userOption.getOrElse(() => throw NotAuthenticatedError());
+        await _authFacade.signOut(currentUser);
         yield const AuthState.unauthenticated();
       },
     );

@@ -15,42 +15,35 @@ class PostsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<PostBloc>()..add(const PostEvent.read()),
-      child: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          state.maybeMap(
-            unauthenticated: (_) => context.replaceRoute(const SignInRoute()),
-            orElse: () {},
-          );
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Flutter Share'),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.exit_to_app),
-                onPressed: () {
-                  context.read<AuthBloc>().add(const AuthEvent.signedOut());
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Flutter Share'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.exit_to_app),
+              onPressed: () {
+                context.read<AuthBloc>().add(const AuthEvent.signedOut());
+                context.replaceRoute(const SignInRoute());
+              },
+            ),
+          ],
+        ),
+        body: BlocBuilder<PostBloc, PostState>(
+          builder: (context, state) {
+            return state.maybeMap(
+              readFailure: (state) {
+                return const Text('');
+              },
+              readSuccess: (state) => ListView.builder(
+                itemCount: state.posts.length,
+                itemBuilder: (_, index) {
+                  final tu = state.posts[index];
+                  return SinglePost(tu.value1, tu.value2);
                 },
               ),
-            ],
-          ),
-          body: BlocBuilder<PostBloc, PostState>(
-            builder: (context, state) {
-              return state.maybeMap(
-                readFailure: (state) {
-                  return const Text('');
-                },
-                readSuccess: (state) => ListView.builder(
-                  itemCount: state.posts.length,
-                  itemBuilder: (_, index) {
-                    final tu = state.posts[index];
-                    return SinglePost(tu.value1, tu.value2);
-                  },
-                ),
-                orElse: () => const Center(child: CircularProgressIndicator()),
-              );
-            },
-          ),
+              orElse: () => const Center(child: CircularProgressIndicator()),
+            );
+          },
         ),
       ),
     );

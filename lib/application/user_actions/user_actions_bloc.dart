@@ -11,7 +11,6 @@ import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/domain/user_actions/i_user_actions_repository.dart';
 import 'package:flutter_share/domain/user_actions/profile.dart';
 import 'package:flutter_share/domain/user_actions/user_actions_failure.dart';
-import 'package:flutter_share/injection.dart';
 
 part 'user_actions_bloc.freezed.dart';
 part 'user_actions_event.dart';
@@ -20,7 +19,9 @@ part 'user_actions_state.dart';
 @injectable
 class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
   final IUserActionsRepository _userActionsRepository;
-  UserActionsBloc(this._userActionsRepository) : super(const _Initial());
+  final IAuthFacade _authFacade;
+  UserActionsBloc(this._userActionsRepository, this._authFacade)
+      : super(const _Initial());
 
   @override
   Stream<UserActionsState> mapEventToState(
@@ -31,9 +32,13 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
         final isFollowingUpdate = !e.profile.isFollowing;
         final followersCountUpdate =
             e.profile.followers + (isFollowingUpdate == true ? 1 : -1);
+        final userOption = _authFacade.getSignedInUser();
+        final currentUser =
+            userOption.getOrElse(() => throw NotAuthenticatedError());
         _userActionsRepository.followProfile(
           isFollowingUpdate,
           e.profile.user.id,
+          currentUser,
         );
         final updatedProfile = e.profile.copyWith(
           isFollowing: isFollowingUpdate,
@@ -42,7 +47,7 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
         yield UserActionsState.loaded(updatedProfile);
       },
       checkLikeStatus: (e) async* {
-        final userOption = getIt<IAuthFacade>().getSignedInUser();
+        final userOption = _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
         final isLiked = e.post.likes[currentUser.id] ?? false;
@@ -50,8 +55,11 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
       },
       fetchProfile: (e) async* {
         yield const UserActionsState.loading();
+        final userOption = _authFacade.getSignedInUser();
+        final currentUser =
+            userOption.getOrElse(() => throw NotAuthenticatedError());
         final failureOrSuccess =
-            await _userActionsRepository.fetchProfile(e.userId);
+            await _userActionsRepository.fetchProfile(e.userId, currentUser.id);
         yield failureOrSuccess.fold(
           (l) => UserActionsState.error(l),
           (r) => UserActionsState.loaded(r),
@@ -67,11 +75,11 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
             );
       },
       likePost: (e) async* {
-        final userOption = getIt<IAuthFacade>().getSignedInUser();
+        final userOption = _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
         e.post.likes[currentUser.id] = e.likeStatus;
-        _userActionsRepository.likePost(e.post);
+        _userActionsRepository.likePost(e.post, currentUser);
         yield UserActionsState.likeStatus(e.likeStatus);
       },
     );

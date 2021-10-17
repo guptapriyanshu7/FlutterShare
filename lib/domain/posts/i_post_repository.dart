@@ -6,7 +6,7 @@ import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/domain/posts/post_failure.dart';
 
 abstract class IPostRepository {
-  Stream<Either<PostFailure, List<Tuple2<Post, User>>>> read();
+  Stream<Either<PostFailure, List<Tuple2<Post, User>>>> read(String currentUserId);
   Future<Either<PostFailure, Unit>> create(Post post);
   Future<Either<PostFailure, Tuple2<Post, User>>> getPost(
     String userId,

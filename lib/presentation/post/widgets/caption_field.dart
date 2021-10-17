@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_share/application/auth/auth_bloc.dart';
 import 'package:flutter_share/application/post/save_post/save_post_bloc.dart';
+import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/domain/core/validators.dart';
 
 class CaptionField extends StatelessWidget {
@@ -12,13 +13,14 @@ class CaptionField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final photoUrl = context.read<AuthBloc>().state.maybeMap(
-          orElse: () {},
-          authenticated: (_) => _.currentUser.photoUrl,
-        );
+    final _authState = context.read<AuthBloc>().state;
+    final photoUrl = _authState.maybeMap(
+      authenticated: (_) => _.currentUser.photoUrl,
+      orElse: () => throw NotAuthenticatedError(),
+    );
     return ListTile(
       leading: CircleAvatar(
-        backgroundImage: CachedNetworkImageProvider(photoUrl!),
+        backgroundImage: CachedNetworkImageProvider(photoUrl),
       ),
       title: TextFormField(
         onChanged: (value) => context
