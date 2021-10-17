@@ -7,12 +7,6 @@ import 'package:flutter_share/helper/helper_functions.dart';
 class GetLocationWidget extends HookWidget {
   const GetLocationWidget({Key? key}) : super(key: key);
 
-  void _addLocationChangedEvent(BuildContext context, String value) {
-    context.read<SavePostBloc>().add(
-          SavePostEvent.locationChanged(value),
-        );
-  }
-
   @override
   Widget build(BuildContext context) {
     final _locationController = useTextEditingController();
@@ -24,34 +18,58 @@ class GetLocationWidget extends HookWidget {
             color: Theme.of(context).primaryColor,
             size: 35,
           ),
-          title: TextFormField(
-            controller: _locationController,
-            onChanged: (value) => _addLocationChangedEvent(context, value),
-            decoration: const InputDecoration(
-              hintText: 'Location...',
-              border: InputBorder.none,
-            ),
-          ),
-        ),
-        Container(
-          alignment: Alignment.center,
-          width: 200,
-          child: ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+          title: BlocListener<SavePostBloc, SavePostState>(
+            listenWhen: (previous, current) => previous.isSaving == true,
+            listener: (context, state) {
+              if (state.failureOption.isNone()) _locationController.clear();
+            },
+            child: TextFormField(
+              controller: _locationController,
+              onChanged: (value) => context
+                  .read<SavePostBloc>()
+                  .add(SavePostEvent.locationChanged(value)),
+              decoration: const InputDecoration(
+                hintText: 'Location...',
+                border: InputBorder.none,
               ),
             ),
-            onPressed: () async {
-              final value = await getLocation();
-              _locationController.text = value;
-              _addLocationChangedEvent(context, value);
-            },
-            icon: const Icon(Icons.my_location),
-            label: const Text('Current Location'),
           ),
         ),
+        _LocationIcon(locationController: _locationController),
       ],
+    );
+  }
+}
+
+class _LocationIcon extends StatelessWidget {
+  const _LocationIcon({
+    Key? key,
+    required this.locationController,
+  }) : super(key: key);
+
+  final TextEditingController locationController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      width: 200,
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        onPressed: () async {
+          final value = await getLocation();
+          locationController.text = value;
+          context.read<SavePostBloc>().add(
+                SavePostEvent.locationChanged(value),
+              );
+        },
+        icon: const Icon(Icons.my_location),
+        label: const Text('Current Location'),
+      ),
     );
   }
 }
