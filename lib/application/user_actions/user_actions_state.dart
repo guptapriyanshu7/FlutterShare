@@ -9,4 +9,7 @@ class UserActionsState with _$UserActionsState {
   const factory UserActionsState.loaded(
     Profile profile,
   ) = _Loaded;
+  const factory UserActionsState.commentsLoaded(
+    List<Comment> comment,
+  ) = _CommentsLoaded;
 }

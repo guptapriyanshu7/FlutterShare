@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_share/application/user_actions/user_actions_bloc.dart';
 import 'package:flutter_share/domain/auth/i_auth_facade.dart';
 import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/injection.dart';
@@ -14,36 +16,6 @@ class CommentsPage extends StatelessWidget {
       : super(key: key);
 
   final commentController = TextEditingController();
-  Widget showComments() {
-    // If this happens
-    return StreamBuilder(
-      stream: getIt<FirebaseFirestore>()
-          .collection('comments')
-          .doc(postId)
-          .collection('comments')
-          .orderBy('timestamp', descending: false)
-          .snapshots(),
-      builder: (
-        context,
-        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
-      ) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        final comments = snapshot.data!.docs.map<ListTile>((doc) {
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundImage:
-                  CachedNetworkImageProvider(doc['avatar'] as String),
-            ),
-            title: Text(doc['comment'] as String),
-            subtitle: Text(format(doc['timestamp'].toDate() as DateTime)),
-          );
-        }).toList();
-        return ListView(children: comments);
-      },
-    );
-  }
 
   void addComment() {
     final userOption = getIt<IAuthFacade>().getSignedInUser();
@@ -55,7 +27,7 @@ class CommentsPage extends StatelessWidget {
         .collection("comments")
         .add({
       'comment': commentController.text,
-      'timestamp': DateTime.now(),
+      'timestamp': DateTime.now().toIso8601String(),
       'userId': currentUser.id,
       'username': currentUser.username,
       'avatar': currentUser.photoUrl,
@@ -85,7 +57,7 @@ class CommentsPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Comments')),
       body: Column(
         children: [
-          Expanded(child: showComments()),
+          Expanded(child: _ShowComments(postId: postId)),
           const Divider(),
           ListTile(
             title: TextField(
@@ -103,6 +75,42 @@ class CommentsPage extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class _ShowComments extends StatelessWidget {
+  const _ShowComments({
+    Key? key,
+    required this.postId,
+  }) : super(key: key);
+
+  final String postId;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) =>
+          getIt<UserActionsBloc>()..add(UserActionsEvent.fetchComments(postId)),
+      child: BlocBuilder<UserActionsBloc, UserActionsState>(
+        builder: (_, state) => state.maybeMap(
+          orElse: () => const Text(''),
+          loading: (_) => const Center(child: CircularProgressIndicator()),
+          commentsLoaded: (_) {
+            final commentsListTile = _.comment.map<ListTile>((commentDomain) {
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage:
+                      CachedNetworkImageProvider(commentDomain.avatar),
+                ),
+                title: Text(commentDomain.comment),
+                subtitle: Text(format(commentDomain.timestamp)),
+              );
+            }).toList();
+            return ListView(children: commentsListTile);
+          },
+        ),
       ),
     );
   }

@@ -13,18 +13,13 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   Future<QuerySnapshot>? searchResultsFuture;
-
   final searchController = TextEditingController();
-
-  void clearForm() {
-    searchController.clear();
-  }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        clearForm();
+        searchController.clear();
         setState(() {
           searchResultsFuture = null;
         });
@@ -41,7 +36,7 @@ class _SearchPageState extends State<SearchPage> {
               prefixIcon: const Icon(Icons.account_box),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.clear),
-                onPressed: clearForm,
+                onPressed: () => searchController.clear(),
               ),
             ),
             onFieldSubmitted: (val) {
@@ -56,43 +51,61 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
         body: searchResultsFuture == null
-            ? Center(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: const [
-                    Text(
-                      'Find Users',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 50,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : FutureBuilder(
-                future: searchResultsFuture,
-                builder:
-                    (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  final List<UserResult> searchResults = [];
-                  for (final doc in snapshot.data!.docs) {
-                    final userJson = doc.data()! as Map<String, dynamic>;
-                    final user = User.fromJson(userJson);
-                    // User.fromDocument(doc as DocumentSnapshot<Object>);
-                    final searchResult = UserResult(user);
-                    searchResults.add(searchResult);
-                  }
-                  return ListView(
-                    children: searchResults,
-                  );
-                },
-              ),
+            ? const _CenterText()
+            : _SearchResult(searchResultsFuture: searchResultsFuture),
+      ),
+    );
+  }
+}
+
+class _SearchResult extends StatelessWidget {
+  const _SearchResult({
+    Key? key,
+    required this.searchResultsFuture,
+  }) : super(key: key);
+
+  final Future<QuerySnapshot>? searchResultsFuture;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: searchResultsFuture,
+      builder: (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        final List<UserResult> searchResults = [];
+        for (final doc in snapshot.data!.docs) {
+          final userJson = doc.data()! as Map<String, dynamic>;
+          final user = User.fromJson(userJson);
+          final searchResult = UserResult(user);
+          searchResults.add(searchResult);
+        }
+        return ListView(
+          children: searchResults,
+        );
+      },
+    );
+  }
+}
+
+class _CenterText extends StatelessWidget {
+  const _CenterText({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text(
+        'Find Users',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.white,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w600,
+          fontSize: 50,
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter_share/domain/user_actions/comment.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
@@ -55,6 +56,15 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
           (l) => UserActionsState.error(l),
           (r) => UserActionsState.loaded(r),
         );
+      },
+      fetchComments: (e) async* {
+        yield const UserActionsState.loading();
+        yield* _userActionsRepository.fetchComments(e.postId).map(
+              (failureOrComments) => failureOrComments.fold(
+                (f) => UserActionsState.error(f),
+                (comments) => UserActionsState.commentsLoaded(comments),
+              ),
+            );
       },
       likePost: (e) async* {
         final userOption = getIt<IAuthFacade>().getSignedInUser();

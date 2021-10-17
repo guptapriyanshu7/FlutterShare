@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_share/domain/user_actions/comment.dart';
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'package:flutter_share/domain/auth/i_auth_facade.dart';
 import 'package:flutter_share/domain/auth/user.dart';
@@ -186,4 +188,96 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
       }
     }
   }
+
+  @override
+  Stream<Either<UserActionsFailure, List<Comment>>> fetchComments(
+    String postId,
+  ) async* {
+    final postCommentsDoc = _firestore.commentsCollection.doc(postId);
+    yield* postCommentsDoc.commentsCollection
+        .orderBy('timestamp', descending: false)
+        .snapshots()
+        .map(
+          (snapshot) => right<UserActionsFailure, List<Comment>>(
+            snapshot.docs.map((doc) => Comment.fromJson(doc.data())).toList(),
+          ),
+        )
+        .onErrorReturnWith((e, _) {
+      if (e is FirebaseException) {
+        if (e.code == 'permission-denied') {
+          return left(const UserActionsFailure.insufficientPermissions());
+        } else if (e.code == 'not-found') {
+          return left(const UserActionsFailure.notFound());
+        } else {
+          return left(const UserActionsFailure.unableToFetch());
+        }
+      } else {
+        return left(const UserActionsFailure.unableToFetch());
+      }
+    });
+  }
+
+  //  @override
+  // Future<Option<UserActionsFailure>> addComment(
+  //   bool isFollowing,
+  //   String userId,
+  // ) async {
+  //   final currentUser = getIt<IAuthFacade>()
+  //       .getSignedInUser()
+  //       .getOrElse(() => throw NotAuthenticatedError());
+  //   try {
+  //     if (isFollowing) {
+  //       await _firestore.followingCollection
+  //           .doc(currentUser.id)
+  //           .userFollowingCollection
+  //           .doc(userId)
+  //           .set({});
+  //       await _firestore.followersCollection
+  //           .doc(userId)
+  //           .userFollowersCollection
+  //           .doc(currentUser.id)
+  //           .set({});
+  //       await _firestore.feedCollection.doc(userId).userFeedCollection.add({
+  //         'type': 'follow',
+  //         'timestamp': DateTime.now(),
+  //         'photoUrl': currentUser.photoUrl,
+  //         'username': currentUser.username,
+  //         'userId': currentUser.id,
+  //       });
+  //     } else {
+  //       await _firestore.followingCollection
+  //           .doc(currentUser.id)
+  //           .userFollowingCollection
+  //           .doc(userId)
+  //           .delete();
+  //       await _firestore.followersCollection
+  //           .doc(userId)
+  //           .userFollowersCollection
+  //           .doc(currentUser.id)
+  //           .delete();
+  //       _firestore.feedCollection
+  //           .doc(userId)
+  //           .userFeedCollection
+  //           .where('userId', isEqualTo: currentUser.id)
+  //           .where('type', isEqualTo: 'follow')
+  //           .get()
+  //           .then(
+  //         (value) async {
+  //           for (final doc in value.docs) {
+  //             await doc.reference.delete();
+  //           }
+  //         },
+  //       );
+  //     }
+  //     return none();
+  //   } on FirebaseException catch (e) {
+  //     if (e.code == 'permission-denied') {
+  //       return some(const UserActionsFailure.insufficientPermissions());
+  //     } else if (e.code == 'not-found') {
+  //       return some(const UserActionsFailure.notFound());
+  //     } else {
+  //       return some(const UserActionsFailure.unableToFetch());
+  //     }
+  //   }
+  // }
 }

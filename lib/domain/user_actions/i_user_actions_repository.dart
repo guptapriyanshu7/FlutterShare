@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
+
 import 'package:flutter_share/domain/posts/post.dart';
+import 'package:flutter_share/domain/user_actions/comment.dart';
 import 'package:flutter_share/domain/user_actions/profile.dart';
 import 'package:flutter_share/domain/user_actions/user_actions_failure.dart';
 
@@ -9,5 +11,8 @@ abstract class IUserActionsRepository {
   Future<Option<UserActionsFailure>> followProfile(
     bool isfollowing,
     String userId,
+  );
+  Stream<Either<UserActionsFailure, List<Comment>>> fetchComments(
+    String postId,
   );
 }
