@@ -13,16 +13,14 @@ class CommentsPage extends StatelessWidget {
   final String postId;
   final String postOwner;
   final String photoUrl;
-  CommentsPage(this.postId, this.postOwner, this.photoUrl, {Key? key})
+  const CommentsPage(this.postId, this.postOwner, this.photoUrl, {Key? key})
       : super(key: key);
 
-  final commentController = TextEditingController();
-
-  void addComment(User currentUser) {
+  void addComment(User currentUser, TextEditingController commentController) {
     getIt<FirebaseFirestore>()
         .collection('comments')
         .doc(postId)
-        .collection("comments")
+        .collection('comments')
         .add({
       'comment': commentController.text,
       'timestamp': DateTime.now().toIso8601String(),
@@ -51,6 +49,7 @@ class CommentsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final commentController = TextEditingController();
     final _authState = context.read<AuthBloc>().state;
     final currentUser = _authState.maybeMap(
       authenticated: (_) => _.currentUser,
@@ -73,7 +72,7 @@ class CommentsPage extends StatelessWidget {
                   const BorderSide(color: Colors.red),
                 ),
               ),
-              onPressed: () => addComment(currentUser),
+              onPressed: () => addComment(currentUser, commentController),
               child: const Text('POST'),
             ),
           )

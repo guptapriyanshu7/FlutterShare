@@ -2,27 +2,22 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
 
-class SearchPage extends StatefulWidget {
-  @override
-  _SearchPageState createState() => _SearchPageState();
-}
-
-class _SearchPageState extends State<SearchPage> {
-  Future<QuerySnapshot>? searchResultsFuture;
-  final searchController = TextEditingController();
+class SearchPage extends HookWidget {
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final searchController = useTextEditingController();
+    final searchResultsFuture = useState<Future<QuerySnapshot>?>(null);
     return RefreshIndicator(
       onRefresh: () async {
         searchController.clear();
-        setState(() {
-          searchResultsFuture = null;
-        });
+        searchResultsFuture.value = null;
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -44,15 +39,13 @@ class _SearchPageState extends State<SearchPage> {
                   .collection('users')
                   .where("displayName", isGreaterThanOrEqualTo: val)
                   .get();
-              setState(() {
-                searchResultsFuture = users;
-              });
+              searchResultsFuture.value = users;
             },
           ),
         ),
-        body: searchResultsFuture == null
+        body: searchResultsFuture.value == null
             ? const _CenterText()
-            : _SearchResult(searchResultsFuture: searchResultsFuture),
+            : _SearchResult(searchResultsFuture: searchResultsFuture.value),
       ),
     );
   }

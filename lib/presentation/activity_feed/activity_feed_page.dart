@@ -11,6 +11,10 @@ import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/routes/router.gr.dart';
 
 class ActivityFeedPage extends StatelessWidget {
+  const ActivityFeedPage({
+    Key? key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final _authState = context.read<AuthBloc>().state;
