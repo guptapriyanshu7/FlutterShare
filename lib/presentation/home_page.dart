@@ -14,8 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
-
   Future<void> _setUpInitial() async {
     final RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
@@ -79,54 +77,74 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        state.maybeMap(
+          orElse: () => context.replaceRoute(const SignInRoute()),
+          authenticated: (_) {},
+        );
+      },
       builder: (context, state) {
         return state.maybeMap(
-          orElse: () =>
-              const Material(child: Center(child: CircularProgressIndicator())),
-          authenticated: (_) => AutoTabsScaffold(
-            key: _scaffoldKey,
-            routes: [
-              const PostsRoute(),
-              const SearchRoute(),
-              const SavePostRoute(),
-              const ActivityFeedRoute(),
-              ProfileRoute(id: _.currentUser.id),
-            ],
-            bottomNavigationBuilder: (_, tabsRouter) {
-              return BottomNavigationBar(
-                currentIndex: tabsRouter.activeIndex,
-                onTap: tabsRouter.setActiveIndex,
-                items: const [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Home',
-                    backgroundColor: Colors.red,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.search),
-                    label: 'Search',
-                    backgroundColor: Colors.red,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.camera_alt),
-                    label: 'New Post',
-                    backgroundColor: Colors.red,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.notifications),
-                    label: 'Notifications',
-                    backgroundColor: Colors.red,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.account_box),
-                    label: 'Account',
-                    backgroundColor: Colors.red,
-                  ),
-                ],
-              );
-            },
+          orElse: () => const Material(
+            child: Center(child: CircularProgressIndicator()),
           ),
+          authenticated: (_) => _TabsScaffold(currentUserId: _.currentUser.id),
+        );
+      },
+    );
+  }
+}
+
+class _TabsScaffold extends StatelessWidget {
+  const _TabsScaffold({
+    Key? key,
+    required this.currentUserId,
+  }) : super(key: key);
+
+  final String currentUserId;
+
+  @override
+  Widget build(BuildContext context) {
+    return AutoTabsScaffold(
+      routes: [
+        const PostsRoute(),
+        const SearchRoute(),
+        const SavePostRoute(),
+        const ActivityFeedRoute(),
+        ProfileRoute(id: currentUserId),
+      ],
+      bottomNavigationBuilder: (_, tabsRouter) {
+        return BottomNavigationBar(
+          currentIndex: tabsRouter.activeIndex,
+          onTap: tabsRouter.setActiveIndex,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+              backgroundColor: Colors.red,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: 'Search',
+              backgroundColor: Colors.red,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.camera_alt),
+              label: 'New Post',
+              backgroundColor: Colors.red,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications),
+              label: 'Notifications',
+              backgroundColor: Colors.red,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_box),
+              label: 'Account',
+              backgroundColor: Colors.red,
+            ),
+          ],
         );
       },
     );

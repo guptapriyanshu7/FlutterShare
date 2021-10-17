@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,7 +5,6 @@ import 'package:flutter_share/application/auth/auth_bloc.dart';
 import 'package:flutter_share/application/post/post_bloc.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/profile/widgets/single_post.dart';
-import 'package:flutter_share/presentation/routes/router.gr.dart';
 
 class PostsPage extends StatelessWidget {
   const PostsPage({Key? key}) : super(key: key);
@@ -21,10 +19,7 @@ class PostsPage extends StatelessWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.exit_to_app),
-              onPressed: () {
-                context.read<AuthBloc>().add(const AuthEvent.signedOut());
-                context.replaceRoute(const SignInRoute());
-              },
+              onPressed: () => context.read<AuthBloc>().add(const AuthEvent.signedOut()),
             ),
           ],
         ),
