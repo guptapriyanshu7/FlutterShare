@@ -39,11 +39,12 @@ Future<void> main() async {
     sound: true,
   );
   configureInjection(Environment.prod);
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+  final _router = Router();
   // final CameraDescription camera;
   @override
   Widget build(BuildContext context) {
@@ -51,8 +52,8 @@ class MyApp extends StatelessWidget {
       create: (context) =>
           getIt<AuthBloc>()..add(const AuthEvent.authCheckRequested()),
       child: MaterialApp.router(
-        routeInformationParser: getIt<Router>().defaultRouteParser(),
-        routerDelegate: getIt<Router>().delegate(),
+        routeInformationParser: _router.defaultRouteParser(),
+        routerDelegate: _router.delegate(),
         title: 'FlutterShare',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
