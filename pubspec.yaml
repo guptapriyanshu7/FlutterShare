@@ -55,9 +55,9 @@ flutter:
   assets:
     - assets/images/google_auth.png
   fonts:
-    - family: MyFlutterApp
+    - family: Roboto
       fonts:
-        - asset: assets/fonts/MyFlutterApp.ttf
+        - asset: assets/fonts/Roboto.ttf
     - family: Billabong
       fonts:
         - asset: assets/fonts/Billabong.ttf

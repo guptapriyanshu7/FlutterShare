@@ -20,19 +20,24 @@ class SearchPage extends HookWidget {
         searchResultsFuture.value = null;
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
         appBar: AppBar(
-          backgroundColor: Colors.white,
           title: TextFormField(
             controller: searchController,
-            decoration: InputDecoration(
-              hintText: 'Search Users',
+            decoration: const InputDecoration(
+              hintText: 'Search',
               filled: true,
-              prefixIcon: const Icon(Icons.account_box),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () => searchController.clear(),
+              contentPadding: EdgeInsets.zero,
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
               ),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
+              // suffixIcon: IconButton(
+              //   icon: const Icon(Icons.clear),
+              //   onPressed: () => searchController.clear(),
+              // ),
             ),
             onFieldSubmitted: (val) {
               final users = getIt<FirebaseFirestore>()
@@ -44,7 +49,8 @@ class SearchPage extends HookWidget {
           ),
         ),
         body: searchResultsFuture.value == null
-            ? const _CenterText()
+            // ? const _CenterText()
+            ? null
             : _SearchResult(searchResultsFuture: searchResultsFuture.value),
       ),
     );
@@ -82,27 +88,27 @@ class _SearchResult extends StatelessWidget {
   }
 }
 
-class _CenterText extends StatelessWidget {
-  const _CenterText({
-    Key? key,
-  }) : super(key: key);
+// class _CenterText extends StatelessWidget {
+//   const _CenterText({
+//     Key? key,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Find Users',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.white,
-          fontStyle: FontStyle.italic,
-          fontWeight: FontWeight.w600,
-          fontSize: 50,
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Center(
+//       child: Text(
+//         'Find Users',
+//         textAlign: TextAlign.center,
+//         style: TextStyle(
+//           color: Colors.white,
+//           fontStyle: FontStyle.italic,
+//           fontWeight: FontWeight.w600,
+//           fontSize: 50,
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class UserResult extends StatelessWidget {
   final User user;

@@ -56,9 +56,19 @@ class MyApp extends StatelessWidget {
         routerDelegate: _router.delegate(),
         title: 'FlutterShare',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData.dark(
-            // colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
-            //     .copyWith(secondary: Colors.pink[200]),
+        theme: ThemeData(
+            brightness: Brightness.dark,
+            fontFamily: 'Roboto',
+            appBarTheme: AppBarTheme(
+              elevation: 0,
+              backgroundColor:
+                  Theme.of(context).colorScheme.background.withOpacity(0),
+            ),
+            progressIndicatorTheme: const ProgressIndicatorThemeData(
+              color: Colors.white,
+              refreshBackgroundColor: Colors.white,
+            )
+            // colorScheme: ColorScheme.fromSwatch(),
             ),
       ),
     );

@@ -116,33 +116,38 @@ class _TabsScaffold extends StatelessWidget {
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           currentIndex: tabsRouter.activeIndex,
           onTap: tabsRouter.setActiveIndex,
+          selectedIconTheme: const IconThemeData(color: Colors.white),
+          unselectedIconTheme: const IconThemeData(color: Colors.white),
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home),
               label: 'Home',
-              backgroundColor: Colors.red,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.search),
+              icon: Icon(Icons.search_outlined),
+              activeIcon: Icon(Icons.search),
               label: 'Search',
-              backgroundColor: Colors.red,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.camera_alt),
+              icon: Icon(Icons.camera_alt_outlined),
+              activeIcon: Icon(Icons.camera_alt),
               label: 'New Post',
-              backgroundColor: Colors.red,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
+              icon: Icon(Icons.favorite_border_outlined),
+              activeIcon: Icon(Icons.favorite),
               label: 'Notifications',
-              backgroundColor: Colors.red,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.account_box),
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
               label: 'Account',
-              backgroundColor: Colors.red,
             ),
           ],
         );

@@ -15,11 +15,18 @@ class PostsPage extends StatelessWidget {
       create: (context) => getIt<PostBloc>()..add(const PostEvent.read()),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Flutter Share'),
+          title: const Text(
+            'FlutterShare',
+            style: TextStyle(
+              fontFamily: 'Billabong',
+              fontSize: 36,
+            ),
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.exit_to_app),
-              onPressed: () => context.read<AuthBloc>().add(const AuthEvent.signedOut()),
+              onPressed: () =>
+                  context.read<AuthBloc>().add(const AuthEvent.signedOut()),
             ),
           ],
         ),
