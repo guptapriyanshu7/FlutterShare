@@ -98,12 +98,12 @@ class _ChangeOrientation extends HookWidget {
             IconButton(
               icon: const Icon(Icons.grid_on),
               onPressed: () => grid.value = true,
-              color: grid.value ? Colors.pink : null,
+              color: grid.value ? Colors.white : Colors.grey,
             ),
             IconButton(
               icon: const Icon(Icons.list),
               onPressed: () => grid.value = false,
-              color: !grid.value ? Colors.pink : null,
+              color: !grid.value ? Colors.white : Colors.grey,
             ),
           ],
         ),
@@ -205,8 +205,8 @@ class _BuildInfo extends StatelessWidget {
           child: Text(
             user.displayName,
             style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+                // fontWeight: FontWeight.bold,
+                ),
           ),
         ),
         Container(
@@ -237,7 +237,7 @@ class _BuildHeader extends StatelessWidget {
     return Row(
       children: [
         CircleAvatar(
-          radius: 40,
+          radius: 45,
           backgroundImage: CachedNetworkImageProvider(user.photoUrl),
         ),
         Expanded(
@@ -251,19 +251,37 @@ class _BuildHeader extends StatelessWidget {
                   children: [
                     Column(
                       children: [
-                        Text(posts.length.toString()),
+                        Text(
+                          posts.length.toString(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
                         const Text('Posts')
                       ],
                     ),
                     Column(
                       children: [
-                        Text(followers.toString()),
+                        Text(
+                          followers.toString(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
                         const Text('Followers')
                       ],
                     ),
                     Column(
                       children: [
-                        Text(following.toString()),
+                        Text(
+                          following.toString(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
                         const Text('Following')
                       ],
                     ),
@@ -297,7 +315,10 @@ class _BuildButtons extends StatelessWidget {
       child: currentUserId == profile.user.id
           ? OutlinedButton(
               onPressed: () {},
-              child: const Text('Edit Profile'),
+              child: const Text(
+                'Edit Profile',
+                style: TextStyle(color: Colors.white),
+              ),
             )
           : OutlinedButton(
               onPressed: () {
@@ -305,8 +326,15 @@ class _BuildButtons extends StatelessWidget {
                     .read<UserActionsBloc>()
                     .add(UserActionsEvent.followProfile(profile));
               },
-              child:
-                  isFollowing ? const Text('Unfollow') : const Text('Follow'),
+              child: isFollowing
+                  ? const Text(
+                      'Unfollow',
+                      style: TextStyle(color: Colors.white),
+                    )
+                  : const Text(
+                      'Follow',
+                      style: TextStyle(color: Colors.white),
+                    ),
             ),
     );
   }

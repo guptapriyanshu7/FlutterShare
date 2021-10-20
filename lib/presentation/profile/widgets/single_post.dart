@@ -79,15 +79,15 @@ class _LikeAndCommentIcons extends StatelessWidget {
         IconButton(
           icon: Icon(
             isLiked ? Icons.favorite : Icons.favorite_border,
+            color: isLiked ? Colors.red : Colors.white,
           ),
           onPressed: () => context
               .read<UserActionsBloc>()
               .add(UserActionsEvent.likePost(!isLiked, post)),
           iconSize: 28.0,
-          color: Theme.of(context).colorScheme.secondary,
         ),
         IconButton(
-          icon: const Icon(Icons.chat),
+          icon: const Icon(Icons.chat_bubble_outline),
           onPressed: () {
             context.pushRoute(
               CommentsRoute(
@@ -98,7 +98,6 @@ class _LikeAndCommentIcons extends StatelessWidget {
             );
           },
           iconSize: 28.0,
-          color: Theme.of(context).colorScheme.secondary,
         ),
       ],
     );

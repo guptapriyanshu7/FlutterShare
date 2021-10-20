@@ -13,9 +13,9 @@ class GetLocationWidget extends HookWidget {
     return Column(
       children: [
         ListTile(
-          leading: Icon(
+          leading: const Icon(
             Icons.pin_drop,
-            color: Theme.of(context).primaryColor,
+            color: Colors.white,
             size: 35,
           ),
           title: BlocListener<SavePostBloc, SavePostState>(
@@ -29,12 +29,13 @@ class GetLocationWidget extends HookWidget {
                   .read<SavePostBloc>()
                   .add(SavePostEvent.locationChanged(value)),
               decoration: const InputDecoration(
-                hintText: 'Location...',
+                hintText: 'Location',
                 border: InputBorder.none,
               ),
             ),
           ),
         ),
+        SizedBox(height: 12),
         _LocationIcon(locationController: _locationController),
       ],
     );

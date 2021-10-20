@@ -67,16 +67,18 @@ class CommentsPage extends HookWidget {
               decoration: const InputDecoration(labelText: 'Write comment...'),
             ),
             trailing: OutlinedButton(
-              style: ButtonStyle(
-                side: MaterialStateProperty.all<BorderSide>(
-                  const BorderSide(color: Colors.red),
-                ),
-              ),
               onPressed: () {
                 addComment(currentUser, commentController.text);
                 commentController.clear();
               },
-              child: const Text('POST'),
+              child: const Text(
+                'POST',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                  color: Colors.white,
+                ),
+              ),
             ),
           )
         ],

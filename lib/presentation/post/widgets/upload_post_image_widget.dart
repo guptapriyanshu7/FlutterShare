@@ -15,7 +15,7 @@ class UploadPostImageWidget extends HookWidget {
     final file = useState(File('some path'));
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.2,
+      height: MediaQuery.of(context).size.height * 0.35,
       child: BlocListener<SavePostBloc, SavePostState>(
         listenWhen: (previous, current) => previous.isSaving == true,
         listener: (context, state) {
@@ -26,7 +26,7 @@ class UploadPostImageWidget extends HookWidget {
               ? Image.file(file.value)
               : const Icon(
                   Icons.camera_alt_rounded,
-                  color: Colors.grey,
+                  color: Colors.white,
                   size: 60,
                 ),
           onTap: () async {

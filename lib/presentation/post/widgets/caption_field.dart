@@ -20,9 +20,8 @@ class CaptionField extends StatelessWidget {
       orElse: () => throw NotAuthenticatedError(),
     );
     return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: CachedNetworkImageProvider(photoUrl),
-      ),
+      leading:
+          CircleAvatar(backgroundImage: CachedNetworkImageProvider(photoUrl)),
       title: const _TextField(),
     );
   }
@@ -59,7 +58,7 @@ class _TextField extends HookWidget {
           return null;
         },
         decoration: const InputDecoration(
-          hintText: 'Enter a Caption...',
+          hintText: 'Enter a Caption',
           counterText: '',
           border: InputBorder.none,
         ),

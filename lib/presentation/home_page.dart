@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +90,10 @@ class _HomePageState extends State<HomePage> {
           orElse: () => const Material(
             child: Center(child: CircularProgressIndicator()),
           ),
-          authenticated: (_) => _TabsScaffold(currentUserId: _.currentUser.id),
+          authenticated: (_) => _TabsScaffold(
+            currentUserId: _.currentUser.id,
+            photoUrl: _.currentUser.photoUrl,
+          ),
         );
       },
     );
@@ -100,9 +104,11 @@ class _TabsScaffold extends StatelessWidget {
   const _TabsScaffold({
     Key? key,
     required this.currentUserId,
+    required this.photoUrl,
   }) : super(key: key);
 
   final String currentUserId;
+  final String photoUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -123,30 +129,36 @@ class _TabsScaffold extends StatelessWidget {
           unselectedIconTheme: const IconThemeData(color: Colors.white),
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          items: const [
-            BottomNavigationBarItem(
+          items: [
+            const BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
               activeIcon: Icon(Icons.home),
               label: 'Home',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.search_outlined),
               activeIcon: Icon(Icons.search),
               label: 'Search',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.camera_alt_outlined),
               activeIcon: Icon(Icons.camera_alt),
               label: 'New Post',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.favorite_border_outlined),
               activeIcon: Icon(Icons.favorite),
               label: 'Notifications',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              activeIcon: Icon(Icons.person),
+              icon: CircleAvatar(
+                radius: 12,
+                foregroundImage: CachedNetworkImageProvider(photoUrl),
+              ),
+              activeIcon: CircleAvatar(
+                radius: 12,
+                foregroundImage: CachedNetworkImageProvider(photoUrl),
+              ),
               label: 'Account',
             ),
           ],
