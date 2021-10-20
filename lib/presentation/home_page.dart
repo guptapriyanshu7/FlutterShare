@@ -141,8 +141,8 @@ class _TabsScaffold extends StatelessWidget {
               label: 'Search',
             ),
             const BottomNavigationBarItem(
-              icon: Icon(Icons.camera_alt_outlined),
-              activeIcon: Icon(Icons.camera_alt),
+              icon: Icon(Icons.add_circle_outline),
+              activeIcon: Icon(Icons.add_circle),
               label: 'New Post',
             ),
             const BottomNavigationBarItem(

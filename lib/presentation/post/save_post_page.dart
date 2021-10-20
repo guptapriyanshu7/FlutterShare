@@ -22,29 +22,39 @@ class SavePostPage extends StatelessWidget {
 
     return BlocProvider(
       create: (context) => getIt<SavePostBloc>(),
-      child: BlocConsumer<SavePostBloc, SavePostState>(
-        listenWhen: (previous, current) =>
-            previous.isSaving != current.isSaving,
-        listener: (context, state) {
-          if (state.isSaving) {
-            showDialog(
-              context: context,
-              builder: (_) {
-                return const Center(child: CircularProgressIndicator());
-              },
-            );
-          } else {
-            Navigator.pop(context);
-          }
-        },
+      child: BlocBuilder<SavePostBloc, SavePostState>(
+        // listenWhen: (previous, current) =>
+        //     previous.isSaving != current.isSaving,
+        // listener: (context, state) {
+        //   if (state.isSaving) {
+        //     showDialog(
+        //       context: context,
+        //       builder: (_) {
+        //         return const Center(child: CircularProgressIndicator());
+        //       },
+        //     );
+        //   } else {
+        //     Navigator.pop(context);
+        //   }
+        // },
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Save Post'),
-              actions: <Widget>[
+              title: const Text('Create'),
+              actions: [
                 IconButton(
-                  icon: const Icon(Icons.check),
-                  onPressed: () => _handleSubmit(context, _formKey),
+                  icon: state.isSaving
+                      ? Transform.scale(
+                          scale: 0.6,
+                          child: const CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Icon(Icons.check),
+                  onPressed: state.isSaving
+                      ? null
+                      : () => _handleSubmit(context, _formKey),
                 )
               ],
             ),
