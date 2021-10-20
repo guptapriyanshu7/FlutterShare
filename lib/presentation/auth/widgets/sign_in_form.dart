@@ -52,13 +52,17 @@ class SignInForm extends StatelessWidget {
               }
             },
             child: ListView(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(16),
               children: [
-                const SizedBox(height: 50),
-                const Icon(
-                  Icons.verified_user_outlined,
-                  size: 90,
-                  color: Colors.red,
+                const SizedBox(height: 150),
+                const Center(
+                  child: Text(
+                    'FlutterShare',
+                    style: TextStyle(
+                      fontFamily: 'Billabong',
+                      fontSize: 60,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
@@ -66,9 +70,18 @@ class SignInForm extends StatelessWidget {
                   keyboardType: TextInputType.emailAddress,
                   autocorrect: false,
                   decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.email),
-                    labelText: 'Email',
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                    hintText: 'Email',
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                    ),
                   ),
+                  // decoration: const InputDecoration(
+                  //   // prefixIcon: Icon(Icons.email),
+                  //   labelText: 'Email',
+                  // ),
                   onChanged: (value) =>
                       signInFormBloc.add(SignInFormEvent.emailChanged(value)),
                   // validator: (_) =>
@@ -85,8 +98,13 @@ class SignInForm extends StatelessWidget {
                   autocorrect: false,
                   obscureText: true,
                   decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.lock),
-                    labelText: 'Password',
+                    hintText: 'Password',
+                    filled: true,
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                    ),
                   ),
                   onChanged: (value) => signInFormBloc.add(
                     SignInFormEvent.passwordChanged(value),
@@ -107,7 +125,8 @@ class SignInForm extends StatelessWidget {
                         onPressed: () {
                           currentFocus.unfocus();
                           signInFormBloc.add(
-                            const SignInFormEvent.signInWithEmailAndPasswordPressed(),
+                            const SignInFormEvent
+                                .signInWithEmailAndPasswordPressed(),
                           );
                         },
                         child: const Text('SIGN IN'),
@@ -128,21 +147,56 @@ class SignInForm extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 12),
+                Row(
+                  children: [
+                    const Expanded(
+                      child: Divider(
+                        color: Colors.white,
+                        // height: 20,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      child: const Text('OR'),
+                    ),
+                    const Expanded(
+                      child: Divider(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
                   onPressed: () => signInFormBloc.add(
                     const SignInFormEvent.signInWithGooglePressed(),
                   ),
-                  child: const Text(
-                    'Sign in with Google',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: state.isSubmitting
+                      ? SizedBox(
+                          height: 14,
+                          width: 14,
+                          child: Transform.scale(
+                            scale: 1.5,
+                            child: const CircularProgressIndicator(
+                              strokeWidth: 1.2,
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                      : const Text(
+                          'Log in with Google',
+                          style: TextStyle(
+                              // fontWeight: FontWeight.bold,
+                              ),
+                        ),
                 ),
-                if (state.isSubmitting) ...[
-                  const SizedBox(height: 12),
-                  const LinearProgressIndicator(),
-                ]
+                // if (state.isSubmitting) ...[
+                //   const SizedBox(height: 12),
+                //   const LinearProgressIndicator(),
+                // ]
               ],
             ),
           ),

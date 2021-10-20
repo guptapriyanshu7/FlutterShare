@@ -58,3 +58,6 @@ flutter:
     - family: MyFlutterApp
       fonts:
         - asset: assets/fonts/MyFlutterApp.ttf
+    - family: Billabong
+      fonts:
+        - asset: assets/fonts/Billabong.ttf

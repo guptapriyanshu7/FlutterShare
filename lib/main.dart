@@ -56,10 +56,10 @@ class MyApp extends StatelessWidget {
         routerDelegate: _router.delegate(),
         title: 'FlutterShare',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
-              .copyWith(secondary: Colors.pink[200]),
-        ),
+        theme: ThemeData.dark(
+            // colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
+            //     .copyWith(secondary: Colors.pink[200]),
+            ),
       ),
     );
   }
