@@ -5,53 +5,69 @@
 [![GitHub stars](https://img.shields.io/github/stars/guptapriyanshu7/FlutterShare?style=for-the-badge)](https://github.com/guptapriyanshu7/FlutterShare/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/guptapriyanshu7/FlutterShare?style=for-the-badge)](https://github.com/guptapriyanshu7/FlutterShare/network)
 
-An Instagram clone app made with flutter/dart.  
-Uses [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc) from state management.
+An Instagram clone app made with flutter and Firebase.
 
-https://user-images.githubusercontent.com/60141300/126169052-745fc7a2-aa53-4ec5-a65a-3993050f9edc.mp4
+## Screenshots
+<p>
+<img src="https://user-images.githubusercontent.com/60141300/138210157-e44a9b20-4737-4a34-89d3-218b73212aca.jpg" width="250" height="470">
+<img src="https://user-images.githubusercontent.com/60141300/138210146-9d1c2d38-46b1-48d5-9e1c-98ecb3ffc038.jpg" width="250" height="470">
+<img src="https://user-images.githubusercontent.com/60141300/138210148-87f3cbaa-3e4c-45e9-9cdc-e436288cfa5a.jpg" width="250" height="470">
+<img src="https://user-images.githubusercontent.com/60141300/138212211-7e3db48b-2ca3-4bc6-8d42-6b5b0b05dfe6.jpg" width="250" height="470">
+<img src="https://user-images.githubusercontent.com/60141300/138210156-bd86d712-a936-4ba8-a6f7-73ac7d000366.jpg" width="250" height="470">
+<img src="https://user-images.githubusercontent.com/60141300/138210158-3986229b-db05-467b-9743-76d80c99817b.jpg" width="250" height="470">
+<img src="https://user-images.githubusercontent.com/60141300/138210161-5f36bf5b-817f-48fa-8759-32924c2b636f.jpg" width="250" height="470">
+<img src="https://user-images.githubusercontent.com/60141300/138210159-c0fe94ea-7063-4717-b5c8-fda18197e287.jpg" width="250" height="470">
+<img src="https://user-images.githubusercontent.com/60141300/138210154-e2395095-0138-4e99-a53b-fb62427c5ce6.jpg" width="250" height="470">
+<img src="https://user-images.githubusercontent.com/60141300/138210143-95a47570-63f2-46af-851f-57218dcffdf6.jpg" width="250" height="470">
+<img src="https://user-images.githubusercontent.com/60141300/138212210-7e5e956e-2b1d-43e8-a88b-f7927894e712.jpg" width="250" height="470">
+</p>
+
 
 ## Features
 
 - Sign In with email/password or google account.
 - Create post with caption and live location.
-- Like and comment on posts.
+- Like posts.
+- Comment on posts and view all comments on a post.
 - Follow users using search.
+- Timeline based on who you follow (using firebase functions).
 - Notifications on other users activity.
-- See followers/following count.
+- Activity Feed showing recent likes/comments on your posts and who followed you.
+- See followers/following/total posts count.
 
 ## Folder Structure
 
 ```
 lib
 ├───application (State Management code using bloc)
-│   ├───auth
-│   │   └───sign_in_form
-│   ├───post
-│   │   └───save_post
-│   └───user_actions
+│   ├───auth (Checks whether user is authenticated.)
+│   │   └───sign_in_form (Sign In/Register using email/password or google.)
+│   ├───post (View post(s))
+│   │   └───save_post (Create posts logic.)
+│   └───user_actions (Follow, like, comments, profile logic.)
 ├───domain (All the models, errors and exceptionns that could occur.)
 │   ├───auth
 │   ├───core
 │   ├───posts
 │   └───user_actions
-├───helper
+├───helper (Get current location.)
 ├───infrastructure (Firebase related code.)
 │   ├───auth
 │   ├───core
 │   ├───post
 │   └───user_actions
 └───presentation (UI)
-    ├───activity_feed
-    ├───auth
+    ├───activity_feed (Main page after signing in.)
+    ├───auth (Sign in form UI)
     │   └───widgets
-    ├───comments
+    ├───comments (Comments page.)
     ├───post
     │   └───widgets
     ├───profile
     │   └───widgets
-    ├───routes
+    ├───routes (Route handling)
     ├───search
-    └───splash
+    └───splash (Checks user was logged in or not, display app icon.)
 ```
 
 ## Local Setup
