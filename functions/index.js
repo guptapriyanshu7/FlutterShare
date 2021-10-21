@@ -125,6 +125,39 @@ exports.onCreatePost = functions.firestore
     });
   });
 
+  exports.onDeletePost = functions.firestore
+  .document("/posts/{userId}/userPosts/{postId}")
+  .onDelete(async (snapshot, context) => {
+    const userId = context.params.userId;
+    const postId = context.params.postId;
+
+    // 1) Get all the followers of the user who made the post
+    const userFollowersRef = admin
+      .firestore()
+      .collection("followers")
+      .doc(userId)
+      .collection("userFollowers");
+
+    const querySnapshot = await userFollowersRef.get();
+    // 2) Delete each post in each follower's timeline
+    querySnapshot.forEach((doc) => {
+      const followerId = doc.id;
+
+      admin
+        .firestore()
+        .collection("timeline")
+        .doc(followerId)
+        .collection("timelinePosts")
+        .doc(postId)
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            doc.ref.delete();
+          }
+        });
+    });
+  });
+
 exports.onCreateActivityFeedItem = functions.firestore
   .document('/feed/{userId}/userFeed/{activityFeedItem}')
   .onCreate(async (snapshot, context) => {

@@ -24,14 +24,14 @@ class ActivityFeedPage extends StatelessWidget {
     );
     return Scaffold(
       appBar: AppBar(title: const Text('Notifications')),
-      body: FutureBuilder(
-        future: getIt<FirebaseFirestore>()
+      body: StreamBuilder(
+        stream: getIt<FirebaseFirestore>()
             .collection('feed')
             .doc(currentUserId)
             .collection('userFeed')
             .orderBy('timestamp', descending: true)
             .limit(50)
-            .get(),
+            .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());

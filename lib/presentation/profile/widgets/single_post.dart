@@ -7,9 +7,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_share/application/auth/auth_bloc.dart';
+import 'package:flutter_share/application/post/post_bloc.dart';
 
 import 'package:flutter_share/application/user_actions/user_actions_bloc.dart';
 import 'package:flutter_share/domain/auth/user.dart';
+import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/injection.dart';
 import 'package:flutter_share/presentation/profile/profile_page.dart';
@@ -203,6 +206,11 @@ class _BuildHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _authState = context.read<AuthBloc>().state;
+    final currentUser = _authState.maybeMap(
+      authenticated: (_) => _.currentUser,
+      orElse: () => throw NotAuthenticatedError(),
+    );
     return ListTile(
       leading: CircleAvatar(
         backgroundImage: CachedNetworkImageProvider(user.photoUrl),
@@ -213,7 +221,43 @@ class _BuildHeader extends StatelessWidget {
       ),
       subtitle: Text(post.location),
       trailing: IconButton(
-        onPressed: () => print('deleting post'),
+        onPressed: currentUser.id != user.id
+            ? () {}
+            : () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return BlocProvider(
+                      create: (context) => getIt<PostBloc>(),
+                      child: BlocBuilder<PostBloc, PostState>(
+                        builder: (context, state) {
+                          return AlertDialog(
+                            title: const Text('Delete'),
+                            content: const Text('Are you sure?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('No'),
+                              ),
+                              TextButton(
+                                style:
+                                    TextButton.styleFrom(primary: Colors.red),
+                                onPressed: () {
+                                  context
+                                      .read<PostBloc>()
+                                      .add(PostEvent.delete(post));
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Yes'),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
         icon: const Icon(Icons.more_vert),
       ),
     );

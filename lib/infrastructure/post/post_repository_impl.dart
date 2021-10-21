@@ -40,6 +40,22 @@ class PostRepositoryImpl implements IPostRepository {
       final userPostsDoc = _firestore.postsCollection.doc(post.ownerid);
       final postId = post.id;
       await userPostsDoc.userPostsCollection.doc(postId).delete();
+      _firebaseStorage.refFromURL(post.mediaUrl).delete();
+      final activityFeedQuerySnapshot = await _firestore.feedCollection
+          .doc(post.ownerid)
+          .userFeedCollection
+          .where('postId', isEqualTo: postId)
+          .get();
+      for (final doc in activityFeedQuerySnapshot.docs) {
+        doc.reference.delete();
+      }
+      final commentsQuerySnapshot = await _firestore.commentsCollection
+          .doc(postId)
+          .commentsCollection
+          .get();
+      for (final doc in commentsQuerySnapshot.docs) {
+        doc.reference.delete();
+      }
       return right(unit);
     } on FirebaseException catch (e) {
       if (e.code == 'permission-denied') {
