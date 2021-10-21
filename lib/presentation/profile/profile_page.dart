@@ -321,6 +321,9 @@ class _BuildButtons extends StatelessWidget {
               ),
             )
           : OutlinedButton(
+              style: isFollowing
+                  ? null
+                  : OutlinedButton.styleFrom(backgroundColor: Colors.blue),
               onPressed: () {
                 context
                     .read<UserActionsBloc>()
