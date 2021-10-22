@@ -20,4 +20,5 @@ abstract class IUserActionsRepository {
   Stream<Either<UserActionsFailure, List<Comment>>> fetchComments(
     String postId,
   );
+  Future<Option<UserActionsFailure>> editProfile(User user);
 }

@@ -210,6 +210,22 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
     });
   }
 
+  @override
+  Future<Option<UserActionsFailure>> editProfile(User user) async {
+    try {
+      await _firestore.usersCollection.doc(user.id).update(user.toJson());
+      return none();
+    } on FirebaseException catch (e) {
+      if (e.code == 'permission-denied') {
+        return some(const UserActionsFailure.insufficientPermissions());
+      } else if (e.code == 'not-found') {
+        return some(const UserActionsFailure.notFound());
+      } else {
+        return some(const UserActionsFailure.unableToFetch());
+      }
+    }
+  }
+
   //  @override
   // Future<Option<UserActionsFailure>> addComment(
   //   bool isFollowing,

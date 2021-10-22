@@ -12,4 +12,5 @@ class UserActionsState with _$UserActionsState {
   const factory UserActionsState.commentsLoaded(
     List<Comment> comment,
   ) = _CommentsLoaded;
+  const factory UserActionsState.profileUpdateSuccess() = _ProfileUpdateSuccess;
 }

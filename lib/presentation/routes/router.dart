@@ -3,6 +3,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter_share/presentation/activity_feed/activity_feed_page.dart';
 import 'package:flutter_share/presentation/auth/sign_in_page.dart';
 import 'package:flutter_share/presentation/comments/comments_page.dart';
+import 'package:flutter_share/presentation/edit_profile/edit_profile.dart';
 import 'package:flutter_share/presentation/home_page.dart';
 import 'package:flutter_share/presentation/post/posts_page.dart';
 import 'package:flutter_share/presentation/post/save_post_page.dart';
@@ -20,6 +21,7 @@ const SINGLE_POST_ROUTE_PATH = 'single-post-page/:userId/:postId';
     AutoRoute(page: SplashPage, initial: true),
     AutoRoute(page: SignInPage),
     AutoRoute(page: CommentsPage),
+    AutoRoute(page: EditProfile),
     AutoRoute(page: ProfilePage, path: PROFILE_ROUTE_PATH),
     AutoRoute(page: SinglePostPage, path: SINGLE_POST_ROUTE_PATH),
     AutoRoute(

@@ -39,7 +39,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       },
       read: (value) async* {
         yield const PostState.loading();
-        final userOption = _authFacade.getSignedInUser();
+        final userOption = await _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
         yield* _postRepository.read(currentUser.id).map(

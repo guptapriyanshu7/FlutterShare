@@ -98,14 +98,20 @@ class FirebaseAuthFacade implements IAuthFacade {
   }
 
   @override
-  Option<User> getSignedInUser() {
+  Future<Option<User>> getSignedInUser() async {
     final firebaseUser = _firebaseAuth.currentUser;
-    return optionOf(firebaseUser?.toDomain());
+    if (firebaseUser == null) return none();
+    final doc = await _firestore.doc(firebaseUser.uid).get();
+    final user = User.fromJson(doc.data()!);
+    // return optionOf(firebaseUser?.toDomain());
+    return some(user);
   }
 
   @override
   Future<void> signOut(User currentUser) async {
-    await _firestore.usersCollection.doc(currentUser.id).set(currentUser.toJson());
+    final userJson = currentUser.toJson();
+    userJson.remove('androidNotificationToken');
+    await _firestore.usersCollection.doc(currentUser.id).set(userJson);
     await _firebaseAuth.signOut();
     await _googleSignIn.signOut();
   }

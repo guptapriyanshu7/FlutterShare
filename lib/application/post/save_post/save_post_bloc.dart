@@ -35,7 +35,7 @@ class SavePostBloc extends Bloc<SavePostEvent, SavePostState> {
         final imageUrl =
             await _postRepository.saveImage(state.file, state.post.id);
         final imageUrll = imageUrl.fold((l) => null, id);
-        final userOption = _authFacade.getSignedInUser();
+        final userOption = await _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
         final Either<PostFailure, Unit> failureOrSuccess = state.isEditing

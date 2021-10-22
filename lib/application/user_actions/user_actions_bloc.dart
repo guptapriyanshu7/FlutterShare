@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/user_actions/comment.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -32,7 +33,7 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
         final isFollowingUpdate = !e.profile.isFollowing;
         final followersCountUpdate =
             e.profile.followers + (isFollowingUpdate == true ? 1 : -1);
-        final userOption = _authFacade.getSignedInUser();
+        final userOption = await _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
         _userActionsRepository.followProfile(
@@ -47,7 +48,7 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
         yield UserActionsState.loaded(updatedProfile);
       },
       checkLikeStatus: (e) async* {
-        final userOption = _authFacade.getSignedInUser();
+        final userOption = await _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
         final isLiked = e.post.likes[currentUser.id] ?? false;
@@ -55,7 +56,7 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
       },
       fetchProfile: (e) async* {
         yield const UserActionsState.loading();
-        final userOption = _authFacade.getSignedInUser();
+        final userOption = await _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
         final failureOrSuccess =
@@ -75,12 +76,17 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
             );
       },
       likePost: (e) async* {
-        final userOption = _authFacade.getSignedInUser();
+        final userOption = await _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
         e.post.likes[currentUser.id] = e.likeStatus;
         _userActionsRepository.likePost(e.post, currentUser);
         yield UserActionsState.likeStatus(e.likeStatus);
+      },
+      editProfile: (e) async* {
+        yield const UserActionsState.loading();
+        await _userActionsRepository.editProfile(e.user);
+        yield const UserActionsState.profileUpdateSuccess();
       },
     );
   }

@@ -6,7 +6,7 @@ extension FirebaseUserDomainX on firebase_user.User {
     return User(
       id: uid,
       bio: '',
-      displayName: displayName ?? 'Dummy name',
+      displayName: displayName ?? '',
       email: email!,
       photoUrl: photoURL ?? 'https://bit.ly/3yyK8ti',
       username: email!,
