@@ -91,7 +91,7 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
         final updateUser =
             currentUser.copyWith(displayName: e.name, bio: e.bio);
         await _userActionsRepository.editProfile(updateUser);
-        yield const UserActionsState.profileUpdateSuccess();
+        yield UserActionsState.profileUpdateSuccess(updateUser);
       },
     );
   }

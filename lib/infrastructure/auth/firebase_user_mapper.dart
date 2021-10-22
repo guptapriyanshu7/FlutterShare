@@ -6,10 +6,10 @@ extension FirebaseUserDomainX on firebase_user.User {
     return User(
       id: uid,
       bio: '',
-      displayName: displayName ?? '',
+      displayName: displayName ?? email!.split('@')[0],
       email: email!,
       photoUrl: photoURL ?? 'https://bit.ly/3yyK8ti',
-      username: email!,
+      username: email!.split('@')[0],
     );
   }
 }

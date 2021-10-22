@@ -4,9 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_share/application/auth/auth_bloc.dart';
 
 import 'package:flutter_share/application/user_actions/user_actions_bloc.dart';
 import 'package:flutter_share/domain/auth/user.dart';
+import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/domain/user_actions/profile.dart';
 import 'package:flutter_share/injection.dart';
@@ -186,13 +188,22 @@ class _BuildInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User buildUser = user;
+    final _authState = context.read<AuthBloc>().state;
+    final currentUser = _authState.maybeMap(
+      authenticated: (_) => _.currentUser,
+      orElse: () => throw NotAuthenticatedError(),
+    );
+    if (currentUser.id == user.id) {
+      buildUser = currentUser;
+    }
     return Column(
       children: [
         Container(
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.only(top: 12.0),
           child: Text(
-            user.username,
+            buildUser.username,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16.0,
@@ -203,7 +214,7 @@ class _BuildInfo extends StatelessWidget {
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.only(top: 4.0),
           child: Text(
-            user.displayName,
+            buildUser.displayName,
             style: const TextStyle(
                 // fontWeight: FontWeight.bold,
                 ),
@@ -212,7 +223,7 @@ class _BuildInfo extends StatelessWidget {
         Container(
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.only(top: 2.0),
-          child: Text(user.bio),
+          child: Text(buildUser.bio),
         ),
       ],
     );

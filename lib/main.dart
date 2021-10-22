@@ -57,19 +57,20 @@ class MyApp extends StatelessWidget {
         title: 'FlutterShare',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            brightness: Brightness.dark,
-            fontFamily: 'Roboto',
-            appBarTheme: AppBarTheme(
-              elevation: 0,
-              backgroundColor:
-                  Theme.of(context).colorScheme.background.withOpacity(0),
-            ),
-            progressIndicatorTheme: const ProgressIndicatorThemeData(
-              color: Colors.white,
-              refreshBackgroundColor: Colors.white,
-            )
-            // colorScheme: ColorScheme.fromSwatch(),
-            ),
+          brightness: Brightness.dark,
+          fontFamily: 'Roboto',
+          appBarTheme: AppBarTheme(
+            elevation: 0,
+            backgroundColor:
+                Theme.of(context).colorScheme.background.withOpacity(0),
+          ),
+          progressIndicatorTheme: const ProgressIndicatorThemeData(
+            color: Colors.white,
+            refreshBackgroundColor: Colors.white,
+          )
+          // colorScheme: ColorScheme.fromSwatch(),
+          ,
+        ),
       ),
     );
   }

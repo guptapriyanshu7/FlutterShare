@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_share/application/auth/auth_bloc.dart';
 import 'package:flutter_share/application/user_actions/user_actions_bloc.dart';
+import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/core/errors.dart';
 import 'package:flutter_share/injection.dart';
 
@@ -11,23 +12,6 @@ class EditProfilePage extends StatelessWidget {
   const EditProfilePage({
     Key? key,
   }) : super(key: key);
-  // void updateProfileData(String name, String bio, User user) {
-  //   setState(() {
-  //     name.trim().length < 3 || name.isEmpty
-  //         ? _displayNameValid = false
-  //         : _displayNameValid = true;
-  //     bio.trim().length > 100 ? _bioValid = false : _bioValid = true;
-  //   });
-
-  //   if (_displayNameValid && _bioValid) {
-  //     getIt<FirebaseFirestore>().doc(user.id).update({
-  //       "displayName": name,
-  //       "bio": name,
-  //     });
-  //     const snackbar = SnackBar(content: Text("Profile updated!"));
-  //     ScaffoldMessenger(key: _scaffoldKey, child: snackbar);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +24,21 @@ class EditProfilePage extends StatelessWidget {
             body: state.maybeMap(
               loading: (value) =>
                   const Center(child: CircularProgressIndicator()),
-              orElse: () => const _BuildContent(),
+              initial: (_) {
+                final _authState = context.read<AuthBloc>().state;
+                final user = _authState.maybeMap(
+                  authenticated: (_) => _.currentUser,
+                  orElse: () => throw NotAuthenticatedError(),
+                );
+                return _BuildContent(user);
+              },
+              profileUpdateSuccess: (_) {
+                context
+                    .read<AuthBloc>()
+                    .add(const AuthEvent.authCheckRequested());
+                return _BuildContent(_.user);
+              },
+              orElse: () {},
             ),
           );
         },
@@ -50,18 +48,15 @@ class EditProfilePage extends StatelessWidget {
 }
 
 class _BuildContent extends HookWidget {
-  const _BuildContent({
+  const _BuildContent(
+    this.user, {
     Key? key,
   }) : super(key: key);
 
+  final User user;
+
   @override
   Widget build(BuildContext context) {
-    final _authState = context.read<AuthBloc>().state;
-    final user = _authState.maybeMap(
-      authenticated: (_) => _.currentUser,
-      orElse: () => throw NotAuthenticatedError(),
-    );
-
     final displayNameController =
         useTextEditingController(text: user.displayName);
     final bioController = useTextEditingController(text: user.bio);

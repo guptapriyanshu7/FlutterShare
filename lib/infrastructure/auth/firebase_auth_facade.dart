@@ -51,10 +51,11 @@ class FirebaseAuthFacade implements IAuthFacade {
     required String password,
   }) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
+      final credential = await _firebaseAuth.signInWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
+      await _saveUserDocToDatabase(credential);
       return right(unit);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found' || e.code == 'wrong-password') {
@@ -89,7 +90,10 @@ class FirebaseAuthFacade implements IAuthFacade {
   Future<void> _saveUserDocToDatabase(UserCredential credential) async {
     final firebaseUser = credential.user!;
     final userDomain = firebaseUser.toDomain();
-    final userJson = userDomain.toJson();
+    Map<String, dynamic> userJson = userDomain.toJson();
+
+    final doc = await _firestore.usersCollection.doc(firebaseUser.uid).get();
+    if (doc.exists) userJson = doc.data()!;
 
     final token = await _firebaseMessaging.getToken();
     final updatedUserJson = {...userJson, 'androidNotificationToken': token};
