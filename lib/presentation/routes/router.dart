@@ -21,7 +21,7 @@ const SINGLE_POST_ROUTE_PATH = 'single-post-page/:userId/:postId';
     AutoRoute(page: SplashPage, initial: true),
     AutoRoute(page: SignInPage),
     AutoRoute(page: CommentsPage),
-    AutoRoute(page: EditProfile),
+    AutoRoute(page: EditProfilePage),
     AutoRoute(page: ProfilePage, path: PROFILE_ROUTE_PATH),
     AutoRoute(page: SinglePostPage, path: SINGLE_POST_ROUTE_PATH),
     AutoRoute(

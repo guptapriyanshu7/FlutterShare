@@ -314,7 +314,7 @@ class _BuildButtons extends StatelessWidget {
       width: 200,
       child: currentUserId == profile.user.id
           ? OutlinedButton(
-              onPressed: () {},
+              onPressed: () => context.pushRoute(const EditProfileRoute()),
               child: const Text(
                 'Edit Profile',
                 style: TextStyle(color: Colors.white),

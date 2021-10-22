@@ -8,5 +8,5 @@ class UserActionsEvent with _$UserActionsEvent {
   const factory UserActionsEvent.likePost(bool likeStatus, Post post) =
       _LikePost;
   const factory UserActionsEvent.followProfile(Profile profile) = _FollowUser;
-  const factory UserActionsEvent.editProfile(User user) = _EditProfile;
+  const factory UserActionsEvent.editProfile(String name, String bio) = _EditProfile;
 }

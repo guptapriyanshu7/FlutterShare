@@ -101,7 +101,7 @@ class FirebaseAuthFacade implements IAuthFacade {
   Future<Option<User>> getSignedInUser() async {
     final firebaseUser = _firebaseAuth.currentUser;
     if (firebaseUser == null) return none();
-    final doc = await _firestore.doc(firebaseUser.uid).get();
+    final doc = await _firestore.usersCollection.doc(firebaseUser.uid).get();
     final user = User.fromJson(doc.data()!);
     // return optionOf(firebaseUser?.toDomain());
     return some(user);

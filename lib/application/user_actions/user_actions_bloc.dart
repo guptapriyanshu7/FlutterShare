@@ -85,7 +85,12 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
       },
       editProfile: (e) async* {
         yield const UserActionsState.loading();
-        await _userActionsRepository.editProfile(e.user);
+        final userOption = await _authFacade.getSignedInUser();
+        final currentUser =
+            userOption.getOrElse(() => throw NotAuthenticatedError());
+        final updateUser =
+            currentUser.copyWith(displayName: e.name, bio: e.bio);
+        await _userActionsRepository.editProfile(updateUser);
         yield const UserActionsState.profileUpdateSuccess();
       },
     );
