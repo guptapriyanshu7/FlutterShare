@@ -16,6 +16,7 @@ An Instagram clone app made with flutter and Firebase.
 <img src="https://user-images.githubusercontent.com/60141300/138210156-bd86d712-a936-4ba8-a6f7-73ac7d000366.jpg" width="250" height="470">
 <img src="https://user-images.githubusercontent.com/60141300/138210158-3986229b-db05-467b-9743-76d80c99817b.jpg" width="250" height="470">
 <img src="https://user-images.githubusercontent.com/60141300/138210161-5f36bf5b-817f-48fa-8759-32924c2b636f.jpg" width="250" height="470">
+<img src="https://user-images.githubusercontent.com/60141300/138482496-e4421cfe-8f5e-4e0e-921c-5ec344f473e0.jpg" width="250" height="470">
 <img src="https://user-images.githubusercontent.com/60141300/138210159-c0fe94ea-7063-4717-b5c8-fda18197e287.jpg" width="250" height="470">
 <img src="https://user-images.githubusercontent.com/60141300/138210154-e2395095-0138-4e99-a53b-fb62427c5ce6.jpg" width="250" height="470">
 <img src="https://user-images.githubusercontent.com/60141300/138210143-95a47570-63f2-46af-851f-57218dcffdf6.jpg" width="250" height="470">
@@ -34,6 +35,7 @@ An Instagram clone app made with flutter and Firebase.
 - Notifications on other users activity.
 - Activity Feed showing recent likes/comments on your posts and who followed you.
 - See followers/following/total posts count.
+- Edit your profile.
 
 ## Folder Structure
 
