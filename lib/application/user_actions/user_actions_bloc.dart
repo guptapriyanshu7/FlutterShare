@@ -22,76 +22,94 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
   final IUserActionsRepository _userActionsRepository;
   final IAuthFacade _authFacade;
   UserActionsBloc(this._userActionsRepository, this._authFacade)
-      : super(const _Initial());
+      : super(const UserActionsState.initial()) {
+    on<UserActionsEvent>(_onUserActionsEvent);
+  }
 
-  @override
-  Stream<UserActionsState> mapEventToState(
+  Future<void> _onUserActionsEvent(
     UserActionsEvent event,
-  ) async* {
-    yield* event.map(
-      followProfile: (e) async* {
-        final isFollowingUpdate = !e.profile.isFollowing;
+    Emitter<UserActionsState> emit,
+  ) async {
+    await event.when(
+      followProfile: (Profile profile) async {
+        final isFollowingUpdate = !profile.isFollowing;
         final followersCountUpdate =
-            e.profile.followers + (isFollowingUpdate == true ? 1 : -1);
+            profile.followers + (isFollowingUpdate == true ? 1 : -1);
+
         final userOption = await _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
+
         _userActionsRepository.followProfile(
           isFollowingUpdate,
-          e.profile.user.id,
+          profile.user.id,
           currentUser,
         );
-        final updatedProfile = e.profile.copyWith(
+        final updatedProfile = profile.copyWith(
           isFollowing: isFollowingUpdate,
           followers: followersCountUpdate,
         );
-        yield UserActionsState.loaded(updatedProfile);
+
+        emit(UserActionsState.loaded(updatedProfile));
       },
-      checkLikeStatus: (e) async* {
+      checkLikeStatus: (Post post) async {
         final userOption = await _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
-        final isLiked = e.post.likes[currentUser.id] ?? false;
-        yield UserActionsState.likeStatus(isLiked);
+
+        final isLiked = post.likes[currentUser.id] ?? false;
+
+        emit(UserActionsState.likeStatus(isLiked));
       },
-      fetchProfile: (e) async* {
-        yield const UserActionsState.loading();
+      fetchProfile: (String userId) async {
+        emit(const UserActionsState.loading());
+
         final userOption = await _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
+
         final failureOrSuccess =
-            await _userActionsRepository.fetchProfile(e.userId, currentUser.id);
-        yield failureOrSuccess.fold(
-          (l) => UserActionsState.error(l),
-          (r) => UserActionsState.loaded(r),
+            await _userActionsRepository.fetchProfile(userId, currentUser.id);
+
+        emit(
+          failureOrSuccess.fold(
+            (l) => UserActionsState.error(l),
+            (r) => UserActionsState.loaded(r),
+          ),
         );
       },
-      fetchComments: (e) async* {
-        yield const UserActionsState.loading();
-        yield* _userActionsRepository.fetchComments(e.postId).map(
+      fetchComments: (String postId) async {
+        emit(const UserActionsState.loading());
+
+        _userActionsRepository.fetchComments(postId).map(
               (failureOrComments) => failureOrComments.fold(
-                (f) => UserActionsState.error(f),
-                (comments) => UserActionsState.commentsLoaded(comments),
+                (f) => emit(UserActionsState.error(f)),
+                (comments) => emit(UserActionsState.commentsLoaded(comments)),
               ),
             );
       },
-      likePost: (e) async* {
+      likePost: (bool likeStatus, Post post) async {
         final userOption = await _authFacade.getSignedInUser();
+
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
-        e.post.likes[currentUser.id] = e.likeStatus;
-        _userActionsRepository.likePost(e.post, currentUser);
-        yield UserActionsState.likeStatus(e.likeStatus);
+
+        post.likes[currentUser.id] = likeStatus;
+        _userActionsRepository.likePost(post, currentUser);
+
+        emit(UserActionsState.likeStatus(likeStatus));
       },
-      editProfile: (e) async* {
-        yield const UserActionsState.loading();
+      editProfile: (String name, String bio) async {
+        emit(const UserActionsState.loading());
+
         final userOption = await _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
-        final updateUser =
-            currentUser.copyWith(displayName: e.name, bio: e.bio);
+
+        final updateUser = currentUser.copyWith(displayName: name, bio: bio);
         await _userActionsRepository.editProfile(updateUser);
-        yield UserActionsState.profileUpdateSuccess(updateUser);
+
+        emit(UserActionsState.profileUpdateSuccess(updateUser));
       },
     );
   }
