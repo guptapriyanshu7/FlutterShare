@@ -4,7 +4,7 @@ targets:
       auto_route_generator|autoRouteGenerator:
         enabled: true
 
-      json_serializable:
+      json_serializable|json_serializable:
         enabled: true
 
       freezed|freezed:

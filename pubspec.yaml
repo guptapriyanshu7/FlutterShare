@@ -12,7 +12,7 @@ dependencies:
   animator: ^3.1.0
   another_flushbar: ^1.10.28
   auto_route: ^3.2.2
-  bloc: ^8.0.2
+  bloc: ^7.2.0
   cached_network_image: ^3.2.0
   camera: ^0.9.4+10
   cloud_firestore: ^3.1.7
@@ -25,7 +25,7 @@ dependencies:
   firebase_storage: ^10.2.6
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.0.1
+  flutter_bloc: ^7.2.0
   flutter_hooks: ^0.18.2
   flutter_local_notifications: ^9.2.0
   freezed_annotation: ^1.1.0

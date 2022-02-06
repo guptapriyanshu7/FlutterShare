@@ -13,26 +13,27 @@ part 'auth_state.dart';
 @injectable
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final IAuthFacade _authFacade;
-  AuthBloc(this._authFacade) : super(const _Initial());
+  AuthBloc(this._authFacade) : super(const AuthState.initial()) {
+    on<AuthEvent>(_onAuthEvent);
+  }
 
-  @override
-  Stream<AuthState> mapEventToState(
-    AuthEvent event,
-  ) async* {
-    yield* event.map(
-      authCheckRequested: (_) async* {
+  Future<void> _onAuthEvent(AuthEvent event, Emitter<AuthState> emit) async {
+    await event.map(
+      authCheckRequested: (_) async {
         final userOption = await _authFacade.getSignedInUser();
-        yield userOption.fold(
-          () => const AuthState.unauthenticated(),
-          (currentUser) => AuthState.authenticated(currentUser),
+
+        userOption.fold(
+          () => emit(const AuthState.unauthenticated()),
+          (currentUser) => emit(AuthState.authenticated(currentUser)),
         );
       },
-      signedOut: (_) async* {
+      signedOut: (_) async {
         final userOption = await _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
+
         await _authFacade.signOut(currentUser);
-        yield const AuthState.unauthenticated();
+        emit(const AuthState.unauthenticated());
       },
     );
   }
