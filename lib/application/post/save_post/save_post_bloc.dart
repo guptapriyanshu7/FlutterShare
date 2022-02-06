@@ -21,16 +21,21 @@ class SavePostBloc extends Bloc<SavePostEvent, SavePostState> {
   final IPostRepository _postRepository;
   final IAuthFacade _authFacade;
   SavePostBloc(this._postRepository, this._authFacade)
-      : super(SavePostState.initial());
-  @override
-  Stream<SavePostState> mapEventToState(
+      : super(SavePostState.initial()) {
+    on<SavePostEvent>(_onSavePostEvent);
+  }
+
+  Future<void> _onSavePostEvent(
     SavePostEvent event,
-  ) async* {
-    yield* event.map(
-      save: (_) async* {
-        yield state.copyWith(
-          isSaving: true,
-          failureOption: none(),
+    Emitter<SavePostState> emit,
+  ) async {
+    await event.when(
+      save: () async {
+        emit(
+          state.copyWith(
+            isSaving: true,
+            failureOption: none(),
+          ),
         );
         final imageUrl =
             await _postRepository.saveImage(state.file, state.post.id);
@@ -44,41 +49,45 @@ class SavePostBloc extends Bloc<SavePostEvent, SavePostState> {
                 state.post
                     .copyWith(mediaUrl: imageUrll!, ownerid: currentUser.id),
               );
-        yield state.copyWith(
-          isSaving: false,
-          post: Post.empty(),
-          // showErrorMessages: true,
-          failureOption: failureOrSuccess.fold(
-            (f) => some(f),
-            (r) => none(),
+        emit(
+          state.copyWith(
+            isSaving: false,
+            post: Post.empty(),
+            // showErrorMessages: true,
+            failureOption: failureOrSuccess.fold(
+              (f) => some(f),
+              (r) => none(),
+            ),
           ),
         );
       },
-      autoValidate: (_) async* {
-        yield state.copyWith(
-          showErrorMessages: true,
+      autoValidate: () {
+        emit(
+          state.copyWith(showErrorMessages: true),
         );
       },
-      captionChanged: (e) async* {
-        yield state.copyWith(
-          post: state.post.copyWith(
-            caption: e.value,
+      captionChanged: (String value) {
+        emit(
+          state.copyWith(
+            post: state.post.copyWith(caption: value),
+            // failureOption: none(),
           ),
-          // failureOption: none(),
         );
       },
-      filePicked: (e) async* {
-        yield state.copyWith(
-          file: e.file,
-          // failureOption: none(),
-        );
-      },
-      locationChanged: (e) async* {
-        yield state.copyWith(
-          post: state.post.copyWith(
-            location: e.value,
+      filePicked: (File file) {
+        emit(
+          state.copyWith(
+            file: file,
+            // failureOption: none(),
           ),
-          // failureOption: none(),
+        );
+      },
+      locationChanged: (String value) {
+        emit(
+          state.copyWith(
+            post: state.post.copyWith(location: value),
+            // failureOption: none(),
+          ),
         );
       },
     );
