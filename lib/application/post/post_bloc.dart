@@ -21,41 +21,52 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   final IPostRepository _postRepository;
   final IAuthFacade _authFacade;
 
-  PostBloc(this._postRepository, this._authFacade) : super(const _Initial());
+  PostBloc(this._postRepository, this._authFacade)
+      : super(const PostState.initial()) {
+    on<PostEvent>(_onPostEvent);
+  }
 
-  @override
-  Stream<PostState> mapEventToState(
+  Future<void> _onPostEvent(
     PostEvent event,
-  ) async* {
-    yield* event.map(
-      getPost: (value) async* {
-        yield const PostState.loading();
+    Emitter<PostState> emit,
+  ) async {
+    await event.when(
+      getPost: (String userId, String postId) async {
+        emit(const PostState.loading());
+
         final Either<PostFailure, Tuple2<Post, User>> failureOrSuccess =
-            await _postRepository.getPost(value.userId, value.postId);
-        yield failureOrSuccess.fold(
-          (f) => PostState.getPostFailure(f),
-          (r) => PostState.getPostSuccess(r.value1, r.value2),
+            await _postRepository.getPost(userId, postId);
+
+        emit(
+          failureOrSuccess.fold(
+            (f) => PostState.getPostFailure(f),
+            (r) => PostState.getPostSuccess(r.value1, r.value2),
+          ),
         );
       },
-      read: (value) async* {
-        yield const PostState.loading();
+      read: () async {
+        emit(const PostState.loading());
+
         final userOption = await _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
-        yield* _postRepository.read(currentUser.id).map(
+
+        _postRepository.read(currentUser.id).map(
               (failureOrPosts) => failureOrPosts.fold(
-                (f) => PostState.readFailure(f),
-                (posts) => PostState.readSuccess(posts),
+                (f) => emit(PostState.readFailure(f)),
+                (posts) => emit(PostState.readSuccess(posts)),
               ),
             );
       },
-      delete: (value) async* {
-        yield const PostState.loading();
+      delete: (Post post) async {
+        emit(const PostState.loading());
+
         final Either<PostFailure, Unit> failureOrSuccess =
-            await _postRepository.delete(value.post);
-        yield failureOrSuccess.fold(
-          (f) => PostState.deleteFailure(f),
-          (r) => const PostState.deleteSuccess(),
+            await _postRepository.delete(post);
+
+        failureOrSuccess.fold(
+          (f) => emit(PostState.deleteFailure(f)),
+          (r) => emit(const PostState.deleteSuccess()),
         );
       },
     );
