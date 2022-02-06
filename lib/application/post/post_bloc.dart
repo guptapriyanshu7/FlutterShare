@@ -51,12 +51,18 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());
 
-        _postRepository.read(currentUser.id).map(
-              (failureOrPosts) => failureOrPosts.fold(
-                (f) => emit(PostState.readFailure(f)),
-                (posts) => emit(PostState.readSuccess(posts)),
-              ),
-            );
+        await emit.forEach(
+          _postRepository.read(currentUser.id),
+          onData: (
+            Either<PostFailure, List<Tuple2<Post, User>>> failureOrPosts,
+          ) =>
+              failureOrPosts.fold(
+            (f) => PostState.readFailure(f),
+            (posts) => PostState.readSuccess(posts),
+          ),
+          onError: (_, __) =>
+              const PostState.readFailure(PostFailure.unexpected()),
+        );
       },
       delete: (Post post) async {
         emit(const PostState.loading());

@@ -18,8 +18,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onAuthEvent(AuthEvent event, Emitter<AuthState> emit) async {
-    await event.map(
-      authCheckRequested: (_) async {
+    await event.when(
+      authCheckRequested: () async {
         final userOption = await _authFacade.getSignedInUser();
 
         userOption.fold(
@@ -27,7 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           (currentUser) => emit(AuthState.authenticated(currentUser)),
         );
       },
-      signedOut: (_) async {
+      signedOut: () async {
         final userOption = await _authFacade.getSignedInUser();
         final currentUser =
             userOption.getOrElse(() => throw NotAuthenticatedError());

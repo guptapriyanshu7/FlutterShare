@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_share/domain/auth/user.dart';
 import 'package:flutter_share/domain/user_actions/comment.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -71,22 +72,25 @@ class UserActionsBloc extends Bloc<UserActionsEvent, UserActionsState> {
         final failureOrSuccess =
             await _userActionsRepository.fetchProfile(userId, currentUser.id);
 
-        emit(
-          failureOrSuccess.fold(
-            (l) => UserActionsState.error(l),
-            (r) => UserActionsState.loaded(r),
-          ),
+        failureOrSuccess.fold(
+          (l) => emit(UserActionsState.error(l)),
+          (r) => emit(UserActionsState.loaded(r)),
         );
       },
       fetchComments: (String postId) async {
         emit(const UserActionsState.loading());
 
-        _userActionsRepository.fetchComments(postId).map(
-              (failureOrComments) => failureOrComments.fold(
-                (f) => emit(UserActionsState.error(f)),
-                (comments) => emit(UserActionsState.commentsLoaded(comments)),
-              ),
-            );
+        await emit.forEach(
+          _userActionsRepository.fetchComments(postId),
+          onData:
+              (Either<UserActionsFailure, List<Comment>> failureOrComments) =>
+                  failureOrComments.fold(
+            (f) => UserActionsState.error(f),
+            (comments) => UserActionsState.commentsLoaded(comments),
+          ),
+          onError: (_, __) =>
+              const UserActionsState.error(UserActionsFailure.unableToFetch()),
+        );
       },
       likePost: (bool likeStatus, Post post) async {
         final userOption = await _authFacade.getSignedInUser();
