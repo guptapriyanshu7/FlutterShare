@@ -38,7 +38,9 @@ class EditProfilePage extends StatelessWidget {
                     .add(const AuthEvent.authCheckRequested());
                 return _BuildContent(_.user);
               },
-              orElse: () {},
+              orElse: () {
+                return null;
+              },
             ),
           );
         },

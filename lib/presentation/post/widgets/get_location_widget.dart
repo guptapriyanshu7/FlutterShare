@@ -35,7 +35,7 @@ class GetLocationWidget extends HookWidget {
             ),
           ),
         ),
-        SizedBox(height: 12),
+       const SizedBox(height: 12),
         _LocationIcon(locationController: _locationController),
       ],
     );

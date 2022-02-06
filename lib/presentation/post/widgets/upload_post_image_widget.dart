@@ -30,7 +30,7 @@ class UploadPostImageWidget extends HookWidget {
                   size: 60,
                 ),
           onTap: () async {
-            final pickedFile = await ImagePicker().getImage(
+            final pickedFile = await ImagePicker().pickImage(
               source: ImageSource.gallery,
               imageQuality: 70,
             );
