@@ -11,19 +11,18 @@ import 'package:flutter_share/domain/posts/i_post_repository.dart';
 import 'package:flutter_share/domain/posts/post.dart';
 import 'package:flutter_share/domain/posts/post_failure.dart';
 import 'package:flutter_share/infrastructure/core/firebase_helpers.dart';
-import 'package:flutter_share/injection.dart';
 
 @LazySingleton(as: IPostRepository)
 class PostRepositoryImpl implements IPostRepository {
   final FirebaseFirestore _firestore;
   final FirebaseStorage _firebaseStorage;
+
   PostRepositoryImpl(this._firestore, this._firebaseStorage);
 
   @override
   Future<Either<PostFailure, Unit>> create(Post post) async {
     try {
-      final userPostsDoc = _firestore.postsCollection.doc(post.ownerid);
-      await userPostsDoc.userPostsCollection.doc(post.id).set(post.toJson());
+      await _userPostDocRef(post.ownerid, post.id).set(post.toJson());
       return right(unit);
     } on FirebaseException catch (e) {
       if (e.code == 'permission-denied') {
@@ -34,13 +33,24 @@ class PostRepositoryImpl implements IPostRepository {
     }
   }
 
+  DocumentReference<Map<String, dynamic>> _userAllPostsDocRef(String userId) =>
+      _firestore.postsCollection.doc(userId);
+
+  DocumentReference<Map<String, dynamic>> _userPostDocRef(
+    String userId,
+    String postId,
+  ) =>
+      _userAllPostsDocRef(userId).userPostsCollection.doc(postId);
+
   @override
   Future<Either<PostFailure, Unit>> delete(Post post) async {
     try {
-      final userPostsDoc = _firestore.postsCollection.doc(post.ownerid);
       final postId = post.id;
-      await userPostsDoc.userPostsCollection.doc(postId).delete();
-      _firebaseStorage.refFromURL(post.mediaUrl).delete();
+
+      await _userPostDocRef(post.ownerid, postId).delete();
+
+      await _firebaseStorage.refFromURL(post.mediaUrl).delete();
+
       final activityFeedQuerySnapshot = await _firestore.feedCollection
           .doc(post.ownerid)
           .userFeedCollection
@@ -49,6 +59,7 @@ class PostRepositoryImpl implements IPostRepository {
       for (final doc in activityFeedQuerySnapshot.docs) {
         doc.reference.delete();
       }
+
       final commentsQuerySnapshot = await _firestore.commentsCollection
           .doc(postId)
           .commentsCollection
@@ -56,6 +67,7 @@ class PostRepositoryImpl implements IPostRepository {
       for (final doc in commentsQuerySnapshot.docs) {
         doc.reference.delete();
       }
+
       return right(unit);
     } on FirebaseException catch (e) {
       if (e.code == 'permission-denied') {
@@ -69,15 +81,14 @@ class PostRepositoryImpl implements IPostRepository {
   }
 
   Future<Tuple2<Post, User>> makeTuple(
-    QueryDocumentSnapshot<Map<String, dynamic>> doc,
+    QueryDocumentSnapshot<Map<String, dynamic>> postDoc,
   ) async {
-    final post = Post.fromJson(doc.data());
-    final userDoc = await getIt<FirebaseFirestore>()
-        .collection('users')
-        .doc(post.ownerid)
-        .get();
+    final post = Post.fromJson(postDoc.data());
+    final userDoc = await _firestore.getUserDoc(post.ownerid);
+
     final userJson = userDoc.data()!;
     final user = User.fromJson(userJson);
+
     return Tuple2(post, user);
   }
 
@@ -124,11 +135,10 @@ class PostRepositoryImpl implements IPostRepository {
     String postId,
   ) async {
     try {
-      final userPostsDoc = _firestore.postsCollection.doc(userId);
-      final postDoc = await userPostsDoc.userPostsCollection.doc(postId).get();
+      final postDoc = await _userPostDocRef(userId, postId).get();
       final post = Post.fromJson(postDoc.data()!);
 
-      final userDoc = await _firestore.usersCollection.doc(userId).get();
+      final userDoc = await _firestore.getUserDoc(userId);
       final user = User.fromJson(userDoc.data()!);
 
       return right(Tuple2(post, user));

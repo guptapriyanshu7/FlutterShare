@@ -22,19 +22,14 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
     String currentUserId,
   ) async {
     try {
-      final userDoc = await _firestore.usersCollection.doc(userId).get();
+      final userDoc = await _firestore.getUserDoc(userId);
       final userJson = userDoc.data();
       final userDomain = User.fromJson(userJson!);
-      final followingQuery = await _firestore.followingCollection
-          .doc(userId)
-          .userFollowingCollection
-          .get();
-      final followingCount = followingQuery.size;
-      final followerQuery = await _firestore.followersCollection
-          .doc(userId)
-          .userFollowersCollection
-          .get();
-      final followerCount = followerQuery.size;
+
+      final followingCount = await _getTotalFollowing(userId);
+
+      final followersCount = await _getTotalFollowers(userId);
+
       final postsQuery = await _firestore.postsCollection
           .doc(userId)
           .userPostsCollection
@@ -50,14 +45,16 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
           .userFollowingCollection
           .doc(userId)
           .get();
+
       final profile = Profile(
         user: userDomain,
         currentUserId: currentUserId,
         following: followingCount,
-        followers: followerCount,
+        followers: followersCount,
         posts: postsDomainList,
         isFollowing: followingDoc.exists,
       );
+
       return right(profile);
     } on FirebaseException catch (e) {
       if (e.code == 'permission-denied') {
@@ -68,6 +65,22 @@ class UserActionsRepositoryImpl implements IUserActionsRepository {
         return left(const UserActionsFailure.unableToFetch());
       }
     }
+  }
+
+  Future<int> _getTotalFollowers(String userId) async {
+    final followerQuery = await _firestore.followersCollection
+        .doc(userId)
+        .userFollowersCollection
+        .get();
+    return followerQuery.size;
+  }
+
+  Future<int> _getTotalFollowing(String userId) async {
+    final followingQuery = await _firestore.followingCollection
+        .doc(userId)
+        .userFollowingCollection
+        .get();
+    return followingQuery.size;
   }
 
   @override

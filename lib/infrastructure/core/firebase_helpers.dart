@@ -15,6 +15,10 @@ extension FirebaseFirestoreX on FirebaseFirestore {
       collection('feed');
   CollectionReference<Map<String, dynamic>> get commentsCollection =>
       collection('comments');
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserDoc(
+    String firebaseUserId,
+  ) =>
+      usersCollection.doc(firebaseUserId).get();
 }
 
 extension DocumentReferenceX on DocumentReference {
